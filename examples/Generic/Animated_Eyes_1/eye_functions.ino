@@ -26,7 +26,7 @@
 #if !defined(LIGHT_PIN) || (LIGHT_PIN < 0)
 // Autonomous iris motion uses a fractal behavior to similate both the major
 // reaction of the eye plus the continuous smaller adjustments that occur.
-uint16_t oldIris = (IRIS_MIN + IRIS_MAX) / 2, newIris;
+unsigned short oldIris = (IRIS_MIN + IRIS_MAX) / 2, newIris;
 #endif
 
 // Initialise eyes ---------------------------------------------------------
@@ -35,7 +35,7 @@ void initEyes(void)
   Serial.println("Initialise eye objects");
 
   // Initialise eye objects based on eyeInfo list in config.h:
-  for (uint8_t e = 0; e < NUM_EYES; e++) {
+  for (unsigned char e = 0; e < NUM_EYES; e++) {
     Serial.print("Create display #"); Serial.println(e);
 
     eye[e].tft_cs      = eyeInfo[e].select;
@@ -59,7 +59,7 @@ void updateEye (void)
 {
 #if defined(LIGHT_PIN) && (LIGHT_PIN >= 0) // Interactive iris
 
-  int16_t v = analogRead(LIGHT_PIN);       // Raw dial/photocell reading
+  short v = analogRead(LIGHT_PIN);       // Raw dial/photocell reading
 #ifdef LIGHT_PIN_FLIP
   v = 1023 - v;                            // Reverse reading from sensor
 #endif
@@ -67,13 +67,13 @@ void updateEye (void)
   else if (v > LIGHT_MAX) v = LIGHT_MAX;
   v -= LIGHT_MIN;  // 0 to (LIGHT_MAX - LIGHT_MIN)
 #ifdef LIGHT_CURVE  // Apply gamma curve to sensor input?
-  v = (int16_t)(pow((double)v / (double)(LIGHT_MAX - LIGHT_MIN),
+  v = (short)(pow((double)v / (double)(LIGHT_MAX - LIGHT_MIN),
                     LIGHT_CURVE) * (double)(LIGHT_MAX - LIGHT_MIN));
 #endif
   // And scale to iris range (IRIS_MAX is size at LIGHT_MIN)
   v = map(v, 0, (LIGHT_MAX - LIGHT_MIN), IRIS_MAX, IRIS_MIN);
 #ifdef IRIS_SMOOTH // Filter input (gradual motion)
-  static int16_t irisValue = (IRIS_MIN + IRIS_MAX) / 2;
+  static short irisValue = (IRIS_MIN + IRIS_MAX) / 2;
   irisValue = ((irisValue * 15) + v) / 16;
   frame(irisValue);
 #else // Unfiltered (immediate motion)
@@ -92,19 +92,19 @@ void updateEye (void)
 // EYE-RENDERING FUNCTION --------------------------------------------------
 void drawEye( // Renders one eye.  Inputs must be pre-clipped & valid.
   // Use native 32-bit variables where possible as this is 10% faster!
-  uint8_t  e,       // Eye array index; 0 or 1 for left/right
-  uint32_t iScale,  // Scale factor for iris
-  uint32_t  scleraX, // First pixel X offset into sclera image
-  uint32_t  scleraY, // First pixel Y offset into sclera image
-  uint32_t  uT,      // Upper eyelid threshold value
-  uint32_t  lT) {    // Lower eyelid threshold value
+  unsigned char  e,       // Eye array index; 0 or 1 for left/right
+  unsigned int iScale,  // Scale factor for iris
+  unsigned int  scleraX, // First pixel X offset into sclera image
+  unsigned int  scleraY, // First pixel Y offset into sclera image
+  unsigned int  uT,      // Upper eyelid threshold value
+  unsigned int  lT) {    // Lower eyelid threshold value
 
-  uint32_t  screenX, screenY, scleraXsave;
-  int32_t  irisX, irisY;
-  uint32_t p, a;
-  uint32_t d;
+  unsigned int  screenX, screenY, scleraXsave;
+  int  irisX, irisY;
+  unsigned int p, a;
+  unsigned int d;
 
-  uint32_t pixels = 0;
+  unsigned int pixels = 0;
 
   // Set up raw pixel dump to entire screen.  Although such writes can wrap
   // around automatically from end of rect back to beginning, the region is
@@ -119,8 +119,8 @@ void drawEye( // Renders one eye.  Inputs must be pre-clipped & valid.
   irisY       = scleraY - (SCLERA_HEIGHT - IRIS_HEIGHT) / 2;
 
   // Eyelid image is left<>right swapped for two displays
-  uint16_t lidX = 0;
-  uint16_t dlidX = -1;
+  unsigned short lidX = 0;
+  unsigned short dlidX = -1;
   if (e) dlidX = 1;
   for (screenY = 0; screenY < SCREEN_HEIGHT; screenY++, scleraY++, irisY++) {
     scleraX = scleraXsave;
@@ -171,7 +171,7 @@ void drawEye( // Renders one eye.  Inputs must be pre-clipped & valid.
 
 // EYE ANIMATION -----------------------------------------------------------
 
-const uint8_t ease[] = { // Ease in/out curve for eye movements 3*t^2-2*t^3
+const unsigned char ease[] = { // Ease in/out curve for eye movements 3*t^2-2*t^3
   0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  2,  2,  2,  3,   // T
   3,  3,  4,  4,  4,  5,  5,  6,  6,  7,  7,  8,  9,  9, 10, 10,   // h
   11, 12, 12, 13, 14, 15, 15, 16, 17, 18, 18, 19, 20, 21, 22, 23,   // x
@@ -191,20 +191,20 @@ const uint8_t ease[] = { // Ease in/out curve for eye movements 3*t^2-2*t^3
 }; // n
 
 #ifdef AUTOBLINK
-uint32_t timeOfLastBlink = 0L, timeToNextBlink = 0L;
+unsigned int timeOfLastBlink = 0L, timeToNextBlink = 0L;
 #endif
 
 // Process motion for a single frame of left or right eye
-void frame(uint16_t iScale) // Iris scale (0-1023)
+void frame(unsigned short iScale) // Iris scale (0-1023)
 {
-  static uint32_t frames   = 0; // Used in frame rate calculation
-  static uint8_t  eyeIndex = 0; // eye[] array counter
-  int16_t         eyeX, eyeY;
-  uint32_t        t = micros(); // Time at start of function
+  static unsigned int frames   = 0; // Used in frame rate calculation
+  static unsigned char  eyeIndex = 0; // eye[] array counter
+  short         eyeX, eyeY;
+  unsigned int        t = micros(); // Time at start of function
 
   if (!(++frames & 255)) { // Every 256 frames...
     float elapsed = (millis() - startTime) / 1000.0;
-    if (elapsed) Serial.println((uint16_t)(frames / elapsed)); // Print FPS
+    if (elapsed) Serial.println((unsigned short)(frames / elapsed)); // Print FPS
   }
 
   if (++eyeIndex >= NUM_EYES) eyeIndex = 0; // Cycle through eyes, 1 per call
@@ -215,8 +215,8 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
     defined(JOYSTICK_Y_PIN) && (JOYSTICK_Y_PIN >= 0)
 
   // Read X/Y from joystick, constrain to circle
-  int16_t dx, dy;
-  int32_t d;
+  short dx, dy;
+  int d;
   eyeX = analogRead(JOYSTICK_X_PIN); // Raw (unclipped) X/Y reading
   eyeY = analogRead(JOYSTICK_Y_PIN);
 #ifdef JOYSTICK_X_FLIP
@@ -228,7 +228,7 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
   dx = (eyeX * 2) - 1023; // A/D exact center is at 511.5.  Scale coords
   dy = (eyeY * 2) - 1023; // X2 so range is -1023 to +1023 w/center at 0.
   if ((d = (dx * dx + dy * dy)) > (1023 * 1023)) { // Outside circle
-    d    = (int32_t)sqrt((float)d);               // Distance from center
+    d    = (int)sqrt((float)d);               // Distance from center
     eyeX = ((dx * 1023 / d) + 1023) / 2;          // Clip to circle edge,
     eyeY = ((dy * 1023 / d) + 1023) / 2;          // scale back to 0-1023
   }
@@ -238,11 +238,11 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
   // holds there for random period until next motion.
 
   static bool  eyeInMotion      = false;
-  static int16_t  eyeOldX = 512, eyeOldY = 512, eyeNewX = 512, eyeNewY = 512;
-  static uint32_t eyeMoveStartTime = 0L;
-  static int32_t  eyeMoveDuration  = 0L;
+  static short  eyeOldX = 512, eyeOldY = 512, eyeNewX = 512, eyeNewY = 512;
+  static unsigned int eyeMoveStartTime = 0L;
+  static int  eyeMoveDuration  = 0L;
 
-  int32_t dt = t - eyeMoveStartTime;      // uS elapsed since last eye event
+  int dt = t - eyeMoveStartTime;      // uS elapsed since last eye event
   if (eyeInMotion) {                      // Currently moving?
     if (dt >= eyeMoveDuration) {          // Time up?  Destination reached.
       eyeInMotion      = false;           // Stop moving
@@ -251,7 +251,7 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
       eyeX = eyeOldX = eyeNewX;           // Save position
       eyeY = eyeOldY = eyeNewY;
     } else { // Move time's not yet fully elapsed -- interpolate position
-      int16_t e = ease[255 * dt / eyeMoveDuration] + 1;   // Ease curve
+      short e = ease[255 * dt / eyeMoveDuration] + 1;   // Ease curve
       eyeX = eyeOldX + (((eyeNewX - eyeOldX) * e) / 256); // Interp X
       eyeY = eyeOldY + (((eyeNewY - eyeOldY) * e) / 256); // and Y
     }
@@ -259,8 +259,8 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
     eyeX = eyeOldX;
     eyeY = eyeOldY;
     if (dt > eyeMoveDuration) {           // Time up?  Begin new move.
-      int16_t  dx, dy;
-      uint32_t d;
+      short  dx, dy;
+      unsigned int d;
       do {                                // Pick new dest in circle
         eyeNewX = random(1024);
         eyeNewY = random(1024);
@@ -280,9 +280,9 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
   // and durations are random (within ranges).
   if ((t - timeOfLastBlink) >= timeToNextBlink) { // Start new blink?
     timeOfLastBlink = t;
-    uint32_t blinkDuration = random(36000, 72000); // ~1/28 - ~1/14 sec
+    unsigned int blinkDuration = random(36000, 72000); // ~1/28 - ~1/14 sec
     // Set up durations for both eyes (if not already winking)
-    for (uint8_t e = 0; e < NUM_EYES; e++) {
+    for (unsigned char e = 0; e < NUM_EYES; e++) {
       if (eye[e].blink.state == NOBLINK) {
         eye[e].blink.state     = ENBLINK;
         eye[e].blink.startTime = t;
@@ -317,8 +317,8 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
 #if defined(BLINK_PIN) && (BLINK_PIN >= 0)
     if (digitalRead(BLINK_PIN) == LOW) {
       // Manually-initiated blinks have random durations like auto-blink
-      uint32_t blinkDuration = random(36000, 72000);
-      for (uint8_t e = 0; e < NUM_EYES; e++) {
+      unsigned int blinkDuration = random(36000, 72000);
+      for (unsigned char e = 0; e < NUM_EYES; e++) {
         if (eye[e].blink.state == NOBLINK) {
           eye[e].blink.state     = ENBLINK;
           eye[e].blink.startTime = t;
@@ -356,10 +356,10 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
   // track the pupil (eyes tend to open only as much as needed -- e.g. look
   // down and the upper eyelid drops).  Just sample a point in the upper
   // lid map slightly above the pupil to determine the rendering threshold.
-  static uint8_t uThreshold = 128;
-  uint8_t        lThreshold, n;
+  static unsigned char uThreshold = 128;
+  unsigned char        lThreshold, n;
 #ifdef TRACKING
-  int16_t sampleX = SCLERA_WIDTH  / 2 - (eyeX / 2), // Reduce X influence
+  short sampleX = SCLERA_WIDTH  / 2 - (eyeX / 2), // Reduce X influence
           sampleY = SCLERA_HEIGHT / 2 - (eyeY + IRIS_HEIGHT / 4);
   // Eyelid is slightly asymmetrical, so two readings are taken, averaged
   if (sampleY < 0) n = 0;
@@ -376,7 +376,7 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
   // The upper/lower thresholds are then scaled relative to the current
   // blink position so that blinks work together with pupil tracking.
   if (eye[eyeIndex].blink.state) { // Eye currently blinking?
-    uint32_t s = (t - eye[eyeIndex].blink.startTime);
+    unsigned int s = (t - eye[eyeIndex].blink.startTime);
     if (s >= eye[eyeIndex].blink.duration) s = 255;  // At or past blink end
     else s = 255 * s / eye[eyeIndex].blink.duration; // Mid-blink
     s          = (eye[eyeIndex].blink.state == DEBLINK) ? 1 + s : 256 - s;
@@ -402,22 +402,22 @@ void frame(uint16_t iScale) // Iris scale (0-1023)
 // reaction of the eye plus the continuous smaller adjustments that occur.
 
 void split( // Subdivides motion path into two sub-paths w/randimization
-  int16_t  startValue, // Iris scale value (IRIS_MIN to IRIS_MAX) at start
-  int16_t  endValue,   // Iris scale value at end
-  uint32_t startTime,  // micros() at start
-  int32_t  duration,   // Start-to-end time, in microseconds
-  int16_t  range) {    // Allowable scale value variance when subdividing
+  short  startValue, // Iris scale value (IRIS_MIN to IRIS_MAX) at start
+  short  endValue,   // Iris scale value at end
+  unsigned int startTime,  // micros() at start
+  int  duration,   // Start-to-end time, in microseconds
+  short  range) {    // Allowable scale value variance when subdividing
 
   if (range >= 8) {    // Limit subdvision count, because recursion
     range    /= 2;     // Split range & time in half for subdivision,
     duration /= 2;     // then pick random center point within range:
-    int16_t  midValue = (startValue + endValue - range) / 2 + random(range);
-    uint32_t midTime  = startTime + duration;
+    short  midValue = (startValue + endValue - range) / 2 + random(range);
+    unsigned int midTime  = startTime + duration;
     split(startValue, midValue, startTime, duration, range); // First half
     split(midValue  , endValue, midTime  , duration, range); // Second half
   } else {             // No more subdivisons, do iris motion...
-    int32_t dt;        // Time (micros) since start of motion
-    int16_t v;         // Interim value
+    int dt;        // Time (micros) since start of motion
+    short v;         // Interim value
     while ((dt = (micros() - startTime)) < duration) {
       v = startValue + (((endValue - startValue) * dt) / duration);
       if (v < IRIS_MIN)      v = IRIS_MIN; // Clip just in case

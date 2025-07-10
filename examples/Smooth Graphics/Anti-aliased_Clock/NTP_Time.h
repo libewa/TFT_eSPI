@@ -109,18 +109,18 @@ const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of th
 
 byte packetBuffer[ NTP_PACKET_SIZE ]; //buffer to hold incoming and outgoing packets
 
-uint8_t lastMinute = 0;
+unsigned char lastMinute = 0;
 
-uint32_t nextSendTime = 0;
-uint32_t newRecvTime = 0;
-uint32_t lastRecvTime = 0;
+unsigned int nextSendTime = 0;
+unsigned int newRecvTime = 0;
+unsigned int lastRecvTime = 0;
 
-uint32_t newTickTime = 0;
-uint32_t lastTickTime = 0;
+unsigned int newTickTime = 0;
+unsigned int lastTickTime = 0;
 
 bool ntp_start = 1;
 
-uint32_t no_packet_count = 0;
+unsigned int no_packet_count = 0;
 
 
 //====================================================================================
@@ -216,7 +216,7 @@ void sendNTPpacket(IPAddress& address)
 void decodeNTP(void)
 {
   timeValid = false;
-  uint32_t waitTime = millis() + 500;
+  unsigned int waitTime = millis() + 500;
   while (millis() < waitTime && !timeValid)
   {
     yield();
@@ -256,16 +256,16 @@ void decodeNTP(void)
       // Print the hour, minute and second:
       Serial.print("Received NTP UTC time : ");
 
-      uint8_t hh = hour(utc);
+      unsigned char hh = hour(utc);
       Serial.print(hh); // print the hour (86400 equals secs per day)
 
       Serial.print(':');
-      uint8_t mm = minute(utc);
+      unsigned char mm = minute(utc);
       if (mm < 10 ) Serial.print('0');
       Serial.print(mm); // print the minute (3600 equals secs per minute)
 
       Serial.print(':');
-      uint8_t ss = second(utc);
+      unsigned char ss = second(utc);
       if ( ss < 10 ) Serial.print('0');
       Serial.println(ss); // print the second
 
@@ -293,21 +293,21 @@ void decodeNTP(void)
 //====================================================================================
 //                                  Time string: 00:00:00
 //====================================================================================
-String timeString(uint32_t t_secs)
+String timeString(unsigned int t_secs)
 {
   String timeNow = "";
 
-  uint8_t h = t_secs / 3600;
+  unsigned char h = t_secs / 3600;
   if ( h < 10) timeNow += "0";
   timeNow += h;
 
   timeNow += ":";
-  uint8_t m = (t_secs - ( h * 3600 )) / 60;
+  unsigned char m = (t_secs - ( h * 3600 )) / 60;
   if (m < 10) timeNow += "0";
   timeNow += m;
 
   timeNow += ":";
-  uint8_t s = t_secs - ( h * 3600 ) - ( m * 60 );
+  unsigned char s = t_secs - ( h * 3600 ) - ( m * 60 );
   if (s < 10) timeNow += "0";
   timeNow += s;
 

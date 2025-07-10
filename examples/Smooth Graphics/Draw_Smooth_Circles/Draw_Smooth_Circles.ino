@@ -21,14 +21,14 @@ void setup(void) {
 // -------------------------------------------------------------------------
 void loop()
 {
-  static uint32_t radius = 2;
-  static uint32_t index = 0;
+  static unsigned int radius = 2;
+  static unsigned int index = 0;
 
-  uint16_t fg_color = rainbow(index);
-  uint16_t bg_color = TFT_BLACK;       // This is the background colour used for smoothing (anti-aliasing)
+  unsigned short fg_color = rainbow(index);
+  unsigned short bg_color = TFT_BLACK;       // This is the background colour used for smoothing (anti-aliasing)
 
-  uint16_t x = tft.width() / 2; // Position of centre of arc
-  uint16_t y = tft.height() / 2;
+  unsigned short x = tft.width() / 2; // Position of centre of arc
+  unsigned short y = tft.height() / 2;
 
   tft.drawSmoothCircle(x, y, radius, fg_color, bg_color);
 

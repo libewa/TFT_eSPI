@@ -8,7 +8,7 @@
   SPIClass& spi = SPI;
 
 // Buffer for SPI transmit byte padding and byte order manipulation
-uint8_t   spiBuffer[8] = {0,0,0,0,0,0,0,0};
+unsigned char   spiBuffer[8] = {0,0,0,0,0,0,0,0};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 #if defined (TFT_SDA_READ) && !defined (TFT_PARALLEL_8_BIT)
@@ -18,12 +18,12 @@ uint8_t   spiBuffer[8] = {0,0,0,0,0,0,0,0};
 ** Function name:           tft_Read_8
 ** Description:             ESP8266 software SPI to read bidirectional SDA line
 ***************************************************************************************/
-uint8_t TFT_eSPI::tft_Read_8(void)
+unsigned char TFT_eSPI::tft_Read_8(void)
 {
-  uint8_t  ret = 0;
-  uint32_t reg = 0;
+  unsigned char  ret = 0;
+  unsigned int reg = 0;
 
-  for (uint8_t i = 0; i < 8; i++) {  // read results
+  for (unsigned char i = 0; i < 8; i++) {  // read results
     ret <<= 1;
     SCLK_L;
     if (digitalRead(TFT_MOSI)) ret |= 1;
@@ -67,9 +67,9 @@ void TFT_eSPI::end_SDA_Read(void)
 ** Function name:           read byte  - supports class functions
 ** Description:             Parallel bus only - dummy function - not used
 ***************************************************************************************/
-uint8_t TFT_eSPI::readByte(void)
+unsigned char TFT_eSPI::readByte(void)
 {
-  uint8_t b = 0xAA;
+  unsigned char b = 0xAA;
   return b;
 }
 
@@ -81,9 +81,9 @@ uint8_t TFT_eSPI::readByte(void)
 ** Function name:           pushBlock - for ESP32 or ESP8266 RPi TFT
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
-  uint8_t colorBin[] = { (uint8_t) (color >> 8), (uint8_t) color };
+  unsigned char colorBin[] = { (unsigned char) (color >> 8), (unsigned char) color };
   if(len) spi.writePattern(&colorBin[0], 2, 1); len--;
   while(len--) {WR_L; WR_H;}
 }
@@ -92,9 +92,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 ** Function name:           pushPixels - for ESP32 or ESP8266 RPi TFT
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint8_t *data = (uint8_t*)data_in;
+  unsigned char *data = (unsigned char*)data_in;
   while ( len >=64 ) {spi.writePattern(data, 64, 1); data += 64; len -= 64; }
   if (len) spi.writePattern(data, len, 1);
 }
@@ -103,8 +103,8 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           pushSwapBytePixels - for ESP32 or ESP8266 RPi TFT
 ** Description:             Write a sequence of pixels with swapped bytes
 ***************************************************************************************/
-void TFT_eSPI::pushSwapBytePixels(const void* data_in, uint32_t len){
-  uint16_t *data = (uint16_t*)data_in;
+void TFT_eSPI::pushSwapBytePixels(const void* data_in, unsigned int len){
+  unsigned short *data = (unsigned short*)data_in;
   while ( len-- ) {tft_Write_16(*data); data++;}
 }
 
@@ -116,16 +116,16 @@ void TFT_eSPI::pushSwapBytePixels(const void* data_in, uint32_t len){
 ** Function name:           pushBlock - for ESP8266 and 3 byte RGB display
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
   // Split out the colours
-  uint8_t r = (color & 0xF800)>>8;
-  uint8_t g = (color & 0x07E0)>>3;
-  uint8_t b = (color & 0x001F)<<3;
+  unsigned char r = (color & 0xF800)>>8;
+  unsigned char g = (color & 0x07E0)>>3;
+  unsigned char b = (color & 0x001F)<<3;
   // Concatenate 4 pixels into three 32-bit blocks
-  uint32_t r0 = r<<24 | b<<16 | g<<8 | r;
-  uint32_t r1 = g<<24 | r<<16 | b<<8 | g;
-  uint32_t r2 = b<<24 | g<<16 | r<<8 | b;
+  unsigned int r0 = r<<24 | b<<16 | g<<8 | r;
+  unsigned int r1 = g<<24 | r<<16 | b<<8 | g;
+  unsigned int r2 = b<<24 | g<<16 | r<<8 | b;
 
   SPI1W0 = r0;
   SPI1W1 = r1;
@@ -180,39 +180,39 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 ** Function name:           pushPixels - for ESP8266 and 3 byte RGB display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   // Send groups of 4 concatenated pixels
   if (len > 3) {
     SPI1U1 = ((4 * 24 - 1) << SPILMOSI);
     while (len > 3) {
 
-      uint8_t  r[4];
-      uint8_t  g[4];
-      uint8_t  b[4];
+      unsigned char  r[4];
+      unsigned char  g[4];
+      unsigned char  b[4];
 
       if (!_swapBytes) {
         // Split out the colours
-        for (uint16_t i = 0; i < 4; i++) {
-          uint16_t col = *data++;
+        for (unsigned short i = 0; i < 4; i++) {
+          unsigned short col = *data++;
           r[i] = (col & 0xF8);
           g[i] = (col & 0xE000)>>11 | (col & 0x07)<<5;
           b[i] = (col & 0x1F00)>>5;
         }
       }
       else {
-        for (uint16_t i = 0; i < 4; i++) {
-          uint16_t col = *data++;
+        for (unsigned short i = 0; i < 4; i++) {
+          unsigned short col = *data++;
           r[i] = (col & 0xF800)>>8;
           g[i] = (col & 0x07E0)>>3;
           b[i] = (col & 0x001F)<<3;
         }
       }
-      uint32_t r0 = r[1]<<24 | b[0]<<16 | g[0]<<8 | r[0];
-      uint32_t r1 = g[2]<<24 | r[2]<<16 | b[1]<<8 | g[1];
-      uint32_t r2 = b[3]<<24 | g[3]<<16 | r[3]<<8 | b[2];
+      unsigned int r0 = r[1]<<24 | b[0]<<16 | g[0]<<8 | r[0];
+      unsigned int r1 = g[2]<<24 | r[2]<<16 | b[1]<<8 | g[1];
+      unsigned int r2 = b[3]<<24 | g[3]<<16 | r[3]<<8 | b[2];
 
       while(SPI1CMD & SPIBUSY) {}
       SPI1W0 = r0;
@@ -234,9 +234,9 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           pushSwapBytePixels - for ESP8266 and 3 byte RGB display
 ** Description:             Write a sequence of pixels with swapped bytes
 ***************************************************************************************/
-void TFT_eSPI::pushSwapBytePixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushSwapBytePixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
   // ILI9488 write macro is not endianess dependant, so swap byte macro not used here
   while ( len-- ) {tft_Write_16(*data); data++;}
 }
@@ -255,15 +255,15 @@ void TFT_eSPI::pushSwapBytePixels(const void* data_in, uint32_t len){
 //       TFT_eSPI       98.06%              97.59%          94.24%
 //       Adafruit_GFX   19.62%              14.31%           7.94%
 //
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
 /*
 while (len>1) { tft_Write_32(color<<16 | color); len-=2;}
 if (len) tft_Write_16(color);
 return;
 //*/
-  uint16_t color16 = (color >> 8) | (color << 8);
-  uint32_t color32 = color16 | color16 << 16;
+  unsigned short color16 = (color >> 8) | (color << 8);
+  unsigned int color32 = color16 | color16 << 16;
 /*
   while(len--) {
     SPI1U1 = ((16-1) << SPILMOSI) | ((16-1) << SPILMISO);
@@ -328,16 +328,16 @@ return;
 ** Function name:           pushPixels - for ESP8266
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
   if(_swapBytes) {
     pushSwapBytePixels(data_in, len);
     return;
   }
 
-  uint16_t *data = (uint16_t*) data_in;
+  unsigned short *data = (unsigned short*) data_in;
 
-  uint32_t color[8];
+  unsigned int color[8];
 
   SPI1U1 = (255 << SPILMOSI) | (255 << SPILMISO);
 
@@ -364,7 +364,7 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 
   if(len)
   {
-    uint32_t bits = (len*16-1); // bits left to shift - 1
+    unsigned int bits = (len*16-1); // bits left to shift - 1
 
     memcpy(color,data,len<<1);
 
@@ -389,18 +389,18 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           pushSwapBytePixels - for ESP8266
 ** Description:             Write a sequence of pixels with swapped bytes
 ***************************************************************************************/
-void TFT_eSPI::pushSwapBytePixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushSwapBytePixels(const void* data_in, unsigned int len){
 
-  uint8_t* data = (uint8_t*)data_in;
-  //uint16_t* data = (uint16_t*)data_in;
+  unsigned char* data = (unsigned char*)data_in;
+  //unsigned short* data = (unsigned short*)data_in;
 
-  uint32_t color[8];
+  unsigned int color[8];
 
   SPI1U1 = (255 << SPILMOSI) | (255 << SPILMISO);
 
   while(len>15)
   {
-    uint32_t i = 0;
+    unsigned int i = 0;
     while(i<8) { color[i++] = DAT8TO32(data); data+=4; }
 
     len -= 16;
@@ -420,8 +420,8 @@ void TFT_eSPI::pushSwapBytePixels(const void* data_in, uint32_t len){
 
   if(len)
   {
-    uint32_t i = 0;
-    uint32_t bits = (len*16-1); // bits left to shift - 1
+    unsigned int i = 0;
+    unsigned int bits = (len*16-1); // bits left to shift - 1
     len = (len+1)>>1;
     while(len--) { color[i++] = DAT8TO32(data); data+=4; }
 

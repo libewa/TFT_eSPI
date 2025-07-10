@@ -10,11 +10,11 @@
     EPD_WIDTH and EPD_HEIGHT are automatically defined here based on the library selected
 
     For 2 colour ePaper displays create one frame pointer in sketch:
-    uint8_t* framePtr;
+    unsigned char* framePtr;
     
     For 3 colour ePaper displays create two frame pointers in sketch:
-    uint8_t* blackFramePtr;
-    uint8_t* redFramePtr;
+    unsigned char* blackFramePtr;
+    unsigned char* redFramePtr;
     
     Call this function to update whole display:
     updateDisplay();
@@ -98,11 +98,11 @@
 // Waveshare libraries  :-(
 //------------------------------------------------------------------------------------
 #if defined (EPD1IN54B_H) || defined(EPD1IN54C_H) || defined(EPD2IN13B_H) || defined(EPD2IN7B_H) || defined(EPD2IN9B_H) || defined(EPD4IN2_H)
-  void updateDisplay(uint8_t* blackFrame = blackFramePtr, uint8_t* redFrame = redFramePtr)
+  void updateDisplay(unsigned char* blackFrame = blackFramePtr, unsigned char* redFrame = redFramePtr)
   {
     ePaper.DisplayFrame(blackFrame, redFrame);  // Update 3 colour display
 #else
-  void updateDisplay(uint8_t* blackFrame = framePtr)
+  void updateDisplay(unsigned char* blackFrame = framePtr)
   {
   #if defined (EPD2IN7_H) || defined(EPD4IN2_H)
     ePaper.DisplayFrame(blackFrame);            // Update 2 color display

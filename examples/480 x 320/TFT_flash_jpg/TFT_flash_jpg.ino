@@ -34,7 +34,7 @@ TFT_eSPI tft = TFT_eSPI();
 #include "jpeg4.h"
 
 // Count how many times the image is drawn for test purposes
-uint32_t icount = 0;
+unsigned int icount = 0;
 //----------------------------------------------------------------------------------------------------
 
 
@@ -87,7 +87,7 @@ void loop() {
 //####################################################################################################
 // Draw a JPEG on the TFT pulled from a program memory array
 //####################################################################################################
-void drawArrayJpeg(const uint8_t arrayname[], uint32_t array_size, int xpos, int ypos) {
+void drawArrayJpeg(const unsigned char arrayname[], unsigned int array_size, int xpos, int ypos) {
 
   int x = xpos;
   int y = ypos;
@@ -109,24 +109,24 @@ void drawArrayJpeg(const uint8_t arrayname[], uint32_t array_size, int xpos, int
 void renderJPEG(int xpos, int ypos) {
 
   // retrieve information about the image
-  uint16_t *pImg;
-  uint16_t mcu_w = JpegDec.MCUWidth;
-  uint16_t mcu_h = JpegDec.MCUHeight;
-  uint32_t max_x = JpegDec.width;
-  uint32_t max_y = JpegDec.height;
+  unsigned short *pImg;
+  unsigned short mcu_w = JpegDec.MCUWidth;
+  unsigned short mcu_h = JpegDec.MCUHeight;
+  unsigned int max_x = JpegDec.width;
+  unsigned int max_y = JpegDec.height;
 
   // Jpeg images are draw as a set of image block (tiles) called Minimum Coding Units (MCUs)
   // Typically these MCUs are 16x16 pixel blocks
   // Determine the width and height of the right and bottom edge image blocks
-  uint32_t min_w = minimum(mcu_w, max_x % mcu_w);
-  uint32_t min_h = minimum(mcu_h, max_y % mcu_h);
+  unsigned int min_w = minimum(mcu_w, max_x % mcu_w);
+  unsigned int min_h = minimum(mcu_h, max_y % mcu_h);
 
   // save the current image block size
-  uint32_t win_w = mcu_w;
-  uint32_t win_h = mcu_h;
+  unsigned int win_w = mcu_w;
+  unsigned int win_h = mcu_h;
 
   // record the current time so we can measure how long it takes to draw an image
-  uint32_t drawTime = millis();
+  unsigned int drawTime = millis();
 
   // save the coordinate of the right and bottom edges to assist image cropping
   // to the screen size
@@ -154,7 +154,7 @@ void renderJPEG(int xpos, int ypos) {
     // copy pixels into a contiguous block
     if (win_w != mcu_w)
     {
-      uint16_t *cImg;
+      unsigned short *cImg;
       int p = 0;
       cImg = pImg + win_w;
       for (int h = 1; h < win_h; h++)
@@ -169,7 +169,7 @@ void renderJPEG(int xpos, int ypos) {
     }
 
     // calculate how many pixels must be drawn
-    uint32_t mcu_pixels = win_w * win_h;
+    unsigned int mcu_pixels = win_w * win_h;
 
     tft.startWrite();
 
@@ -226,7 +226,7 @@ void jpegInfo() {
 
 // The Due will work fine with the HX8357_Due library.
 
-void showTime(uint32_t msTime) {
+void showTime(unsigned int msTime) {
   //tft.setCursor(0, 0);
   //tft.setTextFont(1);
   //tft.setTextSize(2);

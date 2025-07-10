@@ -80,12 +80,12 @@ void readTest(void)
 
 //====================================================================================
 
-void printRange32(uint8_t readStart, uint8_t readEnd)
+void printRange32(unsigned char readStart, unsigned char readEnd)
 {
   Serial.print("Registers from "); Serial.print(readStart, HEX);
   Serial.print(" to "); Serial.println(readEnd, HEX);
 
-  for (uint8_t cmd_reg = readStart; cmd_reg < readEnd; cmd_reg++) {
+  for (unsigned char cmd_reg = readStart; cmd_reg < readEnd; cmd_reg++) {
     readRegister(cmd_reg, 4, 0);
   }
 }
@@ -112,9 +112,9 @@ void printSubset(void)
 
 //====================================================================================
 
-uint32_t readRegister(uint8_t reg, int16_t bytes, uint8_t index)
+unsigned int readRegister(unsigned char reg, short bytes, unsigned char index)
 {
-  uint32_t  data = 0;
+  unsigned int  data = 0;
 
   while (bytes > 0) {
     bytes--;
@@ -129,7 +129,7 @@ uint32_t readRegister(uint8_t reg, int16_t bytes, uint8_t index)
   Serial.print(": 0x");
 
   // Add leading zeros as needed
-  uint32_t mask = 0x1 << 28;
+  unsigned int mask = 0x1 << 28;
   while (data < mask && mask > 0x1) {
     Serial.print("0");
     mask = mask >> 4;

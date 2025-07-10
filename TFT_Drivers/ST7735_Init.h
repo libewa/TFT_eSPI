@@ -8,7 +8,7 @@
 
 {
 	// Initialization commands for ST7735 screens
-  static const uint8_t PROGMEM
+  static const unsigned char PROGMEM
   Bcmd[] = {                  // Initialization commands for 7735B screens
     18,                       // 18 commands in list:
     ST7735_SWRESET,   TFT_INIT_DELAY,  //  1: Software reset, no args, w/delay

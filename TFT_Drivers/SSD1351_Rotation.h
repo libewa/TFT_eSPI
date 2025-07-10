@@ -3,7 +3,7 @@
 
   rotation = m % 4; // Limit the range of values to 0-3
 
-  uint8_t madctl = 0x64;
+  unsigned char madctl = 0x64;
 
   switch (rotation) {
     case 0:

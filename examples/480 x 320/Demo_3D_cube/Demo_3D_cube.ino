@@ -19,8 +19,8 @@
 
 TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 
-int16_t h;
-int16_t w;
+short h;
+short w;
 
 int inc = -2;
 
@@ -131,7 +131,7 @@ void RenderImage( void)
 
   for (int i = 0; i < LinestoRender; i++ )
   {
-    uint16_t color = TFT_BLUE;
+    unsigned short color = TFT_BLUE;
     if (i < 4) color = TFT_RED;
     if (i > 7) color = TFT_GREEN;
     tft.drawLine(Render[i].p0.x, Render[i].p0.y, Render[i].p1.x, Render[i].p1.y, color);

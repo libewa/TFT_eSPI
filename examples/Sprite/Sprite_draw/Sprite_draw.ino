@@ -62,14 +62,14 @@ void loop(void)
   spr.fillSprite(TFT_BLACK);
 
   // Number of pixels to draw
-  uint16_t n = 100;
+  unsigned short n = 100;
 
   // Draw 100 random colour pixels at random positions in sprite
   while (n--)
   {
-    uint16_t colour = random(0x10000); // Returns colour 0 - 0xFFFF
-    int16_t x = random(WIDTH);        // Random x coordinate
-    int16_t y = random(HEIGHT);       // Random y coordinate
+    unsigned short colour = random(0x10000); // Returns colour 0 - 0xFFFF
+    short x = random(WIDTH);        // Random x coordinate
+    short y = random(HEIGHT);       // Random y coordinate
     spr.drawPixel( x, y, colour);      // Draw pixel in sprite
   }
 
@@ -102,7 +102,7 @@ void loop(void)
   int x = tft.width() / 2  -  WIDTH / 2;
   int y = tft.height() / 2 - HEIGHT / 2;
 
-  uint32_t updateTime = 0;       // time for next update
+  unsigned int updateTime = 0;       // time for next update
 
   while (true)
   {

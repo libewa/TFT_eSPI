@@ -1,8 +1,8 @@
 // We need this header file to use FLASH as storage with PROGMEM directive:
 
 // Icon width and height
-const uint16_t alertWidth = 32;
-const uint16_t alertHeight = 32;
+const unsigned short alertWidth = 32;
+const unsigned short alertHeight = 32;
 
 // The icon file can be created with the "UTFT ImageConverter 565" bitmap to .c file creation utility, more can be pasted in here
 const unsigned short  alert[1024] PROGMEM={

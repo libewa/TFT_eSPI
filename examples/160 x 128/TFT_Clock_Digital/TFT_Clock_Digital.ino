@@ -33,21 +33,21 @@ code	color
 
 TFT_eSPI tft = TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
 
-uint32_t targetTime = 0;       // for next 1 second timeout
+unsigned int targetTime = 0;       // for next 1 second timeout
 
 byte omm = 99;
 bool initial = 1;
 byte xcolon = 0;
 unsigned int colour = 0;
 
-static uint8_t conv2d(const char* p) {
-  uint8_t v = 0;
+static unsigned char conv2d(const char* p) {
+  unsigned char v = 0;
   if ('0' <= *p && *p <= '9')
     v = *p - '0';
   return 10 * v + *++p - '0';
 }
 
-uint8_t hh=conv2d(__TIME__), mm=conv2d(__TIME__+3), ss=conv2d(__TIME__+6);  // Get H, M, S from compile time
+unsigned char hh=conv2d(__TIME__), mm=conv2d(__TIME__+3), ss=conv2d(__TIME__+6);  // Get H, M, S from compile time
 
 void setup(void) {
   tft.init();

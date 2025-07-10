@@ -41,14 +41,14 @@ TFT_eSprite spr    = TFT_eSprite(&tft); // Sprite for meter reading
 // Include the jpeg decoder library
 #include <TJpg_Decoder.h>
 
-uint16_t* tft_buffer;
+unsigned short* tft_buffer;
 bool      buffer_loaded = false;
-uint16_t  spr_width = 0;
-uint16_t  bg_color =0;
+unsigned short  spr_width = 0;
+unsigned short  bg_color =0;
 // =======================================================================================
 // This function will be called during decoding of the jpeg file
 // =======================================================================================
-bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
+bool tft_output(short x, short y, unsigned short w, unsigned short h, unsigned short* bitmap)
 {
   // Stop further decoding as image is running off bottom of screen
   if ( y >= tft.height() ) return 0;
@@ -114,7 +114,7 @@ void setup()   {
 // Loop
 // =======================================================================================
 void loop() {
-  uint16_t angle = random(241); // random speed in range 0 to 240
+  unsigned short angle = random(241); // random speed in range 0 to 240
 
   // Plot needle at random angle in range 0 to 240, speed 40ms per increment
   plotNeedle(angle, 30);
@@ -134,8 +134,8 @@ void createNeedle(void)
   needle.fillSprite(TFT_BLACK); // Fill with black
 
   // Define needle pivot point relative to top left corner of Sprite
-  uint16_t piv_x = NEEDLE_WIDTH / 2; // pivot x in Sprite (middle)
-  uint16_t piv_y = NEEDLE_RADIUS;    // pivot y in Sprite
+  unsigned short piv_x = NEEDLE_WIDTH / 2; // pivot x in Sprite (middle)
+  unsigned short piv_y = NEEDLE_RADIUS;    // pivot y in Sprite
   needle.setPivot(piv_x, piv_y);     // Set pivot point in this Sprite
 
   // Draw the red needle in the Sprite
@@ -143,31 +143,31 @@ void createNeedle(void)
   needle.fillRect(1, 1, NEEDLE_WIDTH-2, NEEDLE_LENGTH-2, TFT_RED);
 
   // Bounding box parameters to be populated
-  int16_t min_x;
-  int16_t min_y;
-  int16_t max_x;
-  int16_t max_y;
+  short min_x;
+  short min_y;
+  short max_x;
+  short max_y;
 
   // Work out the worst case area that must be grabbed from the TFT,
   // this is at a 45 degree rotation
   needle.getRotatedBounds(45, &min_x, &min_y, &max_x, &max_y);
 
   // Calculate the size and allocate the buffer for the grabbed TFT area
-  tft_buffer =  (uint16_t*) malloc( ((max_x - min_x) + 2) * ((max_y - min_y) + 2) * 2 );
+  tft_buffer =  (unsigned short*) malloc( ((max_x - min_x) + 2) * ((max_y - min_y) + 2) * 2 );
 }
 
 // =======================================================================================
 // Move the needle to a new position
 // =======================================================================================
-void plotNeedle(int16_t angle, uint16_t ms_delay)
+void plotNeedle(short angle, unsigned short ms_delay)
 {
-  static int16_t old_angle = -120; // Starts at -120 degrees
+  static short old_angle = -120; // Starts at -120 degrees
 
   // Bounding box parameters
-  static int16_t min_x;
-  static int16_t min_y;
-  static int16_t max_x;
-  static int16_t max_y;
+  static short min_x;
+  static short min_y;
+  static short max_x;
+  static short max_y;
 
   if (angle < 0) angle = 0; // Limit angle to emulate needle end stops
   if (angle > 240) angle = 240;

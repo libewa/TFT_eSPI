@@ -13,47 +13,47 @@
 
 TFT_eSPI tft = TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
 
-int16_t h = 128;
-int16_t w = 160;
+short h = 128;
+short w = 160;
 
 int dly = 10;
 
-int16_t paddle_h = 25;
-int16_t paddle_w = 2;
+short paddle_h = 25;
+short paddle_w = 2;
 
-int16_t lpaddle_x = 0;
-int16_t rpaddle_x = w - paddle_w;
+short lpaddle_x = 0;
+short rpaddle_x = w - paddle_w;
 
-int16_t lpaddle_y = 0;
-int16_t rpaddle_y = h - paddle_h;
+short lpaddle_y = 0;
+short rpaddle_y = h - paddle_h;
 
-int16_t lpaddle_d = 1;
-int16_t rpaddle_d = -1;
+short lpaddle_d = 1;
+short rpaddle_d = -1;
 
-int16_t lpaddle_ball_t = w - w / 4;
-int16_t rpaddle_ball_t = w / 4;
+short lpaddle_ball_t = w - w / 4;
+short rpaddle_ball_t = w / 4;
 
-int16_t target_y = 0;
+short target_y = 0;
 
-int16_t ball_x = 2;
-int16_t ball_y = 2;
-int16_t oldball_x = 2;
-int16_t oldball_y = 2;
+short ball_x = 2;
+short ball_y = 2;
+short oldball_x = 2;
+short oldball_y = 2;
 
-int16_t ball_dx = 1;
-int16_t ball_dy = 1;
+short ball_dx = 1;
+short ball_dy = 1;
 
-int16_t ball_w = 4;
-int16_t ball_h = 4;
+short ball_w = 4;
+short ball_h = 4;
 
-int16_t dashline_h = 4;
-int16_t dashline_w = 2;
-int16_t dashline_n = h / dashline_h;
-int16_t dashline_x = w / 2 - 1;
-int16_t dashline_y = dashline_h / 2;
+short dashline_h = 4;
+short dashline_w = 2;
+short dashline_n = h / dashline_h;
+short dashline_x = w / 2 - 1;
+short dashline_y = dashline_h / 2;
 
-int16_t lscore = 12;
-int16_t rscore = 4;
+short lscore = 12;
+short rscore = 4;
 
 void setup(void) {
   
@@ -112,7 +112,7 @@ void midline() {
   // Quick way to draw a dashed line
   tft.setAddrWindow(dashline_x, 0, dashline_w, h);
   
-  for(int16_t i = 0; i < dashline_n; i+=2) {
+  for(short i = 0; i < dashline_n; i+=2) {
     tft.pushColor(WHITE, dashline_w*dashline_h); // push dash pixels
     tft.pushColor(BLACK, dashline_w*dashline_h); // push gap pixels
   }
@@ -169,9 +169,9 @@ void rpaddle() {
 }
 
 void calc_target_y() {
-  int16_t target_x;
-  int16_t reflections;
-  int16_t y;
+  short target_x;
+  short reflections;
+  short y;
 
   if (ball_dx == 1) {
     target_x = w - ball_w;

@@ -20,22 +20,22 @@ void setup(void) {
 // -------------------------------------------------------------------------
 void loop()
 {
-  static uint32_t count = 0;
+  static unsigned int count = 0;
 
-  uint16_t fg_color = random(0x10000);
-  uint16_t bg_color = TFT_BLACK;       // This is the background colour used for smoothing (anti-aliasing)
+  unsigned short fg_color = random(0x10000);
+  unsigned short bg_color = TFT_BLACK;       // This is the background colour used for smoothing (anti-aliasing)
 
-  uint16_t x = random(tft.width());  // Position of centre of arc
-  uint16_t y = random(tft.height());
+  unsigned short x = random(tft.width());  // Position of centre of arc
+  unsigned short y = random(tft.height());
 
-  uint8_t radius       = random(20, tft.width()/4); // Outer arc radius
-  uint8_t thickness    = random(1, radius / 4);     // Thickness
-  uint8_t inner_radius = radius - thickness;        // Calculate inner radius (can be 0 for circle segment)
+  unsigned char radius       = random(20, tft.width()/4); // Outer arc radius
+  unsigned char thickness    = random(1, radius / 4);     // Thickness
+  unsigned char inner_radius = radius - thickness;        // Calculate inner radius (can be 0 for circle segment)
 
   // 0 degrees is at 6 o'clock position
   // Arcs are drawn clockwise from start_angle to end_angle
-  uint16_t start_angle = random(361); // Start angle must be in range 0 to 360
-  uint16_t end_angle   = random(361); // End angle must be in range 0 to 360
+  unsigned short start_angle = random(361); // Start angle must be in range 0 to 360
+  unsigned short end_angle   = random(361); // End angle must be in range 0 to 360
 
   bool arc_end = random(2);           // true = round ends, false = square ends (arc_end parameter can be omitted, ends will then be square)
 

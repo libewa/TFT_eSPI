@@ -29,7 +29,7 @@ TFT_eSPI tft = TFT_eSPI();                   // Invoke custom library with defau
 
 #define TFT_GREY 0x7BEF
 
-uint32_t runTime = 0;
+unsigned int runTime = 0;
 
 void setup()
 {

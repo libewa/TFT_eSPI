@@ -260,12 +260,12 @@
   #if  defined (SPI_18BIT_DRIVER) // SPI 18-bit colour
 
     // Write 8 bits to TFT
-    #define tft_Write_8(C)      spi_get_hw(SPI_X)->dr = (uint32_t)(C); \
+    #define tft_Write_8(C)      spi_get_hw(SPI_X)->dr = (unsigned int)(C); \
                                 while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
 
     //#define tft_Write_8(C)   spi.transfer(C);
     #define tft_Write_8N(B)   while (!spi_is_writable(SPI_X)){}; \
-                             spi_get_hw(SPI_X)->dr = (uint8_t)(B)
+                             spi_get_hw(SPI_X)->dr = (unsigned char)(B)
 
     // Convert 16-bit colour to 18-bit and write in 3 bytes
     #define tft_Write_16(C)  tft_Write_8N(((C) & 0xF800)>>8); \
@@ -307,32 +307,32 @@
       // This swaps to 16-bit mode, used for commands so wait avoids clash with DC timing
       #define tft_Write_8(C)      while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
                                   hw_write_masked(&spi_get_hw(SPI_X)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); \
-                                  spi_get_hw(SPI_X)->dr = (uint32_t)((C) | ((C)<<8)); \
+                                  spi_get_hw(SPI_X)->dr = (unsigned int)((C) | ((C)<<8)); \
                                   while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
 
       // Note: the following macros do not wait for the end of transmission
 
-      #define tft_Write_16(C)     while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_16(C)     while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
-      #define tft_Write_16N(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_16N(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
-      #define tft_Write_16S(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)<<8 | (C)>>8
+      #define tft_Write_16S(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (unsigned int)(C)<<8 | (C)>>8
 
-      #define tft_Write_32(C)     spi_get_hw(SPI_X)->dr = (uint32_t)((C)>>16); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_32(C)     spi_get_hw(SPI_X)->dr = (unsigned int)((C)>>16); spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
-      #define tft_Write_32C(C,D)  spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(D)
+      #define tft_Write_32C(C,D)  spi_get_hw(SPI_X)->dr = (unsigned int)(C); spi_get_hw(SPI_X)->dr = (unsigned int)(D)
 
-      #define tft_Write_32D(C)    spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_32D(C)    spi_get_hw(SPI_X)->dr = (unsigned int)(C); spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
     #elif  defined (RPI_DISPLAY_TYPE) // RPi TFT type always needs 16-bit transfers
       #define tft_Write_8(C)   spi.transfer(C); spi.transfer(C)
-      #define tft_Write_16(C)  spi.transfer((uint8_t)((C)>>8));spi.transfer((uint8_t)((C)>>0))
-      #define tft_Write_16N(C) spi.transfer((uint8_t)((C)>>8));spi.transfer((uint8_t)((C)>>0))
-      #define tft_Write_16S(C) spi.transfer((uint8_t)((C)>>0));spi.transfer((uint8_t)((C)>>8))
+      #define tft_Write_16(C)  spi.transfer((unsigned char)((C)>>8));spi.transfer((unsigned char)((C)>>0))
+      #define tft_Write_16N(C) spi.transfer((unsigned char)((C)>>8));spi.transfer((unsigned char)((C)>>0))
+      #define tft_Write_16S(C) spi.transfer((unsigned char)((C)>>0));spi.transfer((unsigned char)((C)>>8))
 
       #define tft_Write_32(C) \
-        tft_Write_16((uint16_t) ((C)>>16)); \
-        tft_Write_16((uint16_t) ((C)>>0))
+        tft_Write_16((unsigned short) ((C)>>16)); \
+        tft_Write_16((unsigned short) ((C)>>0))
 
       #define tft_Write_32C(C,D) \
         spi.transfer(0); spi.transfer((C)>>8); \
@@ -368,23 +368,23 @@
       // This swaps to 8-bit mode, then back to 16-bit mode
       #define tft_Write_8(C)      while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
                                   hw_write_masked(&spi_get_hw(SPI_X)->cr0, (8 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); \
-                                  spi_get_hw(SPI_X)->dr = (uint32_t)(C); \
+                                  spi_get_hw(SPI_X)->dr = (unsigned int)(C); \
                                   while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {}; \
                                   hw_write_masked(&spi_get_hw(SPI_X)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS)
 
       // Note: the following macros do not wait for the end of transmission
 
-      #define tft_Write_16(C)     while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_16(C)     while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
-      #define tft_Write_16N(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_16N(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
-      #define tft_Write_16S(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (uint32_t)(C)<<8 | (C)>>8
+      #define tft_Write_16S(C)    while (!spi_is_writable(SPI_X)){}; spi_get_hw(SPI_X)->dr = (unsigned int)(C)<<8 | (C)>>8
 
-      #define tft_Write_32(C)     spi_get_hw(SPI_X)->dr = (uint32_t)((C)>>16); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_32(C)     spi_get_hw(SPI_X)->dr = (unsigned int)((C)>>16); spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
-      #define tft_Write_32C(C,D)  spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(D)
+      #define tft_Write_32C(C,D)  spi_get_hw(SPI_X)->dr = (unsigned int)(C); spi_get_hw(SPI_X)->dr = (unsigned int)(D)
 
-      #define tft_Write_32D(C)    spi_get_hw(SPI_X)->dr = (uint32_t)(C); spi_get_hw(SPI_X)->dr = (uint32_t)(C)
+      #define tft_Write_32D(C)    spi_get_hw(SPI_X)->dr = (unsigned int)(C); spi_get_hw(SPI_X)->dr = (unsigned int)(C)
 
     #endif // RPI_DISPLAY_TYPE
   #endif
@@ -428,11 +428,11 @@
 
       // Note: the following macros do not wait for the end of transmission
 
-      #define tft_Write_16(C)     WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((uint32_t)(C) & 0xF800)<<8) | (((C) & 0x07E0)<<5) | (((C) & 0x001F)<<3))
+      #define tft_Write_16(C)     WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((unsigned int)(C) & 0xF800)<<8) | (((C) & 0x07E0)<<5) | (((C) & 0x001F)<<3))
 
-      #define tft_Write_16N(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((uint32_t)(C) & 0xF800)<<8) | (((C) & 0x07E0)<<5) | (((C) & 0x001F)<<3))
+      #define tft_Write_16N(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((unsigned int)(C) & 0xF800)<<8) | (((C) & 0x07E0)<<5) | (((C) & 0x001F)<<3))
 
-      #define tft_Write_16S(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((uint32_t)(C) & 0xF8) << 16) | (((C) & 0xE000)>>3) | (((C) & 0x07)<<13) | (((C) & 0x1F00)>>5))
+      #define tft_Write_16S(C)    WAIT_FOR_FIFO_FREE(1); TX_FIFO = ((((unsigned int)(C) & 0xF8) << 16) | (((C) & 0xE000)>>3) | (((C) & 0x07)<<13) | (((C) & 0x1F00)>>5))
 
       #define tft_Write_32(C)     WAIT_FOR_FIFO_FREE(2); TX_FIFO = ((C)>>8); WAIT_FOR_STALL; tft_Write_8(C)
 

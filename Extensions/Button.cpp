@@ -14,9 +14,9 @@ TFT_eSPI_Button::TFT_eSPI_Button(void) {
 
 // Classic initButton() function: pass center & size
 void TFT_eSPI_Button::initButton(
- TFT_eSPI *gfx, int16_t x, int16_t y, uint16_t w, uint16_t h,
- uint16_t outline, uint16_t fill, uint16_t textcolor,
- char *label, uint8_t textsize)
+ TFT_eSPI *gfx, short x, short y, unsigned short w, unsigned short h,
+ unsigned short outline, unsigned short fill, unsigned short textcolor,
+ char *label, unsigned char textsize)
 {
   // Tweak arguments and pass to the newer initButtonUL() function...
   initButtonUL(gfx, x - (w / 2), y - (h / 2), w, h, outline, fill,
@@ -25,9 +25,9 @@ void TFT_eSPI_Button::initButton(
 
 // Newer function instead accepts upper-left corner & size
 void TFT_eSPI_Button::initButtonUL(
- TFT_eSPI *gfx, int16_t x1, int16_t y1, uint16_t w, uint16_t h,
- uint16_t outline, uint16_t fill, uint16_t textcolor,
- char *label, uint8_t textsize)
+ TFT_eSPI *gfx, short x1, short y1, unsigned short w, unsigned short h,
+ unsigned short outline, unsigned short fill, unsigned short textcolor,
+ char *label, unsigned char textsize)
 {
   _x1           = x1;
   _y1           = y1;
@@ -42,7 +42,7 @@ void TFT_eSPI_Button::initButtonUL(
 }
 
 // Adjust text datum and x, y deltas
-void TFT_eSPI_Button::setLabelDatum(int16_t x_delta, int16_t y_delta, uint8_t datum)
+void TFT_eSPI_Button::setLabelDatum(short x_delta, short y_delta, unsigned char datum)
 {
   _xd        = x_delta;
   _yd        = y_delta;
@@ -50,7 +50,7 @@ void TFT_eSPI_Button::setLabelDatum(int16_t x_delta, int16_t y_delta, uint8_t da
 }
 
 void TFT_eSPI_Button::drawButton(bool inverted, String long_name) {
-  uint16_t fill, outline, text;
+  unsigned short fill, outline, text;
 
   if(!inverted) {
     fill    = _fillcolor;
@@ -62,7 +62,7 @@ void TFT_eSPI_Button::drawButton(bool inverted, String long_name) {
     text    = _fillcolor;
   }
 
-  uint8_t r = min(_w, _h) / 4; // Corner radius
+  unsigned char r = min(_w, _h) / 4; // Corner radius
   _gfx->fillRoundRect(_x1, _y1, _w, _h, r, fill);
   _gfx->drawRoundRect(_x1, _y1, _w, _h, r, outline);
 
@@ -77,9 +77,9 @@ void TFT_eSPI_Button::drawButton(bool inverted, String long_name) {
     _gfx->setTextColor(text, fill);
     _gfx->setTextSize(_textsize);
 
-    uint8_t tempdatum = _gfx->getTextDatum();
+    unsigned char tempdatum = _gfx->getTextDatum();
     _gfx->setTextDatum(_textdatum);
-    uint16_t tempPadding = _gfx->getTextPadding();
+    unsigned short tempPadding = _gfx->getTextPadding();
     _gfx->setTextPadding(0);
 
     if (long_name == "")
@@ -92,7 +92,7 @@ void TFT_eSPI_Button::drawButton(bool inverted, String long_name) {
   }
 }
 
-bool TFT_eSPI_Button::contains(int16_t x, int16_t y) {
+bool TFT_eSPI_Button::contains(short x, short y) {
   return ((x >= _x1) && (x < (_x1 + _w)) &&
           (y >= _y1) && (y < (_y1 + _h)));
 }

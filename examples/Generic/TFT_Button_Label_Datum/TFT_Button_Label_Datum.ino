@@ -70,13 +70,13 @@ void setup() {
 }
 
 void loop() {
-  uint16_t t_x = 0, t_y = 0; // To store the touch coordinates
+  unsigned short t_x = 0, t_y = 0; // To store the touch coordinates
 
   // Get current touch state and coordinates
   bool pressed = tft.getTouch(&t_x, &t_y);
 
   // Adjust press state of each key appropriately
-  for (uint8_t b = 0; b < NUM_KEYS; b++) {
+  for (unsigned char b = 0; b < NUM_KEYS; b++) {
     if (pressed && key[b].contains(t_x, t_y)) 
       key[b].press(true);  // tell the button it is pressed
     else
@@ -84,7 +84,7 @@ void loop() {
   }
 
   // Check if any key has changed state
-  for (uint8_t b = 0; b < NUM_KEYS; b++) {
+  for (unsigned char b = 0; b < NUM_KEYS; b++) {
     // If button was just pressed, redraw inverted button
     if (key[b].justPressed()) {
       Serial.println("Button " + (String)b + " pressed");
@@ -117,7 +117,7 @@ void drawButtons()
                       KEY_TEXTSIZE);
 
     // Adjust button label X delta according to array position
-    // setLabelDatum(uint16_t x_delta, uint16_t y_delta, uint8_t datum)
+    // setLabelDatum(unsigned short x_delta, unsigned short y_delta, unsigned char datum)
     key[i].setLabelDatum(i * 10 - (KEY_W/2), 0, ML_DATUM);
 
     // Draw button and specify label string
@@ -128,8 +128,8 @@ void drawButtons()
 
 void touch_calibrate()
 {
-  uint16_t calData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calData[5];
+  unsigned char calDataOK = 0;
 
   // check file system exists
   if (!SPIFFS.begin()) {

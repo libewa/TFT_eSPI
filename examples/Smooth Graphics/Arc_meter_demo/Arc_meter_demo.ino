@@ -40,12 +40,12 @@ OpenFontRender ofr;
 
 #define DARKER_GREY 0x18E3
 
-uint32_t runTime = 0;       // time for next update
+unsigned int runTime = 0;       // time for next update
 
 int reading = 0; // Value to be displayed
 int d = 0; // Variable used for the sine wave test waveform
 bool range_error = 0;
-int8_t ramp = 1;
+char ramp = 1;
 
 bool initMeter = true;
 
@@ -59,11 +59,11 @@ void setup(void) {
 
 
 void loop() {
-  static uint16_t maxRadius = 0;
-  int8_t ramp = 1;
-  static uint8_t radius = 0;
-  static int16_t xpos = tft.width() / 2;
-  static int16_t ypos = tft.height() / 2;
+  static unsigned short maxRadius = 0;
+  char ramp = 1;
+  static unsigned char radius = 0;
+  static short xpos = tft.width() / 2;
+  static short ypos = tft.height() / 2;
   bool newMeter = false;
 
   if (maxRadius == 0) {
@@ -120,14 +120,14 @@ void loop() {
 // units is the meter scale label
 void ringMeter(int x, int y, int r, int val, const char *units)
 {
-  static uint16_t last_angle = 30;
+  static unsigned short last_angle = 30;
 
   if (initMeter) {
     initMeter = false;
     last_angle = 30;
     tft.fillCircle(x, y, r, DARKER_GREY);
     tft.drawSmoothCircle(x, y, r, TFT_SILVER, DARKER_GREY);
-    uint16_t tmp = r - 3;
+    unsigned short tmp = r - 3;
     tft.drawArc(x, y, tmp, tmp - tmp / 5, last_angle, 330, TFT_BLACK, DARKER_GREY);
   }
 
@@ -160,17 +160,17 @@ void ringMeter(int x, int y, int r, int val, const char *units)
       // A few experimental fudge factors are used here to position the
       // digits in the sprite...
       // Create a sprite to draw the digits into
-      uint8_t w = ofr.getTextWidth("444");
-      uint8_t h = ofr.getTextHeight("4") + 4;
+      unsigned char w = ofr.getTextWidth("444");
+      unsigned char h = ofr.getTextHeight("4") + 4;
       spr.createSprite(w, h + 2);
       spr.fillSprite(DARKER_GREY); // (TFT_BLUE); // (DARKER_GREY);
       char str_buf[8];         // Buffed for string
       itoa (val, str_buf, 10); // Convert value to string (null terminated)
-      uint8_t ptr = 0;         // Pointer to a digit character
-      uint8_t dx = 4;          // x offset for cursor position
+      unsigned char ptr = 0;         // Pointer to a digit character
+      unsigned char dx = 4;          // x offset for cursor position
       if (val < 100) dx = ofr.getTextWidth("4") / 2; // Adjust cursor x for 2 digits
       if (val < 10) dx = ofr.getTextWidth("4");      // Adjust cursor x for 1 digit
-      while ((uint8_t)str_buf[ptr] != 0) ptr++;      // Count the characters
+      while ((unsigned char)str_buf[ptr] != 0) ptr++;      // Count the characters
       while (ptr) {
         ofr.setCursor(w - dx - w / 20, -h / 2.5);    // Offset cursor position in sprite
         ofr.rprintf(str_buf + ptr - 1);              // Draw a character
@@ -193,7 +193,7 @@ void ringMeter(int x, int y, int r, int val, const char *units)
     //ofr.unloadFont(); // Recover space used by font metrics etc.
 
     // Allocate a value to the arc thickness dependant of radius
-    uint8_t thickness = r / 5;
+    unsigned char thickness = r / 5;
     if ( r < 25 ) thickness = r / 3;
 
     // Update the arc, only the zone between last_angle and new val_angle is updated

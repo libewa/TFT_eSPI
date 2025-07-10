@@ -129,7 +129,7 @@ void loop() {
 
   int num = 1;
 
-  for (int16_t angle = 30; angle <= 360; angle += 30)
+  for (short angle = 30; angle <= 360; angle += 30)
   {
     spr.fillSprite(TFT_BLACK);         // Clear the Sprite
     spr.drawNumber(num, 20, 15, 4);    // Plot number, in Sprite at 20,15 and with font 4
@@ -140,7 +140,7 @@ void loop() {
   spr.setTextColor(TFT_WHITE);    // White text in Sprite
   spr.setPivot(-75, 15);          // Set Sprite pivot at -75,15
 
-  for (int16_t angle = -90; angle < 270; angle += 30)
+  for (short angle = -90; angle < 270; angle += 30)
   {
     spr.fillSprite(TFT_BLACK);           // Clear the Sprite
     spr.drawNumber(angle+90, 20, 15, 4); // Plot number, in Sprite at 20,15 and with font 4
@@ -174,7 +174,7 @@ void showMessage(String msg)
   tft.fillRect(0, 0, tft.width(), 20, TFT_BLACK);
   tft.fillRect(0, 20, tft.width(), tft.height()-20, TFT_BLUE);
 
-  uint8_t td = tft.getTextDatum(); // Get current datum
+  unsigned char td = tft.getTextDatum(); // Get current datum
 
   tft.setTextDatum(TC_DATUM);      // Set new datum
 

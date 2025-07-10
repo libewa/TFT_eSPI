@@ -1,6 +1,6 @@
 // Created by http://oleddisplay.squix.ch/ Consider a donation
 // In case of problems make sure that you are using the font file with the correct version!
-const uint8_t Roboto_Thin_24Bitmaps[] PROGMEM = {
+const unsigned char Roboto_Thin_24Bitmaps[] PROGMEM = {
 
 	// Bitmap Data:
 	0x00, // ' '
@@ -196,4 +196,4 @@ const GFXglyph Roboto_Thin_24Glyphs[] PROGMEM = {
 	  {  1858,   8,  25,   9,   -1,  -19 } // '}'
 };
 const GFXfont Roboto_Thin_24 PROGMEM = {
-(uint8_t  *)Roboto_Thin_24Bitmaps,(GFXglyph *)Roboto_Thin_24Glyphs,0x20, 0x7D, 29};
+(unsigned char  *)Roboto_Thin_24Bitmaps,(GFXglyph *)Roboto_Thin_24Glyphs,0x20, 0x7D, 29};

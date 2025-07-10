@@ -46,17 +46,17 @@ TFT_eSPI tft = TFT_eSPI();
 #define GRADIENT_HEIGHT (9 + tft.fontHeight() * 5) // Gradient over 5 lines
 #define OUTSIDE_GRADIENT TFT_BLUE
 
-uint16_t gradientColor(uint16_t x, uint16_t y)
+unsigned short gradientColor(unsigned short x, unsigned short y)
 {
   if (y > GRADIENT_HEIGHT) return OUTSIDE_GRADIENT;   // Outside gradient area
-  uint8_t alpha = (255 * y) / GRADIENT_HEIGHT;        // alpha is a value in the range 0-255
+  unsigned char alpha = (255 * y) / GRADIENT_HEIGHT;        // alpha is a value in the range 0-255
   return tft.alphaBlend(alpha, BOTTOM_COLOR, TOP_COLOR);
 }
 
 void fillGradient() {
-  uint16_t w = tft.width();
-  for (uint16_t y = 0; y < tft.height(); ++y) {
-    uint16_t color = gradientColor(0, y); // x not used here
+  unsigned short w = tft.width();
+  for (unsigned short y = 0; y < tft.height(); ++y) {
+    unsigned short color = gradientColor(0, y); // x not used here
     tft.drawFastHLine(0, y, w, color);
   }
 }
@@ -85,7 +85,7 @@ void loop() {
   tft.setTextColor(TFT_WHITE); // Background color is ignored in gradient area
   tft.setCursor(0, 10); // Set cursor at top left of screen
 
-  uint32_t t = millis();
+  unsigned int t = millis();
   tft.println(" Ode to a small\n lump of green\n putty I found\n in my armpit\n one midsummer\n morning ");
   Serial.println(t = millis()-t);
 

@@ -1,6 +1,6 @@
 // Bodmer's BMP image rendering function
 
-void drawBmp(const char *filename, int16_t x, int16_t y) {
+void drawBmp(const char *filename, short x, short y) {
 
   if ((x >= tft.width()) || (y >= tft.height())) return;
 
@@ -15,11 +15,11 @@ void drawBmp(const char *filename, int16_t x, int16_t y) {
     return;
   }
 
-  uint32_t seekOffset;
-  uint16_t w, h, row, col;
-  uint8_t  r, g, b;
+  unsigned int seekOffset;
+  unsigned short w, h, row, col;
+  unsigned char  r, g, b;
 
-  uint32_t startTime = millis();
+  unsigned int startTime = millis();
 
   if (read16(bmpFS) == 0x4D42)
   {
@@ -38,16 +38,16 @@ void drawBmp(const char *filename, int16_t x, int16_t y) {
       tft.setSwapBytes(true);
       bmpFS.seek(seekOffset);
 
-      uint16_t padding = (4 - ((w * 3) & 3)) & 3;
-      uint8_t lineBuffer[w * 3 + padding];
+      unsigned short padding = (4 - ((w * 3) & 3)) & 3;
+      unsigned char lineBuffer[w * 3 + padding];
 
       for (row = 0; row < h; row++) {
         
         bmpFS.read(lineBuffer, sizeof(lineBuffer));
-        uint8_t*  bptr = lineBuffer;
-        uint16_t* tptr = (uint16_t*)lineBuffer;
+        unsigned char*  bptr = lineBuffer;
+        unsigned short* tptr = (unsigned short*)lineBuffer;
         // Convert 24 to 16-bit colours
-        for (uint16_t col = 0; col < w; col++)
+        for (unsigned short col = 0; col < w; col++)
         {
           b = *bptr++;
           g = *bptr++;
@@ -57,7 +57,7 @@ void drawBmp(const char *filename, int16_t x, int16_t y) {
 
         // Push the pixel row to screen, pushImage will crop the line if needed
         // y is decremented as the BMP image is drawn bottom up
-        tft.pushImage(x, y--, w, 1, (uint16_t*)lineBuffer);
+        tft.pushImage(x, y--, w, 1, (unsigned short*)lineBuffer);
       }
       tft.setSwapBytes(oldSwapBytes);
       Serial.print("Loaded in "); Serial.print(millis() - startTime);
@@ -72,19 +72,19 @@ void drawBmp(const char *filename, int16_t x, int16_t y) {
 // BMP data is stored little-endian, Arduino is little-endian too.
 // May need to reverse subscript order if porting elsewhere.
 
-uint16_t read16(fs::File &f) {
-  uint16_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read(); // MSB
+unsigned short read16(fs::File &f) {
+  unsigned short result;
+  ((unsigned char *)&result)[0] = f.read(); // LSB
+  ((unsigned char *)&result)[1] = f.read(); // MSB
   return result;
 }
 
-uint32_t read32(fs::File &f) {
-  uint32_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read();
-  ((uint8_t *)&result)[2] = f.read();
-  ((uint8_t *)&result)[3] = f.read(); // MSB
+unsigned int read32(fs::File &f) {
+  unsigned int result;
+  ((unsigned char *)&result)[0] = f.read(); // LSB
+  ((unsigned char *)&result)[1] = f.read();
+  ((unsigned char *)&result)[2] = f.read();
+  ((unsigned char *)&result)[3] = f.read(); // MSB
   return result;
 }
 

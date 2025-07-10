@@ -6,8 +6,8 @@ TFT_eSPI tft = TFT_eSPI();
 #define CALIBRATION_FILE "/calibrationData"
 
 void setup(void) {
-  uint16_t calibrationData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calibrationData[5];
+  unsigned char calDataOK = 0;
 
   Serial.begin(115200);
   Serial.println("starting");
@@ -57,8 +57,8 @@ void setup(void) {
 }
 
 void loop() {
-  uint16_t x, y;
-  static uint16_t color;
+  unsigned short x, y;
+  static unsigned short color;
 
   if (tft.getTouch(&x, &y)) {
 

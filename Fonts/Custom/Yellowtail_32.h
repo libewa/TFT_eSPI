@@ -1,6 +1,6 @@
 // Created by http://oleddisplay.squix.ch/ Consider a donation
 // In case of problems make sure that you are using the font file with the correct version!
-const uint8_t Yellowtail_32Bitmaps[] PROGMEM = {
+const unsigned char Yellowtail_32Bitmaps[] PROGMEM = {
 
 	// Bitmap Data:
 	0x00, // ' '
@@ -196,4 +196,4 @@ const GFXglyph Yellowtail_32Glyphs[] PROGMEM = {
 	  {  4618,  21,  32,  16,   -3,  -27 } // '}'
 };
 const GFXfont Yellowtail_32 PROGMEM = {
-(uint8_t  *)Yellowtail_32Bitmaps,(GFXglyph *)Yellowtail_32Glyphs,0x20, 0x7D, 45};
+(unsigned char  *)Yellowtail_32Bitmaps,(GFXglyph *)Yellowtail_32Glyphs,0x20, 0x7D, 45};

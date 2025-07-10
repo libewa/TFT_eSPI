@@ -36,8 +36,8 @@ PNG png; // PNG decoder instance
 TFT_eSPI tft = TFT_eSPI();         // Invoke custom library
 
 // Position variables must be global (PNGdec does not handle position coordinates)
-int16_t xpos = 0;
-int16_t ypos = 0;
+short xpos = 0;
+short ypos = 0;
 
 //====================================================================================
 //                                    Setup
@@ -59,9 +59,9 @@ void setup()
 //====================================================================================
 void loop()
 {
-  uint16_t pngw = 0, pngh = 0; // To store width and height of image
+  unsigned short pngw = 0, pngh = 0; // To store width and height of image
 
-  int16_t rc = png.openFLASH((uint8_t *)bob, sizeof(bob), pngDraw);
+  short rc = png.openFLASH((unsigned char *)bob, sizeof(bob), pngDraw);
 
   if (rc == PNG_SUCCESS) {
     Serial.println("Successfully opened png file");
@@ -70,7 +70,7 @@ void loop()
     Serial.printf("Image metrics: (%d x %d), %d bpp, pixel type: %d\n", pngw, pngh, png.getBpp(), png.getPixelType());
 
     tft.startWrite();
-    uint32_t dt = millis();
+    unsigned int dt = millis();
     rc = png.decode(NULL, 0);
     tft.endWrite();
     Serial.print(millis() - dt); Serial.println("ms");

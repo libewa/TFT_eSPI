@@ -40,7 +40,7 @@ void setup() {
     Serial.println("Card Mount Failed");
     return;
   }
-  uint8_t cardType = SD.cardType();
+  unsigned char cardType = SD.cardType();
 
   if (cardType == CARD_NONE) {
     Serial.println("No SD card attached");
@@ -141,11 +141,11 @@ void jpegRender(int xpos, int ypos) {
 
   //jpegInfo(); // Print information from the JPEG file (could comment this line out)
 
-  uint16_t *pImg;
-  uint16_t mcu_w = JpegDec.MCUWidth;
-  uint16_t mcu_h = JpegDec.MCUHeight;
-  uint32_t max_x = JpegDec.width;
-  uint32_t max_y = JpegDec.height;
+  unsigned short *pImg;
+  unsigned short mcu_w = JpegDec.MCUWidth;
+  unsigned short mcu_h = JpegDec.MCUHeight;
+  unsigned int max_x = JpegDec.width;
+  unsigned int max_y = JpegDec.height;
 
   bool swapBytes = tft.getSwapBytes();
   tft.setSwapBytes(true);
@@ -153,15 +153,15 @@ void jpegRender(int xpos, int ypos) {
   // Jpeg images are draw as a set of image block (tiles) called Minimum Coding Units (MCUs)
   // Typically these MCUs are 16x16 pixel blocks
   // Determine the width and height of the right and bottom edge image blocks
-  uint32_t min_w = jpg_min(mcu_w, max_x % mcu_w);
-  uint32_t min_h = jpg_min(mcu_h, max_y % mcu_h);
+  unsigned int min_w = jpg_min(mcu_w, max_x % mcu_w);
+  unsigned int min_h = jpg_min(mcu_h, max_y % mcu_h);
 
   // save the current image block size
-  uint32_t win_w = mcu_w;
-  uint32_t win_h = mcu_h;
+  unsigned int win_w = mcu_w;
+  unsigned int win_h = mcu_h;
 
   // record the current time so we can measure how long it takes to draw an image
-  uint32_t drawTime = millis();
+  unsigned int drawTime = millis();
 
   // save the coordinate of the right and bottom edges to assist image cropping
   // to the screen size
@@ -187,7 +187,7 @@ void jpegRender(int xpos, int ypos) {
     // copy pixels into a contiguous block
     if (win_w != mcu_w)
     {
-      uint16_t *cImg;
+      unsigned short *cImg;
       int p = 0;
       cImg = pImg + win_w;
       for (int h = 1; h < win_h; h++)
@@ -202,7 +202,7 @@ void jpegRender(int xpos, int ypos) {
     }
 
     // calculate how many pixels must be drawn
-    uint32_t mcu_pixels = win_w * win_h;
+    unsigned int mcu_pixels = win_w * win_h;
 
     // draw image MCU block only if it will fit on the screen
     if (( mcu_x + win_w ) <= tft.width() && ( mcu_y + win_h ) <= tft.height())
@@ -253,7 +253,7 @@ void jpegInfo() {
 
 // The Due will work fine with the HX8357_Due library.
 
-void showTime(uint32_t msTime) {
+void showTime(unsigned int msTime) {
   //tft.setCursor(0, 0);
   //tft.setTextFont(1);
   //tft.setTextSize(2);

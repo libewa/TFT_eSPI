@@ -28,7 +28,7 @@ void user_setup(void) {
 void user_loop(void) {
 /*
   Suppose we have a global bool "animating" (meaning something is in
-  motion) and global uint32_t's "startTime" (the initial time at which
+  motion) and global unsigned int's "startTime" (the initial time at which
   something triggered movement) and "transitionTime" (the total time
   over which movement should occur, expressed in microseconds).
   Maybe it's servos, maybe NeoPixels, or something different altogether.
@@ -47,7 +47,7 @@ void user_loop(void) {
     }
   } else {
     Currently in motion, ignore trigger and move things instead...
-    uint32_t elapsed = millis() - startTime;
+    unsigned int elapsed = millis() - startTime;
     if(elapsed < transitionTime) {
       Part way through motion...how far along?
       float ratio = (float)elapsed / (float)transitionTime;

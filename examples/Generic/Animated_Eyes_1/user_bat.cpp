@@ -14,8 +14,8 @@
 static Adafruit_FreeTouch touch(CAPTOUCH_PIN, OVERSAMPLE_4, RESISTOR_50K, FREQ_MODE_NONE);
 static long     oldState;          // Last-read touch value
 static bool     isTouched = false; // When true, bat is flapping
-static uint32_t touchTime = 0;     // millis() time when flapping started
-static uint32_t touchThreshold;
+static unsigned int touchTime = 0;     // millis() time when flapping started
+static unsigned int touchThreshold;
 
 Servo servo;
 
@@ -50,7 +50,7 @@ void user_loop(void) {
   Serial.println(newState);
 
   if (isTouched) {
-    uint32_t elapsed = millis() - touchTime;
+    unsigned int elapsed = millis() - touchTime;
     if (elapsed >= FLAP_TIME_TOTAL) {   // After all flaps are completed
       isTouched = false;                // Bat goes idle again
       servo.write(0);

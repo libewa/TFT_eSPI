@@ -15,8 +15,8 @@ void setup() {
 }
 
 void loop() {
-  static uint32_t wr = 1;
-  static uint32_t rd = 0xFFFFFFFF;
+  static unsigned int wr = 1;
+  static unsigned int rd = 0xFFFFFFFF;
 
   delay(TDELAY);
 

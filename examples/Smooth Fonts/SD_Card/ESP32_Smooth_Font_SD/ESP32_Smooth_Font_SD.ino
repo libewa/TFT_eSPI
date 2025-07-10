@@ -44,7 +44,7 @@ void setup(void) {
     Serial.println("Card Mount Failed");
     return;
   }
-  uint8_t cardType = SD.cardType();
+  unsigned char cardType = SD.cardType();
 
   if (cardType == CARD_NONE) {
     Serial.println("No SD card attached");
@@ -94,7 +94,7 @@ void loop() {
   // Display all characters of the font
   tft.showFont(2000);
 
- uint32_t dt = millis();
+ unsigned int dt = millis();
 
  int count = 100;
 
@@ -117,7 +117,7 @@ void loop() {
 
   // Set the font colour to be red
   tft.setTextColor(TFT_RED, TFT_BLACK);
-  tft.println((uint32_t)3735928559, HEX); // Should print DEADBEEF
+  tft.println((unsigned int)3735928559, HEX); // Should print DEADBEEF
 
   // Set the font colour to be green with black background
   tft.setTextColor(TFT_GREEN, TFT_BLACK);
@@ -142,7 +142,7 @@ void loop() {
   delay(10000);
 }
 
-void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
+void listDir(fs::FS &fs, const char * dirname, unsigned char levels){
     Serial.printf("Listing directory: %s\n", dirname);
 
     File root = fs.open(dirname);

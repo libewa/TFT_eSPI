@@ -35,14 +35,14 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 #define YMAX 320 // Bottom of screen area
 
 // The initial y coordinate of the top of the scrolling area
-uint16_t yStart = TOP_FIXED_AREA;
+unsigned short yStart = TOP_FIXED_AREA;
 // yArea must be a integral multiple of TEXT_HEIGHT
-uint16_t yArea = YMAX-TOP_FIXED_AREA-BOT_FIXED_AREA;
+unsigned short yArea = YMAX-TOP_FIXED_AREA-BOT_FIXED_AREA;
 // The initial y coordinate of the top of the bottom text line
-uint16_t yDraw = YMAX - BOT_FIXED_AREA - TEXT_HEIGHT;
+unsigned short yDraw = YMAX - BOT_FIXED_AREA - TEXT_HEIGHT;
 
 // Keep track of the drawing x coordinate
-uint16_t xPos = 0;
+unsigned short xPos = 0;
 
 // For the byte we read from the serial port
 byte data = 0;
@@ -127,7 +127,7 @@ int scroll_line() {
 // Setup a portion of the screen for vertical scrolling
 // ##############################################################################################
 // We are using a hardware feature of the display, so we can only scroll in portrait orientation
-void setupScrollArea(uint16_t tfa, uint16_t bfa) {
+void setupScrollArea(unsigned short tfa, unsigned short bfa) {
   tft.writecommand(ILI9341_VSCRDEF); // Vertical scroll definition
   tft.writedata(tfa >> 8);           // Top Fixed Area line count
   tft.writedata(tfa);
@@ -140,7 +140,7 @@ void setupScrollArea(uint16_t tfa, uint16_t bfa) {
 // ##############################################################################################
 // Setup the vertical scrolling start address pointer
 // ##############################################################################################
-void scrollAddress(uint16_t vsp) {
+void scrollAddress(unsigned short vsp) {
   tft.writecommand(ILI9341_VSCRSADD); // Vertical scrolling pointer
   tft.writedata(vsp>>8);
   tft.writedata(vsp);

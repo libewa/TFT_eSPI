@@ -1,6 +1,6 @@
 // Created by http://oleddisplay.squix.ch/ Consider a donation
 // In case of problems make sure that you are using the font file with the correct version!
-const uint8_t Satisfy_24Bitmaps[] PROGMEM = {
+const unsigned char Satisfy_24Bitmaps[] PROGMEM = {
 
 	// Bitmap Data:
 	0x00, // ' '
@@ -196,4 +196,4 @@ const GFXglyph Satisfy_24Glyphs[] PROGMEM = {
 	  {  2595,  10,  24,   7,   -3,  -21 } // '}'
 };
 const GFXfont Satisfy_24 PROGMEM = {
-(uint8_t  *)Satisfy_24Bitmaps,(GFXglyph *)Satisfy_24Glyphs,0x20, 0x7D, 36};
+(unsigned char  *)Satisfy_24Bitmaps,(GFXglyph *)Satisfy_24Glyphs,0x20, 0x7D, 36};

@@ -21,11 +21,11 @@
 ** Function name:           tft_Read_8
 ** Description:             Bit bashed SPI to read bidirectional SDA line
 ***************************************************************************************/
-uint8_t TFT_eSPI::tft_Read_8(void)
+unsigned char TFT_eSPI::tft_Read_8(void)
 {
-  uint8_t  ret = 0;
+  unsigned char  ret = 0;
 
-  for (uint8_t i = 0; i < 8; i++) {  // read results
+  for (unsigned char i = 0; i < 8; i++) {  // read results
     ret <<= 1;
     SCLK_L;
     if (digitalRead(TFT_MOSI)) ret |= 1;
@@ -68,7 +68,7 @@ void TFT_eSPI::end_SDA_Read(void)
 ** Function name:           pushBlock - for generic processor and parallel display
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
 
   while (len>1) {tft_Write_32D(color); len-=2;}
   if (len) {tft_Write_16(color);}
@@ -78,9 +78,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for gereric processor and parallel display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
   if(_swapBytes) {
     while (len>1) {tft_Write_16(*data); data++; tft_Write_16(*data); data++; len -=2;}
     if (len) {tft_Write_16(*data);}
@@ -95,7 +95,7 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           GPIO direction control  - supports class functions
 ** Description:             Set parallel bus to INPUT or OUTPUT
 ***************************************************************************************/
-void TFT_eSPI::busDir(uint32_t mask, uint8_t mode)
+void TFT_eSPI::busDir(unsigned int mask, unsigned char mode)
 {
   // mask is unused for generic processor
   // Arduino native functions suited well to a generic driver
@@ -114,7 +114,7 @@ void TFT_eSPI::busDir(uint32_t mask, uint8_t mode)
 ** Function name:           GPIO direction control  - supports class functions
 ** Description:             Faster GPIO pin input/output switch
 ***************************************************************************************/
-void TFT_eSPI::gpioMode(uint8_t gpio, uint8_t mode)
+void TFT_eSPI::gpioMode(unsigned char gpio, unsigned char mode)
 {
   // No fast port based generic approach available
 }
@@ -123,9 +123,9 @@ void TFT_eSPI::gpioMode(uint8_t gpio, uint8_t mode)
 ** Function name:           read byte  - supports class functions
 ** Description:             Read a byte - parallel bus only
 ***************************************************************************************/
-uint8_t TFT_eSPI::readByte(void)
+unsigned char TFT_eSPI::readByte(void)
 {
-  uint8_t b = 0;
+  unsigned char b = 0;
 
   busDir(0, INPUT);
   digitalWrite(TFT_RD, LOW);
@@ -153,7 +153,7 @@ uint8_t TFT_eSPI::readByte(void)
 ** Function name:           pushBlock - for ESP32 or STM32 RPi TFT
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
 
   if(len) { tft_Write_16(color); len--; }
   while(len--) {WR_L; WR_H;}
@@ -163,9 +163,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for ESP32 or STM32 RPi TFT
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len)
 {
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if (_swapBytes) while ( len-- ) {tft_Write_16S(*data); data++;}
   else while ( len-- ) {tft_Write_16(*data); data++;}
@@ -179,12 +179,12 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
 ** Function name:           pushBlock - for STM32 and 3 byte RGB display
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
   // Split out the colours
-  uint8_t r = (color & 0xF800)>>8;
-  uint8_t g = (color & 0x07E0)>>3;
-  uint8_t b = (color & 0x001F)<<3;
+  unsigned char r = (color & 0xF800)>>8;
+  unsigned char g = (color & 0x07E0)>>3;
+  unsigned char b = (color & 0x001F)<<3;
 
   while ( len-- ) {tft_Write_8(r); tft_Write_8(g); tft_Write_8(b);}
 }
@@ -193,12 +193,12 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 ** Function name:           pushPixels - for STM32 and 3 byte RGB display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
   if (_swapBytes) {
     while ( len-- ) {
-      uint16_t color = *data >> 8 | *data << 8;
+      unsigned short color = *data >> 8 | *data << 8;
       tft_Write_8((color & 0xF800)>>8);
       tft_Write_8((color & 0x07E0)>>3);
       tft_Write_8((color & 0x001F)<<3);
@@ -223,7 +223,7 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           pushBlock - for STM32
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
 
   while ( len-- ) {tft_Write_16(color);}
 }
@@ -232,9 +232,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for STM32
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if (_swapBytes) while ( len-- ) {tft_Write_16(*data); data++;}
   else while ( len-- ) {tft_Write_16S(*data); data++;}
@@ -257,7 +257,7 @@ Minimal function set to support DMA:
 bool TFT_eSPI::initDMA(void)
 void TFT_eSPI::deInitDMA(void)
 bool TFT_eSPI::dmaBusy(void)
-void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
-void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t* image)
+void TFT_eSPI::pushPixelsDMA(unsigned short* image, unsigned int len)
+void TFT_eSPI::pushImageDMA(int x, int y, int w, int h, unsigned short* image)
 
 */

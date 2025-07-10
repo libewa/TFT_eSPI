@@ -23,7 +23,7 @@ ButtonWidget btnR = ButtonWidget(&tft);
 // Create an array of button instances to use in for() loops
 // This is more useful where large numbers of buttons are employed
 ButtonWidget* btn[] = {&btnL , &btnR};;
-uint8_t buttonCount = sizeof(btn) / sizeof(btn[0]);
+unsigned char buttonCount = sizeof(btn) / sizeof(btn[0]);
 
 void btnL_pressAction(void)
 {
@@ -35,7 +35,7 @@ void btnL_pressAction(void)
 
 void btnL_releaseAction(void)
 {
-  static uint32_t waitTime = 1000;
+  static unsigned int waitTime = 1000;
   if (btnL.justReleased()) {
     Serial.println("Left button just released");
     btnL.drawSmoothButton(false);
@@ -74,8 +74,8 @@ void btnR_releaseAction(void)
 }
 
 void initButtons() {
-  uint16_t x = (tft.width() - BUTTON_W) / 2;
-  uint16_t y = tft.height() / 2 - BUTTON_H - 10;
+  unsigned short x = (tft.width() - BUTTON_W) / 2;
+  unsigned short y = tft.height() / 2 - BUTTON_H - 10;
   btnL.initButtonUL(x, y, BUTTON_W, BUTTON_H, TFT_WHITE, TFT_RED, TFT_BLACK, "Button", 1);
   btnL.setPressAction(btnL_pressAction);
   btnL.setReleaseAction(btnL_releaseAction);
@@ -101,15 +101,15 @@ void setup() {
 }
 
 void loop() {
-  static uint32_t scanTime = millis();
-  uint16_t t_x = 9999, t_y = 9999; // To store the touch coordinates
+  static unsigned int scanTime = millis();
+  unsigned short t_x = 9999, t_y = 9999; // To store the touch coordinates
 
   // Scan keys every 50ms at most
   if (millis() - scanTime >= 50) {
     // Pressed will be set true if there is a valid touch on the screen
     bool pressed = tft.getTouch(&t_x, &t_y);
     scanTime = millis();
-    for (uint8_t b = 0; b < buttonCount; b++) {
+    for (unsigned char b = 0; b < buttonCount; b++) {
       if (pressed) {
         if (btn[b]->contains(t_x, t_y)) {
           btn[b]->press(true);
@@ -127,8 +127,8 @@ void loop() {
 
 void touch_calibrate()
 {
-  uint16_t calData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calData[5];
+  unsigned char calDataOK = 0;
 
   // check file system exists
   if (!LittleFS.begin()) {

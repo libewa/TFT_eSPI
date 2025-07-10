@@ -57,7 +57,7 @@ void loop()
   }
 
   // Blend from white to black (32 grey levels)
-  for (uint16_t a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
+  for (unsigned short a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
   {
     tft.drawFastHLine(192, a, 12, tft.alphaBlend(a, TFT_BLACK, TFT_WHITE));
     tft.drawFastHLine(204, a, 12, tft.alphaBlend(a, TFT_BLACK, TFT_RED));
@@ -68,7 +68,7 @@ void loop()
   delay(4000);
 
   // Blend from white to colour (32 grey levels)
-  for (uint16_t a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
+  for (unsigned short a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
   {
     //tft.drawFastHLine(192, a, 12, tft.alphaBlend(a, TFT_BLACK, TFT_WHITE));
     tft.drawFastHLine(204, a, 12, tft.alphaBlend(a, TFT_RED,   TFT_WHITE));
@@ -96,7 +96,7 @@ void loop()
 
   // Blend from white to black (4 grey levels - it will draw 4 more with a blue tinge due to lower blue bit count)
   // Blend from black to a primary colour
-  for (uint16_t a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
+  for (unsigned short a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
   {
     tft.drawFastHLine(192, a, 12, tft.color8to16(tft.color16to8(tft.alphaBlend(a, TFT_BLACK, TFT_WHITE))));
     tft.drawFastHLine(204, a, 12, tft.color8to16(tft.color16to8(tft.alphaBlend(a, TFT_BLACK, TFT_RED))));
@@ -123,7 +123,7 @@ void loop()
 
   /*
   // Blend other colour transitions for test purposes
-  for (uint16_t a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
+  for (unsigned short a = 0; a < 255; a++) // Alpha 0 = 100% background, alpha 255 = 100% foreground
   {
     tft.drawFastHLine(192, a, 12, tft.alphaBlend(a, TFT_WHITE,  TFT_WHITE));  // Should show as solid white
     tft.drawFastHLine(204, a, 12, tft.alphaBlend(a, TFT_BLACK,  TFT_BLACK));  // Should show as solid black

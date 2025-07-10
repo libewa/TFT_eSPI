@@ -31,22 +31,22 @@ TFT_eSPI    tft = TFT_eSPI();
 TFT_eSprite spr[2] = {TFT_eSprite(&tft), TFT_eSprite(&tft)};
 
 // Pointers to start of Sprites in RAM (these are then "image" pointers)
-uint16_t* sprPtr[2];
+unsigned short* sprPtr[2];
 
 // Used for fps measuring
-uint16_t counter = 0;
-int32_t startMillis = millis();
-uint16_t interval = 100;
+unsigned short counter = 0;
+int startMillis = millis();
+unsigned short interval = 100;
 String fps = "xx.xx fps";
 
 // Structure to hold circle plotting parameters
 typedef struct circle_t {
-  int16_t   cx[CNUMBER] = { 0 }; // x coordinate of centre
-  int16_t   cy[CNUMBER] = { 0 }; // y coordinate of centre
-  int16_t   cr[CNUMBER] = { 0 }; // radius
-  uint16_t col[CNUMBER] = { 0 }; // colour
-  int16_t   dx[CNUMBER] = { 0 }; // x movement & direction
-  int16_t   dy[CNUMBER] = { 0 }; // y movement & direction
+  short   cx[CNUMBER] = { 0 }; // x coordinate of centre
+  short   cy[CNUMBER] = { 0 }; // y coordinate of centre
+  short   cr[CNUMBER] = { 0 }; // radius
+  unsigned short col[CNUMBER] = { 0 }; // colour
+  short   dx[CNUMBER] = { 0 }; // x movement & direction
+  short   dy[CNUMBER] = { 0 }; // y movement & direction
 } circle_param;
 
 // Create the structure and get a pointer to it
@@ -63,8 +63,8 @@ void setup() {
   tft.fillScreen(TFT_BLACK);
 
   // Create the 2 sprites, each is half the size of the screen
-  sprPtr[0] = (uint16_t*)spr[0].createSprite(DWIDTH, DHEIGHT / 2);
-  sprPtr[1] = (uint16_t*)spr[1].createSprite(DWIDTH, DHEIGHT / 2);
+  sprPtr[0] = (unsigned short*)spr[0].createSprite(DWIDTH, DHEIGHT / 2);
+  sprPtr[1] = (unsigned short*)spr[1].createSprite(DWIDTH, DHEIGHT / 2);
 
   // Move the sprite 1 coordinate datum upwards half the screen height
   // so from coordinate point of view it occupies the bottom of screen
@@ -78,7 +78,7 @@ void setup() {
   randomSeed(analogRead(A0));
 
   // Initialise circle parameters
-  for (uint16_t i = 0; i < CNUMBER; i++) {
+  for (unsigned short i = 0; i < CNUMBER; i++) {
     circle->cr[i] = random(12, 24);
     circle->cx[i] = random(circle->cr[i], DWIDTH - circle->cr[i]);
     circle->cy[i] = random(circle->cr[i], DHEIGHT - circle->cr[i]);
@@ -117,7 +117,7 @@ void loop() {
 // #########################################################################
 void drawUpdate (bool sel) {
   spr[sel].fillSprite(TFT_BLACK);
-  for (uint16_t i = 0; i < CNUMBER; i++) {
+  for (unsigned short i = 0; i < CNUMBER; i++) {
     // Draw (Note sprite 1 datum was moved, so coordinates do not need to be adjusted
     spr[sel].fillCircle(circle->cx[i], circle->cy[i], circle->cr[i], circle->col[i]);
     spr[sel].drawCircle(circle->cx[i], circle->cy[i], circle->cr[i], TFT_WHITE);
@@ -129,7 +129,7 @@ void drawUpdate (bool sel) {
 
   // Update circle positions after bottom half has been drawn
   if (sel) {
-    for (uint16_t i = 0; i < CNUMBER; i++) {
+    for (unsigned short i = 0; i < CNUMBER; i++) {
       circle->cx[i] += circle->dx[i];
       circle->cy[i] += circle->dy[i];
       if (circle->cx[i] <= circle->cr[i]) {
@@ -155,7 +155,7 @@ void drawUpdate (bool sel) {
 // #########################################################################
 // Return a 16-bit rainbow colour
 // #########################################################################
-uint16_t rainbow(byte value)
+unsigned short rainbow(byte value)
 {
   // If 'value' is in the range 0-159 it is converted to a spectrum colour
   // from 0 = red through to 127 = blue to 159 = violet

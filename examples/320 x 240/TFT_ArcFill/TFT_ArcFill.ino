@@ -68,10 +68,10 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
   // Calculate first pair of coordinates for segment start
   float sx = cos((start_angle - 90) * DEG2RAD);
   float sy = sin((start_angle - 90) * DEG2RAD);
-  uint16_t x0 = sx * (rx - w) + x;
-  uint16_t y0 = sy * (ry - w) + y;
-  uint16_t x1 = sx * rx + x;
-  uint16_t y1 = sy * ry + y;
+  unsigned short x0 = sx * (rx - w) + x;
+  unsigned short y0 = sy * (ry - w) + y;
+  unsigned short x1 = sx * rx + x;
+  unsigned short y1 = sy * ry + y;
 
   // Draw colour blocks every inc degrees
   for (int i = start_angle; i < start_angle + seg * seg_count; i += inc) {

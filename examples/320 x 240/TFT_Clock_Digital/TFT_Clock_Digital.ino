@@ -40,11 +40,11 @@ code	color
 
 TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 
-uint32_t targetTime = 0;                    // for next 1 second timeout
+unsigned int targetTime = 0;                    // for next 1 second timeout
 
-static uint8_t conv2d(const char* p); // Forward declaration needed for IDE 1.6.x
+static unsigned char conv2d(const char* p); // Forward declaration needed for IDE 1.6.x
 
-uint8_t hh = conv2d(__TIME__), mm = conv2d(__TIME__ + 3), ss = conv2d(__TIME__ + 6); // Get H, M, S from compile time
+unsigned char hh = conv2d(__TIME__), mm = conv2d(__TIME__ + 3), ss = conv2d(__TIME__ + 6); // Get H, M, S from compile time
 
 byte omm = 99, oss = 99;
 byte xcolon = 0, xsecs = 0;
@@ -123,8 +123,8 @@ void loop() {
 
 
 // Function to extract numbers from compile time string
-static uint8_t conv2d(const char* p) {
-  uint8_t v = 0;
+static unsigned char conv2d(const char* p) {
+  unsigned char v = 0;
   if ('0' <= *p && *p <= '9')
     v = *p - '0';
   return 10 * v + *++p - '0';

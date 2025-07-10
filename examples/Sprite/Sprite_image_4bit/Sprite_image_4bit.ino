@@ -47,7 +47,7 @@ byte state = 0;
 int rloop = 0;
 int incr = 1;
 
-uint16_t cmap[16];
+unsigned short cmap[16];
 
 void setup()
 {
@@ -68,7 +68,7 @@ void setup()
   tft.fillScreen(TFT_BLACK);
   
   // push the image - only need to do this once.
-  spr.pushImage(2, 2, 160, 160, (uint16_t *)stars);
+  spr.pushImage(2, 2, 160, 160, (unsigned short *)stars);
 
   for (int i = 0; i < 16; i++)
     cmap[i] = rainbow();

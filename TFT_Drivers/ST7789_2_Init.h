@@ -4,7 +4,7 @@
 // Configure ST7789 display
 
 {
-static const uint8_t PROGMEM
+static const unsigned char PROGMEM
   st7789[] = {
     8,
     TFT_SLPOUT, TFT_INIT_DELAY, 255,

@@ -11,10 +11,10 @@
   tft.setViewport(VP_X, VP_Y, VP_W, VP_H, false); // Note: tft.width() and tft.height() return TFT size!
 
   // To get viewport x, y coordinates, width, height and datum position flag
-  int32_t x = tft.getViewportX();      // Always returns viewport x coordinate relative to screen left edge
-  int32_t y = tft.getViewportY(void);  // Always returns viewport y coordinate relative to screen top edge
-  int32_t w = tft.getViewportWidth();  // Always returns width of viewport
-  int32_t h = tft.getViewportHeight(); // Always returns height of viewport
+  int x = tft.getViewportX();      // Always returns viewport x coordinate relative to screen left edge
+  int y = tft.getViewportY(void);  // Always returns viewport y coordinate relative to screen top edge
+  int w = tft.getViewportWidth();  // Always returns width of viewport
+  int h = tft.getViewportHeight(); // Always returns height of viewport
   bool    f = tft.getViewportDatum();  // Datum of the viewport (false = TFT corner, true = viewport corner)
   // To check if all or part of an area is in the viewport
   checkViewport(x, y, w, h); // Returns "true" if all or part of area is in viewport

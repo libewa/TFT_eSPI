@@ -2,7 +2,7 @@
 // This is the command sequence that rotates the RM68120 driver coordinate frame
 
   rotation = m % 4; // Limit the range of values to 0-3
-  uint8_t reg = 0;
+  unsigned char reg = 0;
 
   switch (rotation) {
     case 0:

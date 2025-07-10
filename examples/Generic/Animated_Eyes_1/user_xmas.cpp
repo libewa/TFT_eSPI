@@ -15,11 +15,11 @@
 Adafruit_NeoPixel pixels(LED_COUNT, LED_PIN);
 
 
-uint32_t timeOfLastTwinkle = 0;  // Used for timing pixel changes
-uint8_t litPixel[LIT_PIXELS];    // Indices of which pixels are lit
-uint8_t pixelIndex = LIT_PIXELS; // Index of currently-changing litPixel
+unsigned int timeOfLastTwinkle = 0;  // Used for timing pixel changes
+unsigned char litPixel[LIT_PIXELS];    // Indices of which pixels are lit
+unsigned char pixelIndex = LIT_PIXELS; // Index of currently-changing litPixel
 
-uint32_t colors[] = { 0xFF0000, 0x00FF00, 0xFFFFFF }; // Red, green, white
+unsigned int colors[] = { 0xFF0000, 0x00FF00, 0xFFFFFF }; // Red, green, white
 #define NUM_COLORS (sizeof colors / sizeof colors[0])
 
 void user_setup(void) {
@@ -30,7 +30,7 @@ void user_setup(void) {
 }
 
 void user_loop(void) {
-  uint32_t t = millis();
+  unsigned int t = millis();
 
   if((t - timeOfLastTwinkle) >= TWINKLE_INTERVAL) { // Time to update pixels?
     timeOfLastTwinkle = t;

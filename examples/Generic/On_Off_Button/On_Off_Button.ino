@@ -73,7 +73,7 @@ void setup(void)
 //------------------------------------------------------------------------------------------
 void loop()
 {
-  uint16_t x, y;
+  unsigned short x, y;
 
   // See if there's any touch data for us
   if (tft.getTouch(&x, &y))
@@ -110,8 +110,8 @@ void loop()
 
 void touch_calibrate()
 {
-  uint16_t calData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calData[5];
+  unsigned char calDataOK = 0;
 
   // check file system exists
   if (!SPIFFS.begin()) {

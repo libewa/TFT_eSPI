@@ -22,12 +22,12 @@
 
 TFT_eSPI tft = TFT_eSPI(); // Invoke custom library with default width and height
 
-uint32_t runTime = -99999;       // time for next update
+unsigned int runTime = -99999;       // time for next update
 
 int reading = 0; // Value to be displayed
 int d = 0; // Variable used for the sinewave test waveform
 bool range_error = 0;
-int8_t ramp = 1;
+char ramp = 1;
 
 void setup(void) {
   tft.begin();
@@ -108,10 +108,10 @@ int ringMeter(int value, int vmin, int vmax, int x, int y, int r, const char *un
     // Calculate pair of coordinates for segment start
     float sx = cos((i - 90) * 0.0174532925);
     float sy = sin((i - 90) * 0.0174532925);
-    uint16_t x0 = sx * (r - w) + x;
-    uint16_t y0 = sy * (r - w) + y;
-    uint16_t x1 = sx * r + x;
-    uint16_t y1 = sy * r + y;
+    unsigned short x0 = sx * (r - w) + x;
+    unsigned short y0 = sy * (r - w) + y;
+    unsigned short x1 = sx * r + x;
+    unsigned short y1 = sy * r + y;
 
     // Calculate pair of coordinates for segment end
     float sx2 = cos((i + seg - 90) * 0.0174532925);
@@ -247,9 +247,9 @@ float sineWave(int phase) {
 // Draw array "icon" of defined width and height at coordinate x,y
 // Maximum icon size is 255x255 pixels to avoid integer overflow
 
-void drawIcon(const unsigned short* icon, int16_t x, int16_t y, int8_t width, int8_t height) {
+void drawIcon(const unsigned short* icon, short x, short y, char width, char height) {
 
-  uint16_t  pix_buffer[BUFF_SIZE];   // Pixel buffer (16 bits per pixel)
+  unsigned short  pix_buffer[BUFF_SIZE];   // Pixel buffer (16 bits per pixel)
 
   tft.startWrite();
 
@@ -257,7 +257,7 @@ void drawIcon(const unsigned short* icon, int16_t x, int16_t y, int8_t width, in
   tft.setAddrWindow(x, y, width, height);
 
   // Work out the number whole buffers to send
-  uint16_t nb = ((uint16_t)height * width) / BUFF_SIZE;
+  unsigned short nb = ((unsigned short)height * width) / BUFF_SIZE;
 
   // Fill and send "nb" buffers to TFT
   for (int i = 0; i < nb; i++) {
@@ -268,7 +268,7 @@ void drawIcon(const unsigned short* icon, int16_t x, int16_t y, int8_t width, in
   }
 
   // Work out number of pixels not yet sent
-  uint16_t np = ((uint16_t)height * width) % BUFF_SIZE;
+  unsigned short np = ((unsigned short)height * width) % BUFF_SIZE;
 
   // Send any partial buffer left over
   if (np) {

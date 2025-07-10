@@ -52,7 +52,7 @@ void loop() {
 
   delay(2000);
 
-  uint32_t dt = millis();
+  unsigned int dt = millis();
 
   // Now go bananas and draw 500 more
   for (int i = 0; i < 500; i++)

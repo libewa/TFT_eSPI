@@ -8,7 +8,7 @@
 
 {
 	// Initialization commands for ILI9163 screens
-	static const uint8_t ILI9163_cmds[] PROGMEM =
+	static const unsigned char ILI9163_cmds[] PROGMEM =
 	{
 	17,    // 17 commands follow
 	0x01,  0 + TFT_INIT_DELAY, 120,  // Software reset

@@ -476,11 +476,11 @@
                                WR_STB
     #endif
 
-    #define tft_Write_32(C)    tft_Write_16((uint16_t)((C)>>16)); tft_Write_16((uint16_t)(C))
+    #define tft_Write_32(C)    tft_Write_16((unsigned short)((C)>>16)); tft_Write_16((unsigned short)(C))
 
-    #define tft_Write_32C(C,D) tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(D))
+    #define tft_Write_32C(C,D) tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(D))
 
-    #define tft_Write_32D(C)   tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(C))
+    #define tft_Write_32D(C)   tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(C))
 
     // Read a data bit
     #define RD_TFT_D0 (((GPIOA->IDR)&(D0_PIN_MASK))>>( 9-0)) // Read pin PA9
@@ -619,11 +619,11 @@
 
       #endif
 
-      #define tft_Write_32(C)    tft_Write_16((uint16_t)((C)>>16)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32(C)    tft_Write_16((unsigned short)((C)>>16)); tft_Write_16((unsigned short)(C))
 
-      #define tft_Write_32C(C,D) tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(D))
+      #define tft_Write_32C(C,D) tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(D))
 
-      #define tft_Write_32D(C)   tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32D(C)   tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(C))
 
       // Read a data bit
       #define RD_TFT_D0 (((GPIOF->IDR)&(D0_PIN_MASK))>>(12-0)) // Read pin PF12
@@ -715,11 +715,11 @@
                                GPIOE->BSRR = D11_BSR_MASK(C) | D12_BSR_MASK(C) | D13_BSR_MASK(C) | D14_BSR_MASK(C); \
                                WR_STB
 
-      #define tft_Write_32(C)    tft_Write_16((uint16_t)((C)>>16)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32(C)    tft_Write_16((unsigned short)((C)>>16)); tft_Write_16((unsigned short)(C))
 
-      #define tft_Write_32C(C,D) tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(D))
+      #define tft_Write_32C(C,D) tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(D))
 
-      #define tft_Write_32D(C)   tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32D(C)   tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(C))
 
       // Read a data bit
       #define RD_TFT_D0 (((GPIOF->IDR)&(D0_PIN_MASK))>>( 3-0)) // Read pin PF3
@@ -748,16 +748,16 @@
       #endif
 
       // Write 8 bits to TFT
-      #define tft_Write_8(C)   GPIOX->BSRR = (0x00FF0000 | (uint8_t)(C)); WR_L; WR_STB
+      #define tft_Write_8(C)   GPIOX->BSRR = (0x00FF0000 | (unsigned char)(C)); WR_L; WR_STB
 
       #if defined (SSD1963_DRIVER)
 
         // Write 18-bit color to TFT (untested)
 
         #define tft_Write_16(C)  r6 = (((C) & 0xF800)>> 8); g6 = (((C) & 0x07E0)>> 3); b6 = (((C) & 0x001F)<< 3); \
-                             GPIOX->BSRR = (0x00FF0000 | (uint8_t)(r6)); WR_L; WR_STB; \
-                             GPIOX->BSRR = (0x00FF0000 | (uint8_t)(g6)); WR_L; WR_STB; \
-                             GPIOX->BSRR = (0x00FF0000 | (uint8_t)(b6)); WR_L; WR_STB
+                             GPIOX->BSRR = (0x00FF0000 | (unsigned char)(r6)); WR_L; WR_STB; \
+                             GPIOX->BSRR = (0x00FF0000 | (unsigned char)(g6)); WR_L; WR_STB; \
+                             GPIOX->BSRR = (0x00FF0000 | (unsigned char)(b6)); WR_L; WR_STB
 
         // 18-bit color write with swapped bytes
         #define tft_Write_16S(C) Cswap = ((C) >>8 | (C) << 8); tft_Write_16(Cswap)
@@ -765,19 +765,19 @@
       #else
 
           // Write 16 bits to TFT
-          #define tft_Write_16(C)  GPIOX->BSRR = (0x00FF0000 | (uint8_t)(C>>8)); WR_L; WR_STB; \
-                                   GPIOX->BSRR = (0x00FF0000 | (uint8_t)(C>>0)); WR_L; WR_STB
+          #define tft_Write_16(C)  GPIOX->BSRR = (0x00FF0000 | (unsigned char)(C>>8)); WR_L; WR_STB; \
+                                   GPIOX->BSRR = (0x00FF0000 | (unsigned char)(C>>0)); WR_L; WR_STB
 
           // 16-bit write with swapped bytes
-          #define tft_Write_16S(C) GPIOX->BSRR = (0x00FF0000 | (uint8_t)(C>>0)); WR_L; WR_STB; \
-                                   GPIOX->BSRR = (0x00FF0000 | (uint8_t)(C>>8)); WR_L; WR_STB
+          #define tft_Write_16S(C) GPIOX->BSRR = (0x00FF0000 | (unsigned char)(C>>0)); WR_L; WR_STB; \
+                                   GPIOX->BSRR = (0x00FF0000 | (unsigned char)(C>>8)); WR_L; WR_STB
       #endif
 
-      #define tft_Write_32(C)    tft_Write_16((uint16_t)((C)>>16)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32(C)    tft_Write_16((unsigned short)((C)>>16)); tft_Write_16((unsigned short)(C))
 
-      #define tft_Write_32C(C,D) tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(D))
+      #define tft_Write_32C(C,D) tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(D))
 
-      #define tft_Write_32D(C)   tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32D(C)   tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(C))
 
       // Read a data bit
       #define RD_TFT_D0 ((GPIOX->IDR) & 0x01) // Read pin TFT_D0
@@ -949,11 +949,11 @@
                                  WR_STB
       #endif
 
-      #define tft_Write_32(C)    tft_Write_16((uint16_t)((C)>>16)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32(C)    tft_Write_16((unsigned short)((C)>>16)); tft_Write_16((unsigned short)(C))
 
-      #define tft_Write_32C(C,D) tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(D))
+      #define tft_Write_32C(C,D) tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(D))
 
-      #define tft_Write_32D(C)   tft_Write_16((uint16_t)(C)); tft_Write_16((uint16_t)(C))
+      #define tft_Write_32D(C)   tft_Write_16((unsigned short)(C)); tft_Write_16((unsigned short)(C))
 
       // Read a data bit
       #define RD_TFT_D0 ((((D0_PIN_PORT->IDR) >> (D0_PIN_BIT))&1)<<0) // Read pin TFT_D0
@@ -974,7 +974,7 @@
   #define SPI_TXE_CHECK  while(!__HAL_SPI_GET_FLAG(&spiHal, SPI_FLAG_TXE)){}
                          //BSY check must allow for APB clock delay by checking TXE flag first
   #define SPI_BUSY_CHECK SPI_TXE_CHECK; while( __HAL_SPI_GET_FLAG(&spiHal, SPI_FLAG_BSY)){}
-  #define TX_FIFO        SPI_TXE_CHECK; *((__IO uint8_t *)&SPIX->DR)
+  #define TX_FIFO        SPI_TXE_CHECK; *((__IO unsigned char *)&SPIX->DR)
 
   //#define tft_Write_8(C)   spi.transfer(C)
   #define tft_Write_8(C)   TX_FIFO = (C); SPI_BUSY_CHECK
@@ -1002,7 +1002,7 @@
   #define SPI_TXE_CHECK  while(!__HAL_SPI_GET_FLAG(&spiHal, SPI_FLAG_TXE)){}
                          //BSY check must allow for APB clock delay by checking TXE flag first
   #define SPI_BUSY_CHECK SPI_TXE_CHECK; while( __HAL_SPI_GET_FLAG(&spiHal, SPI_FLAG_BSY)){}
-  #define TX_FIFO        SPI_TXE_CHECK; *((__IO uint8_t *)&SPIX->DR)
+  #define TX_FIFO        SPI_TXE_CHECK; *((__IO unsigned char *)&SPIX->DR)
 
   //#define tft_Write_8(C)   spi.transfer(C)
   #define tft_Write_8(C)   TX_FIFO = (0); TX_FIFO = (C); SPI_BUSY_CHECK
@@ -1033,7 +1033,7 @@
   #define SPI_TXE_CHECK  while(!__HAL_SPI_GET_FLAG(&spiHal, SPI_FLAG_TXE)){}
                          //BSY check must allow for APB clock delay by checking TXE flag first
   #define SPI_BUSY_CHECK SPI_TXE_CHECK; while( __HAL_SPI_GET_FLAG(&spiHal, SPI_FLAG_BSY)){}
-  #define TX_FIFO        SPI_TXE_CHECK; *((__IO uint8_t *)&SPIX->DR)
+  #define TX_FIFO        SPI_TXE_CHECK; *((__IO unsigned char *)&SPIX->DR)
 
   #define tft_Write_8(C)   TX_FIFO = (C); SPI_BUSY_CHECK
   #define tft_Write_16(C)  TX_FIFO = (C)>>8; TX_FIFO = (C); SPI_BUSY_CHECK
@@ -1042,15 +1042,15 @@
 
   #define tft_Write_32(C) \
     TX_FIFO = (C)>>24; TX_FIFO = (C)>>16; \
-    tft_Write_16((uint16_t) ((C)>>0))
+    tft_Write_16((unsigned short) ((C)>>0))
 
   #define tft_Write_32C(C,D) \
     TX_FIFO = (C)>>8; TX_FIFO = (C); \
-    tft_Write_16((uint16_t) (D))
+    tft_Write_16((unsigned short) (D))
 
   #define tft_Write_32D(C) \
     TX_FIFO = (C)>>8; TX_FIFO = (C); \
-    tft_Write_16((uint16_t) (C))
+    tft_Write_16((unsigned short) (C))
 
 #endif
 

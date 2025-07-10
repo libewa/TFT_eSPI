@@ -53,7 +53,7 @@ void setup(void)
 void loop() 
 {
   static int d = 0;
-  static uint32_t updateTime = 0;  
+  static unsigned int updateTime = 0;  
 
   if (millis() - updateTime >= LOOP_PERIOD) 
   {

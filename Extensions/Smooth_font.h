@@ -4,41 +4,41 @@
  public:
 
   // These are for the new anti-aliased fonts
-  void     loadFont(const uint8_t array[]);
+  void     loadFont(const unsigned char array[]);
 #ifdef FONT_FS_AVAILABLE
   void     loadFont(String fontName, fs::FS &ffs);
 #endif
   void     loadFont(String fontName, bool flash = true);
   void     unloadFont( void );
-  bool     getUnicodeIndex(uint16_t unicode, uint16_t *index);
+  bool     getUnicodeIndex(unsigned short unicode, unsigned short *index);
 
-  virtual void drawGlyph(uint16_t code);
+  virtual void drawGlyph(unsigned short code);
 
-  void     showFont(uint32_t td);
+  void     showFont(unsigned int td);
 
  // This is for the whole font
   typedef struct
   {
-    const uint8_t* gArray;           //array start pointer
-    uint16_t gCount;                 // Total number of characters
-    uint16_t yAdvance;               // Line advance
-    uint16_t spaceWidth;             // Width of a space character
-    int16_t  ascent;                 // Height of top of 'd' above baseline, other characters may be taller
-    int16_t  descent;                // Offset to bottom of 'p', other characters may have a larger descent
-    uint16_t maxAscent;              // Maximum ascent found in font
-    uint16_t maxDescent;             // Maximum descent found in font
+    const unsigned char* gArray;           //array start pointer
+    unsigned short gCount;                 // Total number of characters
+    unsigned short yAdvance;               // Line advance
+    unsigned short spaceWidth;             // Width of a space character
+    short  ascent;                 // Height of top of 'd' above baseline, other characters may be taller
+    short  descent;                // Offset to bottom of 'p', other characters may have a larger descent
+    unsigned short maxAscent;              // Maximum ascent found in font
+    unsigned short maxDescent;             // Maximum descent found in font
   } fontMetrics;
 
 fontMetrics gFont = { nullptr, 0, 0, 0, 0, 0, 0, 0 };
 
   // These are for the metrics for each individual glyph (so we don't need to seek this in file and waste time)
-  uint16_t* gUnicode = NULL;  //UTF-16 code, the codes are searched so do not need to be sequential
-  uint8_t*  gHeight = NULL;   //cheight
-  uint8_t*  gWidth = NULL;    //cwidth
-  uint8_t*  gxAdvance = NULL; //setWidth
-  int16_t*  gdY = NULL;       //topExtent
-  int8_t*   gdX = NULL;       //leftExtent
-  uint32_t* gBitmap = NULL;   //file pointer to greyscale bitmap
+  unsigned short* gUnicode = NULL;  //UTF-16 code, the codes are searched so do not need to be sequential
+  unsigned char*  gHeight = NULL;   //cheight
+  unsigned char*  gWidth = NULL;    //cwidth
+  unsigned char*  gxAdvance = NULL; //setWidth
+  short*  gdY = NULL;       //topExtent
+  char*   gdX = NULL;       //leftExtent
+  unsigned int* gBitmap = NULL;   //file pointer to greyscale bitmap
 
   bool     fontLoaded = false; // Flags when a anti-aliased font is loaded
 
@@ -55,7 +55,7 @@ fontMetrics gFont = { nullptr, 0, 0, 0, 0, 0, 0, 0 };
   private:
 
   void     loadMetrics(void);
-  uint32_t readInt32(void);
+  unsigned int readInt32(void);
 
-  uint8_t* fontPtr = nullptr;
+  unsigned char* fontPtr = nullptr;
 

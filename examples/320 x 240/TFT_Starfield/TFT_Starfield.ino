@@ -8,14 +8,14 @@ TFT_eSPI tft = TFT_eSPI();
 
 // With 1024 stars the update rate is ~65 frames per second
 #define NSTARS 1024
-uint8_t sx[NSTARS] = {};
-uint8_t sy[NSTARS] = {};
-uint8_t sz[NSTARS] = {};
+unsigned char sx[NSTARS] = {};
+unsigned char sy[NSTARS] = {};
+unsigned char sz[NSTARS] = {};
 
-uint8_t za, zb, zc, zx;
+unsigned char za, zb, zc, zx;
 
 // Fast 0-255 random number generator from http://eternityforest.com/Projects/rng.php:
-uint8_t __attribute__((always_inline)) rng()
+unsigned char __attribute__((always_inline)) rng()
 {
   zx++;
   za = (za^zc^zx);
@@ -44,7 +44,7 @@ void setup() {
 void loop()
 {
   unsigned long t0 = micros();
-  uint8_t spawnDepthVariation = 255;
+  unsigned char spawnDepthVariation = 255;
 
   for(int i = 0; i < NSTARS; ++i)
   {
@@ -70,7 +70,7 @@ void loop()
   
         if (screen_x >= 0 && screen_y >= 0 && screen_x < 320 && screen_y < 240)
         {
-          uint8_t r, g, b;
+          unsigned char r, g, b;
           r = g = b = 255 - sz[i];
           tft.drawPixel(screen_x, screen_y, tft.color565(r,g,b));
         }

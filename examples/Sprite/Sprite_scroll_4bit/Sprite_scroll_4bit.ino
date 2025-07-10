@@ -33,7 +33,7 @@ int grid = 0;
 int tcount = 0;
 
 // Palette colour table
-uint16_t palette[16];
+unsigned short palette[16];
 
 //==========================================================================================
 void setup() {

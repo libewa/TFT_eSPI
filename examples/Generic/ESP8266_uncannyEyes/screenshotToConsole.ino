@@ -41,13 +41,13 @@
 
 void screenshotToConsole()
 {
-  uint8_t e = 0;
-  uint8_t lastColor[3];
-  uint8_t color[3];
-  uint32_t sameColorPixelCount = 0;
-  uint16_t sameColorPixelCount16 = 0;
-  uint32_t sameColorStartIndex = 0;
-  uint32_t totalImageDataLength = 0;
+  unsigned char e = 0;
+  unsigned char lastColor[3];
+  unsigned char color[3];
+  unsigned int sameColorPixelCount = 0;
+  unsigned short sameColorPixelCount16 = 0;
+  unsigned int sameColorStartIndex = 0;
+  unsigned int totalImageDataLength = 0;
 
 //  delay(1000);
 
@@ -70,11 +70,11 @@ void screenshotToConsole()
   totalImageDataLength += 6;
   sameColorStartIndex = 0;
 
-  for (uint32_t py = 0; py < (eye[e].tft.height() - 1); py++)
+  for (unsigned int py = 0; py < (eye[e].tft.height() - 1); py++)
   {
-    for (uint32_t px = 0; px < (eye[e].tft.width() - 1); px++)
+    for (unsigned int px = 0; px < (eye[e].tft.width() - 1); px++)
     {
-      uint32_t i = px + eye[e].tft.width() * py;
+      unsigned int i = px + eye[e].tft.width() * py;
       yield();
       if (i)
       {
@@ -107,7 +107,7 @@ void screenshotToConsole()
       }
     }
   }
-  sameColorPixelCount = (uint32_t)eye[e].tft.width() * (uint32_t)eye[e].tft.height() - sameColorStartIndex;
+  sameColorPixelCount = (unsigned int)eye[e].tft.width() * (unsigned int)eye[e].tft.height() - sameColorStartIndex;
   if (sameColorPixelCount > 65535)
   {
     sameColorPixelCount16 = 65535;
@@ -129,7 +129,7 @@ void screenshotToConsole()
   Serial.println(totalImageDataLength);
 }
 
-void printHex8(uint8_t *data, uint8_t length) // prints 8-bit data in hex
+void printHex8(unsigned char *data, unsigned char length) // prints 8-bit data in hex
 {
   char tmp[length * 2 + 1];
   byte first;
@@ -149,7 +149,7 @@ void printHex8(uint8_t *data, uint8_t length) // prints 8-bit data in hex
   Serial.print(tmp);
 }
 
-void printHex16(uint16_t *data, uint8_t length) // prints 8-bit data in hex
+void printHex16(unsigned short *data, unsigned char length) // prints 8-bit data in hex
 {
   char tmp[length * 4 + 1];
   byte first;
@@ -179,7 +179,7 @@ void printHex16(uint16_t *data, uint8_t length) // prints 8-bit data in hex
   Serial.print(tmp);
 }
 
-void printHex32(uint32_t *data, uint8_t length) // prints 8-bit data in hex
+void printHex32(unsigned int *data, unsigned char length) // prints 8-bit data in hex
 {
   char tmp[length * 8 + 1];
   byte dataByte[8];

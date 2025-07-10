@@ -24,8 +24,8 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 #define TFT_GREY 0x5AEB
 
 float ltx = 0;    // Saved x coord of bottom of needle
-uint16_t osx = M_SIZE*120, osy = M_SIZE*120; // Saved x & y coords
-uint32_t updateTime = 0;       // time for next update
+unsigned short osx = M_SIZE*120, osy = M_SIZE*120; // Saved x & y coords
+unsigned int updateTime = 0;       // time for next update
 
 int old_analog =  -999; // Value last displayed
 
@@ -78,10 +78,10 @@ void analogMeter()
     // Coordinates of tick to draw
     float sx = cos((i - 90) * 0.0174532925);
     float sy = sin((i - 90) * 0.0174532925);
-    uint16_t x0 = sx * (M_SIZE*100 + tl) + M_SIZE*120;
-    uint16_t y0 = sy * (M_SIZE*100 + tl) + M_SIZE*140;
-    uint16_t x1 = sx * M_SIZE*100 + M_SIZE*120;
-    uint16_t y1 = sy * M_SIZE*100 + M_SIZE*140;
+    unsigned short x0 = sx * (M_SIZE*100 + tl) + M_SIZE*120;
+    unsigned short y0 = sy * (M_SIZE*100 + tl) + M_SIZE*140;
+    unsigned short x1 = sx * M_SIZE*100 + M_SIZE*120;
+    unsigned short y1 = sy * M_SIZE*100 + M_SIZE*140;
 
     // Coordinates of next tick for zone fill
     float sx2 = cos((i + 5 - 90) * 0.0174532925);

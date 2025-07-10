@@ -24,8 +24,8 @@ PNG png; // PNG decoder instance
 
 #define MAX_IMAGE_WIDTH 240 // Adjust for your images
 
-int16_t xpos = 0;
-int16_t ypos = 0;
+short xpos = 0;
+short ypos = 0;
 
 // Include the TFT library https://github.com/Bodmer/TFT_eSPI
 #include "SPI.h"
@@ -52,12 +52,12 @@ void setup()
 //====================================================================================
 void loop()
 {
-  int16_t rc = png.openFLASH((uint8_t *)panda, sizeof(panda), pngDraw);
+  short rc = png.openFLASH((unsigned char *)panda, sizeof(panda), pngDraw);
   if (rc == PNG_SUCCESS) {
     Serial.println("Successfully opened png file");
     Serial.printf("image specs: (%d x %d), %d bpp, pixel type: %d\n", png.getWidth(), png.getHeight(), png.getBpp(), png.getPixelType());
     tft.startWrite();
-    uint32_t dt = millis();
+    unsigned int dt = millis();
     rc = png.decode(NULL, 0);
     Serial.print(millis() - dt); Serial.println("ms");
     tft.endWrite();
@@ -76,7 +76,7 @@ void loop()
 // you will need to adapt this function to suit.
 // Callback function to draw pixels to the display
 void pngDraw(PNGDRAW *pDraw) {
-  uint16_t lineBuffer[MAX_IMAGE_WIDTH];
+  unsigned short lineBuffer[MAX_IMAGE_WIDTH];
   png.getLineAsRGB565(pDraw, lineBuffer, PNG_RGB565_BIG_ENDIAN, 0xffffffff);
   tft.pushImage(xpos, ypos + pDraw->y, pDraw->iWidth, 1, lineBuffer);
 }

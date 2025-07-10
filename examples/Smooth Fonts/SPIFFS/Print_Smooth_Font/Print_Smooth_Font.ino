@@ -94,7 +94,7 @@ void loop() {
 
   // Set the font colour to be red
   tft.setTextColor(TFT_RED, TFT_BLACK);
-  tft.println((uint32_t)3735928559, HEX); // Should print DEADBEEF
+  tft.println((unsigned int)3735928559, HEX); // Should print DEADBEEF
 
   // Set the font colour to be green with black background
   tft.setTextColor(TFT_GREEN, TFT_BLACK);
@@ -152,7 +152,7 @@ void listFiles(void) {
 }
 
 #ifdef ESP32
-void listDir(fs::FS &fs, const char * dirname, uint8_t levels) {
+void listDir(fs::FS &fs, const char * dirname, unsigned char levels) {
   Serial.printf("Listing directory: %s\n", dirname);
 
   fs::File root = fs.open(dirname);

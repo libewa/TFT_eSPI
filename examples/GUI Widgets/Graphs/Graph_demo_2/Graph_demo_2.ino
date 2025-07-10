@@ -72,7 +72,7 @@ void setup() {
 }
 
 void loop() {
-  static uint32_t plotTime = millis();
+  static unsigned int plotTime = millis();
   static float gx = 0.0, gy = 0.0;
   static float delta = 7.0;
 

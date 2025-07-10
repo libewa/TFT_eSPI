@@ -64,10 +64,10 @@ Looks like driver chip is: ILI9163 (based on datasheet ID)
 
 char *chip = "Unknown                                 ";
 
-uint32_t readwrite8(uint8_t cmd, uint8_t bits, uint8_t dummy)
+unsigned int readwrite8(unsigned char cmd, unsigned char bits, unsigned char dummy)
 {
-    uint32_t ret = 0;
-    uint8_t val = cmd;
+    unsigned int ret = 0;
+    unsigned char val = cmd;
     int cnt = 8;
     digitalWrite(TFT_CS, LOW);
     digitalWrite(TFT_DC, LOW);
@@ -98,9 +98,9 @@ uint32_t readwrite8(uint8_t cmd, uint8_t bits, uint8_t dummy)
     return ret;
 }
 
-void showreg(uint8_t reg, uint8_t bits, uint8_t dummy)
+void showreg(unsigned char reg, unsigned char bits, unsigned char dummy)
 {
-    uint32_t val;
+    unsigned int val;
     val = readwrite8(reg, bits, dummy);
 
     Serial.print("Register 0x");
@@ -113,7 +113,7 @@ void showreg(uint8_t reg, uint8_t bits, uint8_t dummy)
 
 void setup() {
     // put your setup code here, to run once:
-    uint32_t ID = 0;
+    unsigned int ID = 0;
     Serial.begin(115200);
 
     delay(4000); // Delay to allow USB to connect to a Leonardo etc.

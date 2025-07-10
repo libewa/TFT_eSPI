@@ -20,15 +20,15 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 #define GEN_DELAY 0
 
 //Current grid
-uint8_t grid[GRIDX][GRIDY];
+unsigned char grid[GRIDX][GRIDY];
 
 //The new grid for the next generation
-uint8_t newgrid[GRIDX][GRIDY];
+unsigned char newgrid[GRIDX][GRIDY];
 
 //Number of generations
 #define NUMGEN 600
 
-uint16_t genCount = 0;
+unsigned short genCount = 0;
 
 void setup()   {
 
@@ -71,8 +71,8 @@ void loop() {
     computeCA();
     drawGrid();
     delay(GEN_DELAY);
-    for (int16_t x = 1; x < GRIDX-1; x++) {
-      for (int16_t y = 1; y < GRIDY-1; y++) {
+    for (short x = 1; x < GRIDX-1; x++) {
+      for (short y = 1; y < GRIDY-1; y++) {
         grid[x][y] = newgrid[x][y];
       }
     }
@@ -83,9 +83,9 @@ void loop() {
 //Draws the grid on the display
 void drawGrid(void) {
 
-  uint16_t color = TFT_WHITE;
-  for (int16_t x = 1; x < GRIDX - 1; x++) {
-    for (int16_t y = 1; y < GRIDY - 1; y++) {
+  unsigned short color = TFT_WHITE;
+  for (short x = 1; x < GRIDX - 1; x++) {
+    for (short y = 1; y < GRIDY - 1; y++) {
       if ((grid[x][y]) != (newgrid[x][y])) {
         if (newgrid[x][y] == 1) color = 0xFFFF; //random(0xFFFF);
         else color = 0;
@@ -97,8 +97,8 @@ void drawGrid(void) {
 
 //Initialise Grid
 void initGrid(void) {
-  for (int16_t x = 0; x < GRIDX; x++) {
-    for (int16_t y = 0; y < GRIDY; y++) {
+  for (short x = 0; x < GRIDX; x++) {
+    for (short y = 0; y < GRIDY; y++) {
       newgrid[x][y] = 0;
 
       if (x == 0 || x == GRIDX - 1 || y == 0 || y == GRIDY - 1) {
@@ -117,8 +117,8 @@ void initGrid(void) {
 
 //Compute the CA. Basically everything related to CA starts here
 void computeCA() {
-  for (int16_t x = 1; x < GRIDX; x++) {
-    for (int16_t y = 1; y < GRIDY; y++) {
+  for (short x = 1; x < GRIDX; x++) {
+    for (short y = 1; y < GRIDY; y++) {
       int neighbors = getNumberOfNeighbors(x, y);
       if (grid[x][y] == 1 && (neighbors == 2 || neighbors == 3 ))
       {

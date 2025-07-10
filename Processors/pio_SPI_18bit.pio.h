@@ -21,7 +21,7 @@
 #define tft_io_offset_block_fill 17u
 #define tft_io_offset_start_tx 27u
 
-static const uint16_t tft_io_program_instructions[] = {
+static const unsigned short tft_io_program_instructions[] = {
     0x90a0, //  0: pull   block           side 0     
     0x6019, //  1: out    pins, 25                   
     0x181e, //  2: jmp    30              side 1     

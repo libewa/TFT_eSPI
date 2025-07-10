@@ -13,9 +13,9 @@
 #include <TJpg_Decoder.h>
 
 #ifdef USE_DMA
-  uint16_t  dmaBuffer1[16*16]; // Toggle buffer for 16*16 MCU block, 512bytes
-  uint16_t  dmaBuffer2[16*16]; // Toggle buffer for 16*16 MCU block, 512bytes
-  uint16_t* dmaBufferPtr = dmaBuffer1;
+  unsigned short  dmaBuffer1[16*16]; // Toggle buffer for 16*16 MCU block, 512bytes
+  unsigned short  dmaBuffer2[16*16]; // Toggle buffer for 16*16 MCU block, 512bytes
+  unsigned short* dmaBufferPtr = dmaBuffer1;
   bool dmaBufferSel = 0;
 #endif
 
@@ -26,7 +26,7 @@ TFT_eSPI tft = TFT_eSPI();         // Invoke custom library
 
 // This next function will be called during decoding of the jpeg file to render each
 // 16x16 or 8x8 image tile (Minimum Coding Unit) to the TFT.
-bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
+bool tft_output(short x, short y, unsigned short w, unsigned short h, unsigned short* bitmap)
 {
    // Stop further decoding as image is running off bottom of screen
   if ( y >= tft.height() ) return 0;
@@ -86,12 +86,12 @@ void loop()
 
 
   // Get the width and height in pixels of the jpeg if you wish:
-  uint16_t w = 0, h = 0;
+  unsigned short w = 0, h = 0;
   TJpgDec.getJpgSize(&w, &h, panda, sizeof(panda));
   Serial.print("Width = "); Serial.print(w); Serial.print(", height = "); Serial.println(h);
 
   // Time recorded for test purposes
-  uint32_t dt = millis();
+  unsigned int dt = millis();
 
   // Must use startWrite first so TFT chip select stays low during DMA and SPI channel settings remain configured
   tft.startWrite();

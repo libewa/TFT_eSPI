@@ -47,15 +47,15 @@ TFT_eSPI tft;           // A single instance is used for 1 or 2 displays
   #define BUFFERS 1      // 1 buffer for no DMA
 #endif
 
-uint16_t pbuffer[BUFFERS][BUFFER_SIZE]; // Pixel rendering buffer
+unsigned short pbuffer[BUFFERS][BUFFER_SIZE]; // Pixel rendering buffer
 bool     dmaBuf   = 0;                  // DMA buffer selection
 
 // This struct is populated in config.h
 typedef struct {        // Struct is defined before including config.h --
-  int8_t  select;       // pin numbers for each eye's screen select line
-  int8_t  wink;         // and wink button (or -1 if none) specified there,
-  uint8_t rotation;     // also display rotation and the x offset
-  int16_t xposition;    // position of eye on the screen
+  char  select;       // pin numbers for each eye's screen select line
+  char  wink;         // and wink button (or -1 if none) specified there,
+  unsigned char rotation;     // also display rotation and the x offset
+  short xposition;    // position of eye on the screen
 } eyeInfo_t;
 
 #include "config.h"     // ****** CONFIGURATION IS DONE IN HERE ******
@@ -73,18 +73,18 @@ extern void user_loop(void);
 #define ENBLINK 1       // Eyelid is currently closing
 #define DEBLINK 2       // Eyelid is currently opening
 typedef struct {
-  uint8_t  state;       // NOBLINK/ENBLINK/DEBLINK
-  uint32_t duration;    // Duration of blink state (micros)
-  uint32_t startTime;   // Time (micros) of last state change
+  unsigned char  state;       // NOBLINK/ENBLINK/DEBLINK
+  unsigned int duration;    // Duration of blink state (micros)
+  unsigned int startTime;   // Time (micros) of last state change
 } eyeBlink;
 
 struct {                // One-per-eye structure
-  int16_t   tft_cs;     // Chip select pin for each display
+  short   tft_cs;     // Chip select pin for each display
   eyeBlink  blink;      // Current blink/wink state
-  int16_t   xposition;  // x position of eye image
+  short   xposition;  // x position of eye image
 } eye[NUM_EYES];
 
-uint32_t startTime;  // For FPS indicator
+unsigned int startTime;  // For FPS indicator
 
 // INITIALIZATION -- runs once at startup ----------------------------------
 void setup(void) {
@@ -117,7 +117,7 @@ void setup(void) {
   digitalWrite(eye[0].tft_cs, HIGH);
   if (NUM_EYES > 1) digitalWrite(eye[1].tft_cs, HIGH);
 
-  for (uint8_t e = 0; e < NUM_EYES; e++) {
+  for (unsigned char e = 0; e < NUM_EYES; e++) {
     digitalWrite(eye[e].tft_cs, LOW);
     tft.setRotation(eyeInfo[e].rotation);
     tft.fillScreen(TFT_BLACK);

@@ -71,10 +71,10 @@ void loop()
   {
     tft.resetViewport(); // Reset viewport so width() and height() return TFT size
 
-    uint16_t w = 40;
-    uint16_t h = 40;
-    uint16_t x = random(tft.width()  - w);
-    uint16_t y = random(tft.height() - h);
+    unsigned short w = 40;
+    unsigned short h = 40;
+    unsigned short x = random(tft.width()  - w);
+    unsigned short y = random(tft.height() - h);
 
     tft.setViewport(x, y, w, h);
 

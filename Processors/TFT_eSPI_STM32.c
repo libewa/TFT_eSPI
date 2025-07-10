@@ -32,12 +32,12 @@
 ** Function name:           tft_Read_8
 ** Description:             STM32 software SPI to read bidirectional SDA line
 ***************************************************************************************/
-uint8_t TFT_eSPI::tft_Read_8(void)
+unsigned char TFT_eSPI::tft_Read_8(void)
 {
-  uint8_t  ret = 0;
-  uint32_t reg = 0;
+  unsigned char  ret = 0;
+  unsigned int reg = 0;
 
-  for (uint8_t i = 0; i < 8; i++) {  // read results
+  for (unsigned char i = 0; i < 8; i++) {  // read results
     ret <<= 1;
     SCLK_L;
     if (digitalRead(TFT_MOSI)) ret |= 1;
@@ -80,7 +80,7 @@ void TFT_eSPI::end_SDA_Read(void)
 ** Function name:           pushBlock - for ESP32 and parallel display
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
     // Loop unrolling improves speed dramatically graphics test  0.634s => 0.374s
     while (len>31) {
     #if !defined (SSD1963_DRIVER)
@@ -125,9 +125,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for ESP32 and parallel display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if(_swapBytes) {
     while (len>1) {tft_Write_16(*data); data++; tft_Write_16(*data); data++; len -=2;}
@@ -144,7 +144,7 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           GPIO direction control  - supports class functions
 ** Description:             Set parallel bus to INPUT or OUTPUT
 ***************************************************************************************/
-void TFT_eSPI::busDir(uint32_t mask, uint8_t mode)
+void TFT_eSPI::busDir(unsigned int mask, unsigned char mode)
 {
 #if defined (STM_PORTA_DATA_BUS)
   #if defined (STM32F1xx)
@@ -207,7 +207,7 @@ void TFT_eSPI::busDir(uint32_t mask, uint8_t mode)
 ** Function name:           GPIO direction control  - supports class functions
 ** Description:             Set STM32 GPIO pin to input or output (set high) ASAP
 ***************************************************************************************/
-void TFT_eSPI::gpioMode(uint8_t gpio, uint8_t mode)
+void TFT_eSPI::gpioMode(unsigned char gpio, unsigned char mode)
 {
   PinName pn = digitalPinToPinName(gpio);
   // Push-pull output with no pullup
@@ -220,9 +220,9 @@ void TFT_eSPI::gpioMode(uint8_t gpio, uint8_t mode)
 ** Function name:           read byte  - supports class functions
 ** Description:             Read a byte - parallel bus only
 ***************************************************************************************/
-uint8_t TFT_eSPI::readByte(void)
+unsigned char TFT_eSPI::readByte(void)
 {
-  uint8_t b = 0;
+  unsigned char b = 0;
 
   RD_L;
 #if defined (STM_PORTA_DATA_BUS)
@@ -264,7 +264,7 @@ uint8_t TFT_eSPI::readByte(void)
 ** Function name:           pushBlock - for ESP32 or STM32 RPi TFT
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
   if(len) { tft_Write_16(color); len--; }
   while(len--) {WR_L; WR_H;}
@@ -274,9 +274,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 ** Function name:           pushPixels - for ESP32 or STM32 RPi TFT
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len)
 {
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if (_swapBytes) while ( len-- ) { tft_Write_16S(*data); data++;}
   else while ( len-- ) {tft_Write_16(*data); data++;}
@@ -291,14 +291,14 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
 #define BUF_SIZE 240*3
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
-  //uint8_t col[BUF_SIZE];
+  //unsigned char col[BUF_SIZE];
   // Always using swapped bytes is a peculiarity of this function...
   //color = color>>8 | color<<8;
-  uint8_t r = (color & 0xF800)>>8; // Red
-  uint8_t g = (color & 0x07E0)>>3; // Green
-  uint8_t b = (color & 0x001F)<<3; // Blue
+  unsigned char r = (color & 0xF800)>>8; // Red
+  unsigned char g = (color & 0x07E0)>>3; // Green
+  unsigned char b = (color & 0x001F)<<3; // Blue
 
   while(len--) {
     TX_FIFO = (r);
@@ -311,9 +311,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 ** Function name:           pushPixels - for STM32 and 3 byte RGB display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len)
 {
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if(!_swapBytes) {
     while ( len-- ) {
@@ -346,27 +346,27 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
 ***************************************************************************************/
 #define BUF_SIZE 480
 /*
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
-  uint16_t col[BUF_SIZE];
+  unsigned short col[BUF_SIZE];
   // Always using swapped bytes is a peculiarity of this function...
-  uint16_t swapColor = color>>8 | color<<8;
+  unsigned short swapColor = color>>8 | color<<8;
   if  (len<BUF_SIZE) {
-    for (uint32_t i = 0; i < len; i++) col[i] = swapColor;
-    HAL_SPI_Transmit(&spiHal, (uint8_t*)col, len<<1, HAL_MAX_DELAY);
+    for (unsigned int i = 0; i < len; i++) col[i] = swapColor;
+    HAL_SPI_Transmit(&spiHal, (unsigned char*)col, len<<1, HAL_MAX_DELAY);
     return;
   }
 
-  for (uint32_t i = 0; i < BUF_SIZE; i++) col[i] = swapColor;
+  for (unsigned int i = 0; i < BUF_SIZE; i++) col[i] = swapColor;
   do {
-    HAL_SPI_Transmit(&spiHal, (uint8_t*)col, BUF_SIZE<<1, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&spiHal, (unsigned char*)col, BUF_SIZE<<1, HAL_MAX_DELAY);
     len -= BUF_SIZE;
   } while ( len>=BUF_SIZE ) ;
   // Send remaining pixels
-  if (len) HAL_SPI_Transmit(&spiHal, (uint8_t*)col, len<<1, HAL_MAX_DELAY);
+  if (len) HAL_SPI_Transmit(&spiHal, (unsigned char*)col, len<<1, HAL_MAX_DELAY);
 }
  //*/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
     // Loop unrolling improves speed dramatically graphics test  0.634s => 0.374s
     while (len>31) {
     #if !defined (SSD1963_DRIVER)
@@ -411,22 +411,22 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for STM32
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len)
 {
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if(_swapBytes) {
     while ( len-- ) {
-      TX_FIFO = (uint8_t)(*data>>8);
-      TX_FIFO = (uint8_t)(*data);
+      TX_FIFO = (unsigned char)(*data>>8);
+      TX_FIFO = (unsigned char)(*data);
       data++;
     }
   }
   else {
     while ( len-- ) {
       // Split out the colours
-      TX_FIFO = (uint8_t)(*data);
-      TX_FIFO = (uint8_t)(*data>>8);
+      TX_FIFO = (unsigned char)(*data);
+      TX_FIFO = (unsigned char)(*data>>8);
       data++;
     }
   }
@@ -470,7 +470,7 @@ void TFT_eSPI::dmaWait(void)
 ** Description:             Push pixels to TFT (len must be less than 32767)
 ***************************************************************************************/
 // This will byte swap the original image if setSwapBytes(true) was called by sketch.
-void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
+void TFT_eSPI::pushPixelsDMA(unsigned short* image, unsigned int len)
 {
   if (len == 0) return;
 
@@ -478,10 +478,10 @@ void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
   while (spiHal.State == HAL_SPI_STATE_BUSY_TX); // Check if SPI Tx is busy
 
   if(_swapBytes) {
-    for (uint32_t i = 0; i < len; i++) (image[i] = image[i] << 8 | image[i] >> 8);
+    for (unsigned int i = 0; i < len; i++) (image[i] = image[i] << 8 | image[i] >> 8);
   }
 
-  HAL_SPI_Transmit_DMA(&spiHal, (uint8_t*)image, len << 1);
+  HAL_SPI_Transmit_DMA(&spiHal, (unsigned char*)image, len << 1);
 }
 
 
@@ -490,14 +490,14 @@ void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
 ** Description:             Push image to a window (w*h must be less than 65536)
 ***************************************************************************************/
 // This will clip and also swap bytes if setSwapBytes(true) was called by sketch
-void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t* image, uint16_t* buffer)
+void TFT_eSPI::pushImageDMA(int x, int y, int w, int h, unsigned short* image, unsigned short* buffer)
 {
   if ((x >= _vpW) || (y >= _vpH)) return;
 
-  int32_t dx = 0;
-  int32_t dy = 0;
-  int32_t dw = w;
-  int32_t dh = h;
+  int dx = 0;
+  int dy = 0;
+  int dw = w;
+  int dh = h;
 
   if (x < _vpX) { dx = _vpX - x; dw -= dx; x = _vpX; }
   if (y < _vpY) { dy = _vpY - y; dh -= dy; y = _vpY; }
@@ -507,7 +507,7 @@ void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t
 
   if (dw < 1 || dh < 1) return;
 
-  uint32_t len = dw*dh;
+  unsigned int len = dw*dh;
 
   if (buffer == nullptr) {
     buffer = image;
@@ -517,23 +517,23 @@ void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t
   // If image is clipped, copy pixels into a contiguous block
   if ( (dw != w) || (dh != h) ) {
     if(_swapBytes) {
-      for (int32_t yb = 0; yb < dh; yb++) {
-        for (int32_t xb = 0; xb < dw; xb++) {
-          uint32_t src = xb + dx + w * (yb + dy);
+      for (int yb = 0; yb < dh; yb++) {
+        for (int xb = 0; xb < dw; xb++) {
+          unsigned int src = xb + dx + w * (yb + dy);
           (buffer[xb + yb * dw] = image[src] << 8 | image[src] >> 8);
         }
       }
     }
     else {
-      for (int32_t yb = 0; yb < dh; yb++) {
-        memcpy((uint8_t*) (buffer + yb * dw), (uint8_t*) (image + dx + w * (yb + dy)), dw << 1);
+      for (int yb = 0; yb < dh; yb++) {
+        memcpy((unsigned char*) (buffer + yb * dw), (unsigned char*) (image + dx + w * (yb + dy)), dw << 1);
       }
     }
   }
   // else, if a buffer pointer has been provided copy whole image to the buffer
   else if (buffer != image || _swapBytes) {
     if(_swapBytes) {
-      for (uint32_t i = 0; i < len; i++) (buffer[i] = image[i] << 8 | image[i] >> 8);
+      for (unsigned int i = 0; i < len; i++) (buffer[i] = image[i] << 8 | image[i] >> 8);
     }
     else {
       memcpy(buffer, image, len*2);
@@ -547,11 +547,11 @@ void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t
   // User sketch can prevent blocking by managing pixel count and splitting into blocks
   // of 32767 pixels maximum. (equivalent to an area of ~320 x 100 pixels)
   while(len>0x7FFF) { // Transfer 16-bit pixels in blocks if len*2 over 65534 bytes
-    HAL_SPI_Transmit(&spiHal, (uint8_t*)buffer, 0x800<<1, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&spiHal, (unsigned char*)buffer, 0x800<<1, HAL_MAX_DELAY);
     len -= 0x800; buffer+= 0x800; // Arbitrarily send 1K pixel blocks (2Kbytes)
   }
   // Send remaining pixels using DMA (max 65534 bytes)
-  HAL_SPI_Transmit_DMA(&spiHal, (uint8_t*)buffer, len << 1);
+  HAL_SPI_Transmit_DMA(&spiHal, (unsigned char*)buffer, len << 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

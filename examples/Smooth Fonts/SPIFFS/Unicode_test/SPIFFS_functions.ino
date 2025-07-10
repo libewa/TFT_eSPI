@@ -41,7 +41,7 @@ void listFiles(void) {
 //====================================================================================
 
 #ifdef ESP32
-void listDir(fs::FS &fs, const char * dirname, uint8_t levels) {
+void listDir(fs::FS &fs, const char * dirname, unsigned char levels) {
   Serial.printf("Listing directory: %s\n", dirname);
 
   fs::File root = fs.open(dirname);

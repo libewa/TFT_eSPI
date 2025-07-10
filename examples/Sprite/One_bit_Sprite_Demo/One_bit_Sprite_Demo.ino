@@ -72,7 +72,7 @@ void loop() {
 void drawStar(int x, int y, int star_color)
 {
   // 1 bpp colour values can only be 1 or 0 (one or zero)
-  uint16_t transparent = 0; // The transparent colour, can only be 1 or 0
+  unsigned short transparent = 0; // The transparent colour, can only be 1 or 0
 
   // Create an 1 bit (2 colour) sprite 70x80 pixels (uses 70*80/8 = 700 bytes of RAM)
   // Colour depths of 8 bits per pixel and 16 bits are also supported.

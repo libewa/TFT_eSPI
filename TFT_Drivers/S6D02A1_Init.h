@@ -8,7 +8,7 @@
 
 {
 	// Initialization commands for S6D02A1 screens
-	static const uint8_t S6D02A1_cmds[] PROGMEM =
+	static const unsigned char S6D02A1_cmds[] PROGMEM =
 	{
 	29,
 	0xf0,	2,	0x5a, 0x5a,				// Excommand2

@@ -9,7 +9,7 @@
 // Squix font file format so do NOT try and print the tilde (~) symbol (ASCII 0x7E)
 // Alternatively look at the end of the font header file and edit:  0x7E to read 0x7D
 /* e.g.                                                                          vvvv
-  (uint8_t  *)Orbitron_Light_32Bitmaps,(GFXglyph *)Orbitron_Light_32Glyphs,0x20, 0x7D, 32};
+  (unsigned char  *)Orbitron_Light_32Bitmaps,(GFXglyph *)Orbitron_Light_32Glyphs,0x20, 0x7D, 32};
                                                                                  ^^^^
 */
 

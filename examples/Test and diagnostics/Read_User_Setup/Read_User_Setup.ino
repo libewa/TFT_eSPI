@@ -127,7 +127,7 @@ if (user.pin_tft_d7 != -1) { Serial.print("TFT_D7   = " + pinNameRef); Serial.pr
 
 Serial.println();
 
-uint16_t fonts = tft.fontsLoaded();
+unsigned short fonts = tft.fontsLoaded();
 if (fonts & (1 << 1))        Serial.print("Font GLCD   loaded\n");
 if (fonts & (1 << 2))        Serial.print("Font 2      loaded\n");
 if (fonts & (1 << 4))        Serial.print("Font 4      loaded\n");
@@ -158,7 +158,7 @@ void printProcessorName(void)
 }
 
 // Get pin name
-int8_t getPinName(int8_t pin)
+char getPinName(char pin)
 {
   // For ESP32 and RP2040 pin labels on boards use the GPIO number
   if (user.esp == 0x32 || user.esp == 0x2040) return pin;

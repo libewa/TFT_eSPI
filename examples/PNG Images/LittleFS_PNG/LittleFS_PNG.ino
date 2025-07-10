@@ -23,8 +23,8 @@
 PNG png;
 #define MAX_IMAGE_WIDTH 240 // Adjust for your images
 
-int16_t xpos = 0;
-int16_t ypos = 0;
+short xpos = 0;
+short ypos = 0;
 
 // Include the TFT library https://github.com/Bodmer/TFT_eSPI
 #include "SPI.h"
@@ -66,11 +66,11 @@ void loop()
     // If it is not a directory and filename ends in .png then load it
     if (!file.isDirectory() && strname.endsWith(".png")) {
       // Pass support callback function names to library
-      int16_t rc = png.open(strname.c_str(), pngOpen, pngClose, pngRead, pngSeek, pngDraw);
+      short rc = png.open(strname.c_str(), pngOpen, pngClose, pngRead, pngSeek, pngDraw);
       if (rc == PNG_SUCCESS) {
         tft.startWrite();
         Serial.printf("image specs: (%d x %d), %d bpp, pixel type: %d\n", png.getWidth(), png.getHeight(), png.getBpp(), png.getPixelType());
-        uint32_t dt = millis();
+        unsigned int dt = millis();
         if (png.getWidth() > MAX_IMAGE_WIDTH) {
           Serial.println("Image too wide for allocated line buffer size!");
         }
@@ -97,7 +97,7 @@ void loop()
 // you will need to adapt this function to suit.
 // Callback function to draw pixels to the display
 void pngDraw(PNGDRAW *pDraw) {
-  uint16_t lineBuffer[MAX_IMAGE_WIDTH];
+  unsigned short lineBuffer[MAX_IMAGE_WIDTH];
   png.getLineAsRGB565(pDraw, lineBuffer, PNG_RGB565_BIG_ENDIAN, 0xffffffff);
   tft.pushImage(xpos, ypos + pDraw->y, pDraw->iWidth, 1, lineBuffer);
 }

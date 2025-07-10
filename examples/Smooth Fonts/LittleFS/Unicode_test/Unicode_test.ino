@@ -33,8 +33,8 @@
 
 TFT_eSPI tft = TFT_eSPI(); // Invoke custom library
 
-uint16_t bg = TFT_BLACK;
-uint16_t fg = TFT_WHITE;
+unsigned short bg = TFT_BLACK;
+unsigned short fg = TFT_WHITE;
 
 
 //====================================================================================
@@ -105,7 +105,7 @@ void loop()
 
   tft.fillScreen(bg);
   tft.setCursor(0,0);
-uint32_t dt = millis();
+unsigned int dt = millis();
   tft.setTextColor(TFT_CYAN, bg);
   tft.println(test2);
 

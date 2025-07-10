@@ -29,9 +29,9 @@ TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite dial   = TFT_eSprite(&tft); // Sprite object for dial
 TFT_eSprite needle = TFT_eSprite(&tft); // Sprite object for needle
 
-uint32_t startMillis;
+unsigned int startMillis;
 
-int16_t angle = 0;
+short angle = 0;
 
 // =======================================================================================
 // Setup
@@ -65,7 +65,7 @@ void loop() {
 
   // Push the needle sprite to the dial Sprite at different angles and then push the dial to the screen
   // Use angle increments in range 1 to 6 for smoother or faster movement
-  for (int16_t angle = -120; angle <= 120; angle += 2) {
+  for (short angle = -120; angle <= 120; angle += 2) {
     plotDial(0, 0, angle, "RPM", angle + 120);
     delay(25);
     yield(); // Avoid a watchdog time-out
@@ -74,7 +74,7 @@ void loop() {
   delay(1000);  // Pause
 
   // Update the dial Sprite with decreasing angle and plot to screen at 0,0, no delay
-  for (int16_t angle = 120; angle >= -120; angle -= 2) {
+  for (short angle = 120; angle >= -120; angle -= 2) {
     plotDial(0, 0, angle, "RPM", angle + 120);
     yield(); // Avoid a watchdog time-out
   }
@@ -85,7 +85,7 @@ void loop() {
   // The needle graphic has a black border so if the angle increment is small
   // (6 degrees or less in this case) it wipes the last needle position when
   // it is rotated and hence it clears the swept area to black
-  for (int16_t angle = 0; angle <= 360; angle += 5)
+  for (short angle = 0; angle <= 360; angle += 5)
   {
     needle.pushRotated(angle); // Plot direct to TFT at specified angle
     yield();                   // Avoid a watchdog time-out
@@ -96,7 +96,7 @@ void loop() {
 // Create the dial sprite, the dial outer and place scale markers
 // =======================================================================================
 
-void createDialScale(int16_t start_angle, int16_t end_angle, int16_t increment)
+void createDialScale(short start_angle, short end_angle, short increment)
 {
   // Create the dial Sprite
   dial.setColorDepth(8);       // Size is odd (i.e. 91) so there is a centre pixel at 45,45
@@ -112,7 +112,7 @@ void createDialScale(int16_t start_angle, int16_t end_angle, int16_t increment)
   needle.fillSprite(TFT_WHITE);  // Fill with white
   needle.setPivot(1, 43);        //  Set pivot point x to the Sprite centre and y to marker radius
 
-  for (int16_t angle = start_angle; angle <= end_angle; angle += increment) {
+  for (short angle = start_angle; angle <= end_angle; angle += increment) {
     needle.pushRotated(&dial, angle); // Sprite is used to make scale markers
     yield(); // Avoid a watchdog time-out
   }
@@ -125,7 +125,7 @@ void createDialScale(int16_t start_angle, int16_t end_angle, int16_t increment)
 // Add the empty dial face with label and value
 // =======================================================================================
 
-void drawEmptyDial(String label, int16_t val)
+void drawEmptyDial(String label, short val)
 {
   // Draw black face
   dial.fillCircle(45, 45, 40, TFT_BLACK);
@@ -140,7 +140,7 @@ void drawEmptyDial(String label, int16_t val)
 // Update the dial and plot to screen with needle at defined angle
 // =======================================================================================
 
-void plotDial(int16_t x, int16_t y, int16_t angle, String label, uint16_t val)
+void plotDial(short x, short y, short angle, String label, unsigned short val)
 {
   // Draw the blank dial in the Sprite, add label and number
   drawEmptyDial(label, val);
@@ -164,8 +164,8 @@ void createNeedle(void)
   needle.fillSprite(TFT_BLACK);          // Fill with black
 
   // Define needle pivot point
-  uint16_t piv_x = needle.width() / 2;   // x pivot of Sprite (middle)
-  uint16_t piv_y = needle.height() - 10; // y pivot of Sprite (10 pixels from bottom)
+  unsigned short piv_x = needle.width() / 2;   // x pivot of Sprite (middle)
+  unsigned short piv_y = needle.height() - 10; // y pivot of Sprite (10 pixels from bottom)
   needle.setPivot(piv_x, piv_y);         // Set pivot point in this Sprite
 
   // Draw the red needle with a yellow tip

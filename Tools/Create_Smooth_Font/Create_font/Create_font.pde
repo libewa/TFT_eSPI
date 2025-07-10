@@ -541,7 +541,7 @@ void setup() {
 
     output.println("#include <pgmspace.h>");
     output.println();
-    output.println("const uint8_t " + fontName + str(fontSize) + "[] PROGMEM = {");
+    output.println("const unsigned char " + fontName + str(fontSize) + "[] PROGMEM = {");
 
     int i = 0;
     int data = input.read();

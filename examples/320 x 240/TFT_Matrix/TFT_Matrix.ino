@@ -22,11 +22,11 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 #define BOT_FIXED_AREA 0  // Number of lines in bottom fixed area (lines counted from bottom of screen)
 #define TOP_FIXED_AREA 0  // Number of lines in top fixed area (lines counted from top of screen)
 
-uint16_t yStart = TOP_FIXED_AREA;
-uint16_t yArea = 320 - TOP_FIXED_AREA - BOT_FIXED_AREA;
-uint16_t yDraw = 320 - BOT_FIXED_AREA - TEXT_HEIGHT;
+unsigned short yStart = TOP_FIXED_AREA;
+unsigned short yArea = 320 - TOP_FIXED_AREA - BOT_FIXED_AREA;
+unsigned short yDraw = 320 - BOT_FIXED_AREA - TEXT_HEIGHT;
 byte     pos[42];
-uint16_t xPos = 0;
+unsigned short xPos = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -62,7 +62,7 @@ void loop(void) {
 
 }
 
-void setupScrollArea(uint16_t TFA, uint16_t BFA) {
+void setupScrollArea(unsigned short TFA, unsigned short BFA) {
   tft.writecommand(ILI9341_VSCRDEF); // Vertical scroll definition
   tft.writedata(TFA >> 8);
   tft.writedata(TFA);
@@ -83,7 +83,7 @@ int scroll_slow(int lines, int wait) {
   return  yTemp;
 }
 
-void scrollAddress(uint16_t VSP) {
+void scrollAddress(unsigned short VSP) {
   tft.writecommand(ILI9341_VSCRSADD); // Vertical scrolling start address
   tft.writedata(VSP >> 8);
   tft.writedata(VSP);

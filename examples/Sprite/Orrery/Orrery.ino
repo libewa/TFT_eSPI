@@ -16,8 +16,8 @@ TFT_eSprite img = TFT_eSprite(&tft);  // Sprite class
 #define sunX tft.width()/2
 #define sunY tft.height()/2
 
-uint16_t orb_inc;
-uint16_t planet_r;
+unsigned short orb_inc;
+unsigned short planet_r;
 
 #include <stdio.h>
 #include "astronomy.h"
@@ -25,14 +25,14 @@ uint16_t planet_r;
 
 astro_time_t astro_time;
 
-uint16_t grey;
+unsigned short grey;
 
 static const astro_body_t body[] = {
   BODY_SUN, BODY_MERCURY, BODY_VENUS, BODY_EARTH, BODY_MARS,
   BODY_JUPITER, BODY_SATURN, BODY_URANUS, BODY_NEPTUNE
 };
 
-static const uint16_t bodyColour[] = {
+static const unsigned short bodyColour[] = {
   TFT_YELLOW, TFT_DARKGREY, TFT_ORANGE, TFT_BLUE, TFT_RED,
   TFT_GOLD, TFT_BROWN, TFT_DARKCYAN, TFT_CYAN
 };
@@ -72,7 +72,7 @@ void setup() {
 // Loop
 // =========================================================================
 void loop() {
-  uint32_t dt = millis();
+  unsigned int dt = millis();
   plot_planets();
   showTime(astro_time);
 

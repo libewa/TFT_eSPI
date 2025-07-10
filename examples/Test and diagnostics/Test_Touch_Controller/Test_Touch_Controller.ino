@@ -31,7 +31,7 @@ void setup(void) {
 
 void loop() {
 
-  uint16_t x, y;
+  unsigned short x, y;
 
   tft.getTouchRaw(&x, &y);
   

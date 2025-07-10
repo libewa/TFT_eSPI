@@ -65,7 +65,7 @@ void loop(void)
   spr.fillSprite(0);
 
    // create a color map with known colors (16 maximum for 4-bit Sprite
-  uint16_t cmap[16];
+  unsigned short cmap[16];
 
 
   cmap[0]  = TFT_BLACK; // We will keep this as black
@@ -94,14 +94,14 @@ void loop(void)
   spr.pushSprite(tft.width() - WIDTH + 40, tft.height() - HEIGHT + 40);
 
   // Number of pixels to draw
-  uint16_t n = 100;
+  unsigned short n = 100;
 
   // Draw 100 random color pixels at random positions in sprite
   while (n--)
   {
-    uint16_t color = random(0x10); // Returns color 0 - 0x0F (i.e. 0-15)
-    int16_t x = random(WIDTH);     // Random x coordinate
-    int16_t y = random(HEIGHT);    // Random y coordinate
+    unsigned short color = random(0x10); // Returns color 0 - 0x0F (i.e. 0-15)
+    short x = random(WIDTH);     // Random x coordinate
+    short y = random(HEIGHT);    // Random y coordinate
     spr.drawPixel(x, y, color);    // Draw pixel in sprite
   }
 
@@ -152,7 +152,7 @@ void loop(void)
   int x = tft.width() / 2  -  WIDTH / 2;
   int y = tft.height() / 2 - HEIGHT / 2;
 
-  uint32_t updateTime = 0;       // time for next update
+  unsigned int updateTime = 0;       // time for next update
 
   while (true)
   {

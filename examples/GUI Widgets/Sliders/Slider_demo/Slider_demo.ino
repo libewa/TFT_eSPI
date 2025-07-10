@@ -60,8 +60,8 @@ void setup() {
   s1.drawSlider(0, 0, param);
 
   // Show bounding box (1 pixel outside slider working area)
-  int16_t x, y;    // x and y can be negative
-  uint16_t w, h;   // Width and height
+  short x, y;    // x and y can be negative
+  unsigned short w, h;   // Width and height
   s1.getBoundingRect(&x, &y, &w, &h);     // Update x,y,w,h with bounding box
   tft.drawRect(x, y, w, h, TFT_DARKGREY); // Draw rectangle outline
 /*
@@ -108,8 +108,8 @@ void setup() {
 }
 
 void loop() {
-  static uint32_t scanTime = millis();
-  uint16_t t_x = 9999, t_y = 9999; // To store the touch coordinates
+  static unsigned int scanTime = millis();
+  unsigned short t_x = 9999, t_y = 9999; // To store the touch coordinates
 
   // Scan for touch every 50ms
   if (millis() - scanTime >= 20) {
@@ -137,8 +137,8 @@ void loop() {
 
 void touch_calibrate()
 {
-  uint16_t calData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calData[5];
+  unsigned char calDataOK = 0;
 
   // check file system exists
   if (!LittleFS.begin()) {

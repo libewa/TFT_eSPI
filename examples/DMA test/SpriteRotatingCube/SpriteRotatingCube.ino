@@ -57,10 +57,10 @@ TFT_eSprite spr[2] = {TFT_eSprite(&tft), TFT_eSprite(&tft) };
 bool sprSel = 0;
 
 // Pointers to start of Sprites in RAM
-uint16_t* sprPtr[2];
+unsigned short* sprPtr[2];
 
 // Define the cube face colors
-uint16_t palette[] = {TFT_WHITE,  // 1
+unsigned short palette[] = {TFT_WHITE,  // 1
                       TFT_GREENYELLOW,    // 2
                       TFT_YELLOW, // 3
                       TFT_PINK,  // 4
@@ -69,9 +69,9 @@ uint16_t palette[] = {TFT_WHITE,  // 1
                      };
 
 // Used for fps measuring
-uint16_t counter = 0;
+unsigned short counter = 0;
 long startMillis = millis();
-uint16_t interval = 100;
+unsigned short interval = 100;
 
 // size / 2 of cube edge
 float d = 15;
@@ -120,8 +120,8 @@ float r[] = {
 String fps = "0fps";
 
 // Sprite draw position
-int16_t xpos = 0;
-int16_t ypos = 0;
+short xpos = 0;
+short ypos = 0;
 
 // Prime number initial value
 int prime_max = 2;
@@ -151,8 +151,8 @@ void setup() {
   spr[1].setColorDepth(COLOR_DEPTH);
 
   // Create the 2 sprites
-  sprPtr[0] = (uint16_t*)spr[0].createSprite(IWIDTH, IHEIGHT);
-  sprPtr[1] = (uint16_t*)spr[1].createSprite(IWIDTH, IHEIGHT);
+  sprPtr[0] = (unsigned short*)spr[0].createSprite(IWIDTH, IHEIGHT);
+  sprPtr[1] = (unsigned short*)spr[1].createSprite(IWIDTH, IHEIGHT);
 
   // Define text datum and text colour for Sprites
   spr[0].setTextColor(TFT_BLACK);
@@ -173,7 +173,7 @@ void setup() {
 
 /////////////////////////////////////////////////////////// loop ///////////////////////////////////////////////////
 void loop() {
-  uint32_t updateTime = 0;       // time for next update
+  unsigned int updateTime = 0;       // time for next update
   bool bounce = false;
   int wait = 0; //random (20);
 
@@ -245,7 +245,7 @@ void loop() {
       }
 #ifdef PRIME_NUMBER_PROCESSOR_LOAD
       // Add a processor task
-      uint32_t pr = computePrimeNumbers(prime_max);
+      unsigned int pr = computePrimeNumbers(prime_max);
       Serial.print("Biggest = "); Serial.println(pr);
 #endif
       // Change coord for next loop
@@ -350,10 +350,10 @@ void drawCube()
 }
 
 // This is to provide a processing load to see the improvement DMA gives
-uint32_t computePrimeNumbers(int32_t n) {
+unsigned int computePrimeNumbers(int n) {
   if (n<2) return 1;
 
-  int32_t i, fact, j, p = 0;
+  int i, fact, j, p = 0;
 
   //Serial.print("\nPrime Numbers are: \n");
   for (i = 1; i <= n; i++)

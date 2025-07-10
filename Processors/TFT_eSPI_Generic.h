@@ -109,7 +109,7 @@
                            spi.transfer(((C) & 0xE000)>>11 | ((C) & 0x07)<<5); \
                            spi.transfer(((C) & 0x1F00)>>5)
   // Write 32 bits to TFT
-  #define tft_Write_32(C)  spi.transfer16((C)>>16); spi.transfer16((uint16_t)(C))
+  #define tft_Write_32(C)  spi.transfer16((C)>>16); spi.transfer16((unsigned short)(C))
 
   // Write two address coordinates
   #define tft_Write_32C(C,D) spi.transfer16(C); spi.transfer16(D)
@@ -123,12 +123,12 @@
 #else
   #if  defined (RPI_DISPLAY_TYPE) // RPi TFT type always needs 16-bit transfers
     #define tft_Write_8(C)   spi.transfer(C); spi.transfer(C)
-    #define tft_Write_16(C)  spi.transfer((uint8_t)((C)>>8));spi.transfer((uint8_t)((C)>>0))
-    #define tft_Write_16S(C) spi.transfer((uint8_t)((C)>>0));spi.transfer((uint8_t)((C)>>8))
+    #define tft_Write_16(C)  spi.transfer((unsigned char)((C)>>8));spi.transfer((unsigned char)((C)>>0))
+    #define tft_Write_16S(C) spi.transfer((unsigned char)((C)>>0));spi.transfer((unsigned char)((C)>>8))
 
     #define tft_Write_32(C) \
-      tft_Write_16((uint16_t) ((C)>>16)); \
-      tft_Write_16((uint16_t) ((C)>>0))
+      tft_Write_16((unsigned short) ((C)>>16)); \
+      tft_Write_16((unsigned short) ((C)>>0))
 
     #define tft_Write_32C(C,D) \
       spi.transfer(0); spi.transfer((C)>>8); \
@@ -145,8 +145,8 @@
   #else
     #ifdef __AVR__ // AVR processors do not have 16-bit transfer
       #define tft_Write_8(C)   {SPDR=(C); while (!(SPSR&_BV(SPIF)));}
-      #define tft_Write_16(C)  tft_Write_8((uint8_t)((C)>>8));tft_Write_8((uint8_t)((C)>>0))
-      #define tft_Write_16S(C) tft_Write_8((uint8_t)((C)>>0));tft_Write_8((uint8_t)((C)>>8))
+      #define tft_Write_16(C)  tft_Write_8((unsigned char)((C)>>8));tft_Write_8((unsigned char)((C)>>0))
+      #define tft_Write_16S(C) tft_Write_8((unsigned char)((C)>>0));tft_Write_8((unsigned char)((C)>>8))
     #else
       #define tft_Write_8(C)   spi.transfer(C)
       #define tft_Write_16(C)  spi.transfer16(C)
@@ -154,16 +154,16 @@
     #endif // AVR    
 
     #define tft_Write_32(C) \
-    tft_Write_16((uint16_t) ((C)>>16)); \
-    tft_Write_16((uint16_t) ((C)>>0))
+    tft_Write_16((unsigned short) ((C)>>16)); \
+    tft_Write_16((unsigned short) ((C)>>0))
 
     #define tft_Write_32C(C,D) \
-    tft_Write_16((uint16_t) (C)); \
-    tft_Write_16((uint16_t) (D))
+    tft_Write_16((unsigned short) (C)); \
+    tft_Write_16((unsigned short) (D))
 
     #define tft_Write_32D(C) \
-    tft_Write_16((uint16_t) (C)); \
-    tft_Write_16((uint16_t) (C))
+    tft_Write_16((unsigned short) (C)); \
+    tft_Write_16((unsigned short) (C))
   #endif // RPI_DISPLAY_TYPE
 #endif
 

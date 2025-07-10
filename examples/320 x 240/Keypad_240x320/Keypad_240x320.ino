@@ -55,7 +55,7 @@ TFT_eSPI tft = TFT_eSPI(); // Invoke custom library
 // Number length, buffer for storing it and character index
 #define NUM_LEN 12
 char numberBuffer[NUM_LEN + 1] = "";
-uint8_t numberIndex = 0;
+unsigned char numberIndex = 0;
 
 // We have a status line for messages
 #define STATUS_X 120 // Centred on this
@@ -63,7 +63,7 @@ uint8_t numberIndex = 0;
 
 // Create 15 keys for the keypad
 char keyLabel[15][5] = {"New", "Del", "Send", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "#" };
-uint16_t keyColor[15] = {TFT_RED, TFT_DARKGREY, TFT_DARKGREEN,
+unsigned short keyColor[15] = {TFT_RED, TFT_DARKGREY, TFT_DARKGREEN,
                          TFT_BLUE, TFT_BLUE, TFT_BLUE,
                          TFT_BLUE, TFT_BLUE, TFT_BLUE,
                          TFT_BLUE, TFT_BLUE, TFT_BLUE,
@@ -105,13 +105,13 @@ void setup() {
 //------------------------------------------------------------------------------------------
 
 void loop(void) {
-  uint16_t t_x = 0, t_y = 0; // To store the touch coordinates
+  unsigned short t_x = 0, t_y = 0; // To store the touch coordinates
 
   // Pressed will be set true is there is a valid touch on the screen
   bool pressed = tft.getTouch(&t_x, &t_y);
 
   // / Check if any key coordinate boxes contain the touch coordinates
-  for (uint8_t b = 0; b < 15; b++) {
+  for (unsigned char b = 0; b < 15; b++) {
     if (pressed && key[b].contains(t_x, t_y)) {
       key[b].press(true);  // tell the button it is pressed
     } else {
@@ -120,7 +120,7 @@ void loop(void) {
   }
 
   // Check if any key has changed state
-  for (uint8_t b = 0; b < 15; b++) {
+  for (unsigned char b = 0; b < 15; b++) {
 
     if (b < 3) tft.setFreeFont(LABEL1_FONT);
     else tft.setFreeFont(LABEL2_FONT);
@@ -184,9 +184,9 @@ void loop(void) {
 void drawKeypad()
 {
   // Draw the keys
-  for (uint8_t row = 0; row < 5; row++) {
-    for (uint8_t col = 0; col < 3; col++) {
-      uint8_t b = col + row * 3;
+  for (unsigned char row = 0; row < 5; row++) {
+    for (unsigned char col = 0; col < 3; col++) {
+      unsigned char b = col + row * 3;
 
       if (b < 3) tft.setFreeFont(LABEL1_FONT);
       else tft.setFreeFont(LABEL2_FONT);
@@ -204,8 +204,8 @@ void drawKeypad()
 
 void touch_calibrate()
 {
-  uint16_t calData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calData[5];
+  unsigned char calDataOK = 0;
 
   // check file system exists
   if (!SPIFFS.begin()) {

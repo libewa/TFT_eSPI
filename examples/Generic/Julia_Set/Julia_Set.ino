@@ -10,7 +10,7 @@
 
 TFT_eSPI tft = TFT_eSPI();  // Invoke custom library
 
-const uint16_t MAX_ITERATION = 300; // Nombre de couleurs
+const unsigned short MAX_ITERATION = 300; // Nombre de couleurs
 
 #define SCREEN_WIDTH  tft.width()  // 
 #define SCREEN_HEIGHT tft.height() // Taille de l'écran
@@ -51,12 +51,12 @@ void draw_Julia(float c_r, float c_i, float zoom) {
 
   /* Pour chaque pixel en X */
 
-  for(int16_t x = SCREEN_WIDTH/2 - 1; x >= 0; x--) { // Rely on inverted symmetry
+  for(short x = SCREEN_WIDTH/2 - 1; x >= 0; x--) { // Rely on inverted symmetry
     /* Pour chaque pixel en Y */
-    for(uint16_t y = 0; y < SCREEN_HEIGHT; y++) {      
+    for(unsigned short y = 0; y < SCREEN_HEIGHT; y++) {      
       old_r = 1.5 * (x - SCREEN_WIDTH / 2) / (0.5 * zoom * SCREEN_WIDTH);
       old_i = (y - SCREEN_HEIGHT / 2) / (0.5 * zoom * SCREEN_HEIGHT);
-      uint16_t i = 0;
+      unsigned short i = 0;
 
       while ((old_r * old_r + old_i * old_i) < 4.0 && i < MAX_ITERATION) {
         new_r = old_r * old_r - old_i * old_i ;

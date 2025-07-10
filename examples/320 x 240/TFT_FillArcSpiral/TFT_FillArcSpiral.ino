@@ -63,10 +63,10 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
     // Calculate pair of coordinates for segment start
     float sx = cos((i - 90) * DEG2RAD);
     float sy = sin((i - 90) * DEG2RAD);
-    uint16_t x0 = sx * (rx - w) + x;
-    uint16_t y0 = sy * (ry - w) + y;
-    uint16_t x1 = sx * rx + x;
-    uint16_t y1 = sy * ry + y;
+    unsigned short x0 = sx * (rx - w) + x;
+    unsigned short y0 = sy * (ry - w) + y;
+    unsigned short x1 = sx * rx + x;
+    unsigned short y1 = sy * ry + y;
 
     // Calculate pair of coordinates for segment end
     float sx2 = cos((i + seg - 90) * DEG2RAD);

@@ -73,7 +73,7 @@ void loop() {
   // line widths at the two ends. Background colour is black.
   for (int angle = -130; angle <= 130; angle += 10) {
     getCoord(cx, cy, &px1, &py1, &px2, &py2, r1, r2, angle);
-    uint16_t colour = rainbow(map(angle, -130, 130, 0, 127));
+    unsigned short colour = rainbow(map(angle, -130, 130, 0, 127));
     if (angle > 45) colour = TFT_DARKGREY;
     tft.drawWedgeLine(px1, py1, px2, py2, w1, w2, colour, TFT_BLACK);
   }
@@ -133,7 +133,7 @@ void loop() {
 // =========================================================================
 // Coordinates are returned to caller via the xp and yp pointers
 #define DEG2RAD 0.0174532925
-void getCoord(int16_t x, int16_t y, float *xp1, float *yp1, float *xp2, float *yp2, int16_t r1, int16_t r2, float a)
+void getCoord(short x, short y, float *xp1, float *yp1, float *xp2, float *yp2, short r1, short r2, float a)
 {
   float sx = cos( (a - 90) * DEG2RAD);
   float sy = sin( (a - 90) * DEG2RAD);

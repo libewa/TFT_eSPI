@@ -51,11 +51,11 @@ int   balloldx  = ballx, balloldy = bally;   // Prior ball position
 
 // Working buffer for ball rendering...2 scan lines that alternate,
 // one is rendered while the other is transferred via DMA.
-uint16_t renderbuf[2][SCREENWIDTH];
+unsigned short renderbuf[2][SCREENWIDTH];
 
-uint16_t palette[16]; // Color table for ball rotation effect
+unsigned short palette[16]; // Color table for ball rotation effect
 
-uint32_t startTime, frame = 0; // For frames-per-second estimate
+unsigned int startTime, frame = 0; // For frames-per-second estimate
 
 void setup() {
   Serial.begin(115200);
@@ -70,15 +70,15 @@ void setup() {
 
   tft.initDMA();
 
-  tft.drawBitmap(0, 0, (const uint8_t *)background, SCREENWIDTH, SCREENHEIGHT, GRIDCOLOR);
+  tft.drawBitmap(0, 0, (const unsigned char *)background, SCREENWIDTH, SCREENHEIGHT, GRIDCOLOR);
 
   startTime = millis();
 }
 
 void loop() {
 
-  balloldx = (int16_t)ballx; // Save prior position
-  balloldy = (int16_t)bally;
+  balloldx = (short)ballx; // Save prior position
+  balloldy = (short)bally;
   ballx   += ballvx;         // Update position
   bally   += ballvy;
   ballvy  += 0.06;          // Update Y velocity
@@ -92,7 +92,7 @@ void loop() {
   // Determine screen area to update.  This is the bounds of the ball's
   // prior and current positions, so the old ball is fully erased and new
   // ball is fully drawn.
-  int16_t minx, miny, maxx, maxy, width, height;
+  short minx, miny, maxx, maxy, width, height;
   // Determine bounds of prior and new positions
   minx = ballx;
   if(balloldx < minx)                    minx = balloldx;
@@ -113,20 +113,20 @@ void loop() {
 
   // Set 7 palette entries to white, 7 to red, based on frame number.
   // This makes the ball spin
-  for(uint8_t i=0; i<14; i++) {
+  for(unsigned char i=0; i<14; i++) {
     palette[i+2] = ((((int)ballframe + i) % 14) < 7) ? WHITE : RED;
     // Palette entries 0 and 1 aren't used (clear and shadow, respectively)
   }
 
   // Only the changed rectangle is drawn into the 'renderbuf' array...
-  uint16_t c, *destPtr;
-  int16_t  bx  = minx - (int)ballx, // X relative to ball bitmap (can be negative)
+  unsigned short c, *destPtr;
+  short  bx  = minx - (int)ballx, // X relative to ball bitmap (can be negative)
            by  = miny - (int)bally, // Y relative to ball bitmap (can be negative)
            bgx = minx,              // X relative to background bitmap (>= 0)
            bgy = miny,              // Y relative to background bitmap (>= 0)
            x, y, bx1, bgx1;         // Loop counters and working vars
-  uint8_t  p;                       // 'packed' value of 2 ball pixels
-  int8_t bufIdx = 0;
+  unsigned char  p;                       // 'packed' value of 2 ball pixels
+  char bufIdx = 0;
 
   // Start SPI transaction and drop TFT_CS - avoids transaction overhead in loop
   tft.startWrite();
@@ -174,7 +174,7 @@ void loop() {
   //delay(5);
   // Show approximate frame rate
   if(!(++frame & 255)) { // Every 256 frames...
-    uint32_t elapsed = (millis() - startTime) / 1000; // Seconds
+    unsigned int elapsed = (millis() - startTime) / 1000; // Seconds
     if(elapsed) {
       Serial.print(frame / elapsed);
       Serial.println(" fps");

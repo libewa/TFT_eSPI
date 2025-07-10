@@ -113,10 +113,10 @@ SPI3_HOST = 2
 
 // Processor specific code used by SPI bus transaction startWrite and endWrite functions
 #if !defined (ESP32_PARALLEL)
-  #define _spi_cmd       (volatile uint32_t*)(SPI_CMD_REG(SPI_PORT))
-  #define _spi_user      (volatile uint32_t*)(SPI_USER_REG(SPI_PORT))
-  #define _spi_mosi_dlen (volatile uint32_t*)(SPI_MOSI_DLEN_REG(SPI_PORT))
-  #define _spi_w         (volatile uint32_t*)(SPI_W0_REG(SPI_PORT))
+  #define _spi_cmd       (volatile unsigned int*)(SPI_CMD_REG(SPI_PORT))
+  #define _spi_user      (volatile unsigned int*)(SPI_USER_REG(SPI_PORT))
+  #define _spi_mosi_dlen (volatile unsigned int*)(SPI_MOSI_DLEN_REG(SPI_PORT))
+  #define _spi_w         (volatile unsigned int*)(SPI_W0_REG(SPI_PORT))
 
   #if (TFT_SPI_MODE == SPI_MODE1) || (TFT_SPI_MODE == SPI_MODE2)
     #define SET_BUS_WRITE_MODE *_spi_user = SPI_USR_MOSI | SPI_CK_OUT_EDGE
@@ -365,7 +365,7 @@ SPI3_HOST = 2
   // Create a bit set lookup table for data bus - wastes 1kbyte of RAM but speeds things up dramatically
   // can then use e.g. GPIO.out_w1ts = set_mask(0xFF); to set data bus to 0xFF
   #define PARALLEL_INIT_TFT_DATA_BUS               \
-  for (int32_t c = 0; c<256; c++)                  \
+  for (int c = 0; c<256; c++)                  \
   {                                                \
     xset_mask[c] = 0;                              \
     if ( c & 0x01 ) xset_mask[c] |= (1 << (TFT_D0-MASK_OFFSET)); \
@@ -410,14 +410,14 @@ SPI3_HOST = 2
   //*/
 
   // Write 8 bits to TFT
-  #define tft_Write_8(C)  GPIO_CLR_REG =  GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t)(C)); WR_H
+  #define tft_Write_8(C)  GPIO_CLR_REG =  GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char)(C)); WR_H
 
   #if defined (SSD1963_DRIVER)
 
     // Write 18-bit color to TFT
-    #define tft_Write_16(C) GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((uint8_t) (((C) & 0xF800)>> 8)); WR_H; \
-                            GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((uint8_t) (((C) & 0x07E0)>> 3)); WR_H; \
-                            GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((uint8_t) (((C) & 0x001F)<< 3)); WR_H
+    #define tft_Write_16(C) GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((unsigned char) (((C) & 0xF800)>> 8)); WR_H; \
+                            GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((unsigned char) (((C) & 0x07E0)>> 3)); WR_H; \
+                            GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((unsigned char) (((C) & 0x001F)<< 3)); WR_H
 
     // 18-bit color write with swapped bytes
     #define tft_Write_16S(C) Cswap = ((C) >>8 | (C) << 8); tft_Write_16(Cswap)
@@ -426,37 +426,37 @@ SPI3_HOST = 2
 
     #ifdef PSEUDO_16_BIT
       // One write strobe for both bytes
-      #define tft_Write_16(C)  GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((uint8_t) ((C) >> 0)); WR_H
-      #define tft_Write_16S(C) GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((uint8_t) ((C) >> 8)); WR_H
+      #define tft_Write_16(C)  GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((unsigned char) ((C) >> 0)); WR_H
+      #define tft_Write_16S(C) GPIO.out_w1tc = GPIO_OUT_CLR_MASK; GPIO.out_w1ts = set_mask((unsigned char) ((C) >> 8)); WR_H
     #else
       // Write 16 bits to TFT
-      #define tft_Write_16(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 8)); WR_H; \
-                              GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 0)); WR_H
+      #define tft_Write_16(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 8)); WR_H; \
+                              GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 0)); WR_H
 
       // 16-bit write with swapped bytes
-      #define tft_Write_16S(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 0)); WR_H; \
-                               GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 8)); WR_H
+      #define tft_Write_16S(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 0)); WR_H; \
+                               GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 8)); WR_H
     #endif
 
   #endif
 
   // Write 32 bits to TFT
-  #define tft_Write_32(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 24)); WR_H; \
-                          GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 16)); WR_H; \
-                          GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >>  8)); WR_H; \
-                          GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >>  0)); WR_H
+  #define tft_Write_32(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 24)); WR_H; \
+                          GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 16)); WR_H; \
+                          GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >>  8)); WR_H; \
+                          GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >>  0)); WR_H
 
   // Write two concatenated 16-bit values to TFT
-  #define tft_Write_32C(C,D) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 8)); WR_H; \
-                             GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 0)); WR_H; \
-                             GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((D) >> 8)); WR_H; \
-                             GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((D) >> 0)); WR_H
+  #define tft_Write_32C(C,D) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 8)); WR_H; \
+                             GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 0)); WR_H; \
+                             GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((D) >> 8)); WR_H; \
+                             GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((D) >> 0)); WR_H
 
   // Write 16-bit value twice to TFT - used by drawPixel()
-  #define tft_Write_32D(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 8)); WR_H; \
-                           GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 0)); WR_H; \
-                           GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 8)); WR_H; \
-                           GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((uint8_t) ((C) >> 0)); WR_H
+  #define tft_Write_32D(C) GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 8)); WR_H; \
+                           GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 0)); WR_H; \
+                           GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 8)); WR_H; \
+                           GPIO_CLR_REG = GPIO_OUT_CLR_MASK; GPIO_SET_REG = set_mask((unsigned char) ((C) >> 0)); WR_H
 
    // Read pin
   #ifdef TFT_RD
@@ -586,10 +586,10 @@ SPI3_HOST = 2
   #define tft_Write_32(C) TFT_WRITE_BITS(C, 32)
 
   // Write two address coordinates
-  #define tft_Write_32C(C,D)  TFT_WRITE_BITS((uint16_t)((D)<<8 | (D)>>8)<<16 | (uint16_t)((C)<<8 | (C)>>8), 32)
+  #define tft_Write_32C(C,D)  TFT_WRITE_BITS((unsigned short)((D)<<8 | (D)>>8)<<16 | (unsigned short)((C)<<8 | (C)>>8), 32)
 
   // Write same value twice
-  #define tft_Write_32D(C) TFT_WRITE_BITS((uint16_t)((C)<<8 | (C)>>8)<<16 | (uint16_t)((C)<<8 | (C)>>8), 32)
+  #define tft_Write_32D(C) TFT_WRITE_BITS((unsigned short)((C)<<8 | (C)>>8)<<16 | (unsigned short)((C)<<8 | (C)>>8), 32)
 
 #endif
 
@@ -606,7 +606,7 @@ SPI3_HOST = 2
   #define tft_Read_8() spi.transfer(0)
 #endif
 
-// Concatenate a byte sequence A,B,C,D to CDAB, P is a uint8_t pointer
-#define DAT8TO32(P) ( (uint32_t)P[0]<<8 | P[1] | P[2]<<24 | P[3]<<16 )
+// Concatenate a byte sequence A,B,C,D to CDAB, P is a unsigned char pointer
+#define DAT8TO32(P) ( (unsigned int)P[0]<<8 | P[1] | P[2]<<24 | P[3]<<16 )
 
 #endif // Header end

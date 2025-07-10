@@ -26,12 +26,12 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 
 float sx = 0, sy = 1, mx = 1, my = 0, hx = -1, hy = 0;    // Saved H, M, S x & y multipliers
 float sdeg=0, mdeg=0, hdeg=0;
-uint16_t osx=120, osy=120, omx=120, omy=120, ohx=120, ohy=120;  // Saved H, M, S x & y coords
-uint16_t x0=0, x1=0, yy0=0, yy1=0;
-uint32_t targetTime = 0;                    // for next 1 second timeout
+unsigned short osx=120, osy=120, omx=120, omy=120, ohx=120, ohy=120;  // Saved H, M, S x & y coords
+unsigned short x0=0, x1=0, yy0=0, yy1=0;
+unsigned int targetTime = 0;                    // for next 1 second timeout
 
-static uint8_t conv2d(const char* p); // Forward declaration needed for IDE 1.6.x
-uint8_t hh=conv2d(__TIME__), mm=conv2d(__TIME__+3), ss=conv2d(__TIME__+6);  // Get H, M, S from compile time
+static unsigned char conv2d(const char* p); // Forward declaration needed for IDE 1.6.x
+unsigned char hh=conv2d(__TIME__), mm=conv2d(__TIME__+3), ss=conv2d(__TIME__+6);  // Get H, M, S from compile time
 
 bool initial = 1;
 
@@ -139,8 +139,8 @@ void loop() {
   }
 }
 
-static uint8_t conv2d(const char* p) {
-  uint8_t v = 0;
+static unsigned char conv2d(const char* p) {
+  unsigned char v = 0;
   if ('0' <= *p && *p <= '9')
     v = *p - '0';
   return 10 * v + *++p - '0';

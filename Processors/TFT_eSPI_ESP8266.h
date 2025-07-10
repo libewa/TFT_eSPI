@@ -156,7 +156,7 @@
   SPI1CMD |= SPIBUSY; \
   while(SPI1CMD & SPIBUSY) {}
 
-  #define tft_Write_8(C)     TFT_WRITE_BITS((uint16_t)(C)<<8, CMD_BITS)
+  #define tft_Write_8(C)     TFT_WRITE_BITS((unsigned short)(C)<<8, CMD_BITS)
 
   #define tft_Write_16(C)    TFT_WRITE_BITS((C)>>8 | (C)<<8, 16)
 
@@ -239,7 +239,7 @@
   #define tft_Read_8() spi.transfer(0)
 #endif
 
-// Concatenate a byte sequence A,B,C,D to CDAB, P is a uint8_t pointer
-#define DAT8TO32(P) ( (uint32_t)P[0]<<8 | P[1] | P[2]<<24 | P[3]<<16 )
+// Concatenate a byte sequence A,B,C,D to CDAB, P is a unsigned char pointer
+#define DAT8TO32(P) ( (unsigned int)P[0]<<8 | P[1] | P[2]<<24 | P[3]<<16 )
 
 #endif // Header end

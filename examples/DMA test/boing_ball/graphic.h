@@ -1,7 +1,7 @@
 // Graphics arrays were generated from PNG images using Python and PIL.
 // Each is bit-packed into bytes: background is 1bpp, ball is 4bpp.
 
-const uint8_t background[SCREENHEIGHT][SCREENWIDTH/8] = {
+const unsigned char background[SCREENHEIGHT][SCREENWIDTH/8] = {
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
@@ -806,7 +806,7 @@ const uint8_t background[SCREENHEIGHT][SCREENWIDTH/8] = {
 #define BALLWIDTH  136
 #define BALLHEIGHT 100
 
-const uint8_t ball[BALLHEIGHT][BALLWIDTH/2] = {
+const unsigned char ball[BALLHEIGHT][BALLWIDTH/2] = {
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X01, 0X11,

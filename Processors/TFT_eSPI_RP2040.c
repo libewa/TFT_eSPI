@@ -49,26 +49,26 @@
 
   // Community RP2040 board package by Earle Philhower
   PIO tft_pio = pio0;     // Code will try both pio's to find a free SM
-  int8_t pio_sm = 0;  // pioinit will claim a free one
+  char pio_sm = 0;  // pioinit will claim a free one
   // Updated later with the loading offset of the PIO program.
-  uint32_t program_offset  = 0;
+  unsigned int program_offset  = 0;
 
   // SM stalled mask
-  uint32_t pull_stall_mask = 0;
+  unsigned int pull_stall_mask = 0;
 
   // SM jump instructions to change SM behaviour
-  uint32_t pio_instr_jmp8  = 0;
-  uint32_t pio_instr_fill  = 0;
-  uint32_t pio_instr_addr  = 0;
+  unsigned int pio_instr_jmp8  = 0;
+  unsigned int pio_instr_fill  = 0;
+  unsigned int pio_instr_addr  = 0;
 
   // SM "set" instructions to control DC control signal
-  uint32_t pio_instr_set_dc = 0;
-  uint32_t pio_instr_clr_dc = 0;
+  unsigned int pio_instr_set_dc = 0;
+  unsigned int pio_instr_clr_dc = 0;
 
 #endif
 
 #ifdef RP2040_DMA
-  int32_t            dma_tx_channel;
+  int            dma_tx_channel;
   dma_channel_config dma_tx_config;
 #endif
 
@@ -80,12 +80,12 @@
 ** Function name:           tft_Read_8
 ** Description:             Bit bashed SPI to read bidirectional SDA line
 ***************************************************************************************/
-uint8_t TFT_eSPI::tft_Read_8(void)
+unsigned char TFT_eSPI::tft_Read_8(void)
 {
-  uint8_t  ret = 0;
+  unsigned char  ret = 0;
 
   /*
-  for (uint8_t i = 0; i < 8; i++) {  // read results
+  for (unsigned char i = 0; i < 8; i++) {  // read results
     ret <<= 1;
     SCLK_L;
     if (digitalRead(TFT_MOSI)) ret |= 1;
@@ -126,7 +126,7 @@ void TFT_eSPI::end_SDA_Read(void)
 #if defined (RP2040_PIO_INTERFACE)
 ////////////////////////////////////////////////////////////////////////////////////////
 #ifdef RP2040_PIO_SPI
-void pioinit(uint32_t clock_freq) {
+void pioinit(unsigned int clock_freq) {
 
   // Find enough free space on one of the PIO's
   tft_pio = pio0;
@@ -162,7 +162,7 @@ void pioinit(uint32_t clock_freq) {
   // Define the pin used for data output
   sm_config_set_out_pins(&c, TFT_MOSI, 1);
   // Set clock divider, frequency is set up to 2% faster than specified, or next division down
-  uint16_t clock_div = 0.98 + clock_get_hz(clk_sys) / (clock_freq * 2.0); // 2 cycles per bit
+  unsigned short clock_div = 0.98 + clock_get_hz(clk_sys) / (clock_freq * 2.0); // 2 cycles per bit
   sm_config_set_clkdiv(&c, clock_div);
   // Make a single 8 words FIFO from the 4 words TX and RX FIFOs
   sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
@@ -186,7 +186,7 @@ void pioinit(uint32_t clock_freq) {
   pio_instr_clr_dc = pio_encode_set((pio_src_dest)0, 0);
 }
 #else // 8 or 16-bit parallel
-void pioinit(uint16_t clock_div, uint16_t fract_div) {
+void pioinit(unsigned short clock_div, unsigned short fract_div) {
 
   // Find enough free space on one of the PIO's
   tft_pio = pio0;
@@ -201,9 +201,9 @@ void pioinit(uint16_t clock_div, uint16_t fract_div) {
   pio_sm = pio_claim_unused_sm(tft_pio, false);
 
   #if defined (TFT_PARALLEL_8_BIT)
-    uint8_t bits = 8;
+    unsigned char bits = 8;
   #else // must be TFT_PARALLEL_16_BIT
-    uint8_t bits = 16;
+    unsigned char bits = 16;
   #endif
   
   // Load the PIO program
@@ -262,10 +262,10 @@ void pioinit(uint16_t clock_div, uint16_t fract_div) {
 ***************************************************************************************/
 #ifdef RP2040_PIO_PUSHBLOCK
 // PIO handles pixel block fill writes
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
 #if  defined (SPI_18BIT_DRIVER) || (defined (SSD1963_DRIVER) && defined (TFT_PARALLEL_8_BIT))
-  uint32_t col = ((color & 0xF800)<<8) | ((color & 0x07E0)<<5) | ((color & 0x001F)<<3);
+  unsigned int col = ((color & 0xF800)<<8) | ((color & 0x07E0)<<5) | ((color & 0x001F)<<3);
   if (len) {
     WAIT_FOR_STALL;
     tft_pio->sm[pio_sm].instr = pio_instr_fill;
@@ -285,7 +285,7 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 }
 
 #else
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
 
   while (len > 4) {
     // 5 seems to be the optimum for maximum transfer rate
@@ -311,23 +311,23 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for generic processor and parallel display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 #if  defined (SPI_18BIT_DRIVER) || (defined (SSD1963_DRIVER) && defined (TFT_PARALLEL_8_BIT))
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
   if (_swapBytes) {
     while ( len-- ) {
-      uint32_t col = *data++;
+      unsigned int col = *data++;
       tft_Write_16(col);
     }
   }
   else {
     while ( len-- ) {
-      uint32_t col = *data++;
+      unsigned int col = *data++;
       tft_Write_16S(col);
     }
   }
 #else
-  const uint16_t *data = (uint16_t*)data_in;
+  const unsigned short *data = (unsigned short*)data_in;
 
   // PIO sends MS byte first, so bytes are already swapped on transmit
   if(_swapBytes) {
@@ -374,7 +374,7 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           GPIO direction control  - supports class functions
 ** Description:             Set parallel bus to INPUT or OUTPUT
 ***************************************************************************************/
-void TFT_eSPI::busDir(uint32_t mask, uint8_t mode)
+void TFT_eSPI::busDir(unsigned int mask, unsigned char mode)
 {
   // Avoid warnings
   mask = mask;
@@ -397,7 +397,7 @@ void TFT_eSPI::busDir(uint32_t mask, uint8_t mode)
 ** Function name:           GPIO direction control  - supports class functions
 ** Description:             Faster GPIO pin input/output switch
 ***************************************************************************************/
-void TFT_eSPI::gpioMode(uint8_t gpio, uint8_t mode)
+void TFT_eSPI::gpioMode(unsigned char gpio, unsigned char mode)
 {
   // Avoid warnings
   gpio = gpio;
@@ -409,9 +409,9 @@ void TFT_eSPI::gpioMode(uint8_t gpio, uint8_t mode)
 ** Function name:           read byte  - supports class functions
 ** Description:             Read a byte - parallel bus only - not supported yet
 ***************************************************************************************/
-uint8_t TFT_eSPI::readByte(void)
+unsigned char TFT_eSPI::readByte(void)
 {
-  uint8_t b = 0;
+  unsigned char b = 0;
 /*
   busDir(0, INPUT);
   digitalWrite(TFT_RD, LOW);
@@ -439,7 +439,7 @@ uint8_t TFT_eSPI::readByte(void)
 ** Function name:           pushBlock - for ESP32 or RP2040 RPi TFT
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
 
   if(len) { tft_Write_16(color); len--; }
   while(len--) {WR_L; WR_H;}
@@ -449,9 +449,9 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for ESP32 or RP2040 RPi TFT
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len)
 {
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
 
   if (_swapBytes) while ( len-- ) {tft_Write_16S(*data); data++;}
   else while ( len-- ) {tft_Write_16(*data); data++;}
@@ -465,17 +465,17 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len)
 ** Function name:           pushBlock - for RP2040 and 3 byte RGB display
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len)
 {
-  uint16_t r = (color & 0xF800)>>8;
-  uint16_t g = (color & 0x07E0)>>3;
-  uint16_t b = (color & 0x001F)<<3;
+  unsigned short r = (color & 0xF800)>>8;
+  unsigned short g = (color & 0x07E0)>>3;
+  unsigned short b = (color & 0x001F)<<3;
 
   // If more than 32 pixels then change to 16-bit transfers with concatenated pixels
   if (len > 32) {
-    uint32_t rg = r<<8 | g;
-    uint32_t br = b<<8 | r;
-    uint32_t gb = g<<8 | b;
+    unsigned int rg = r<<8 | g;
+    unsigned int br = b<<8 | r;
+    unsigned int gb = g<<8 | b;
     // Must wait before changing to 16-bit
     while (spi_get_hw(SPI_X)->sr & SPI_SSPSR_BSY_BITS) {};
     hw_write_masked(&spi_get_hw(SPI_X)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS);
@@ -498,18 +498,18 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len)
 ** Function name:           pushPixels - for RP2040 and 3 byte RGB display
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
 
-  uint16_t *data = (uint16_t*)data_in;
+  unsigned short *data = (unsigned short*)data_in;
   if (_swapBytes) {
     while ( len-- ) {
-      uint32_t col = *data++;
+      unsigned int col = *data++;
       tft_Write_16(col);
     }
   }
   else {
     while ( len-- ) {
-      uint32_t col = *data++;
+      unsigned int col = *data++;
       tft_Write_16S(col);
     }
   }
@@ -523,11 +523,11 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ** Function name:           pushBlock - for RP2040
 ** Description:             Write a block of pixels of the same colour
 ***************************************************************************************/
-void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
+void TFT_eSPI::pushBlock(unsigned short color, unsigned int len){
   while(len--)
   {
     while (!spi_is_writable(SPI_X)){};
-    spi_get_hw(SPI_X)->dr = (uint32_t)color;
+    spi_get_hw(SPI_X)->dr = (unsigned int)color;
   }
 }
 
@@ -535,23 +535,23 @@ void TFT_eSPI::pushBlock(uint16_t color, uint32_t len){
 ** Function name:           pushPixels - for RP2040
 ** Description:             Write a sequence of pixels
 ***************************************************************************************/
-void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
-  uint16_t *data = (uint16_t*)data_in;
+void TFT_eSPI::pushPixels(const void* data_in, unsigned int len){
+  unsigned short *data = (unsigned short*)data_in;
   if (_swapBytes) {
     while(len--)
     {
       while (!spi_is_writable(SPI_X)){};
-      spi_get_hw(SPI_X)->dr = (uint32_t)(*data++);
+      spi_get_hw(SPI_X)->dr = (unsigned int)(*data++);
     }
   }
   else
   {
     while(len--)
     {
-      uint16_t color = *data++;
+      unsigned short color = *data++;
       color = color >> 8 | color << 8;
       while (!spi_is_writable(SPI_X)){};
-      spi_get_hw(SPI_X)->dr = (uint32_t)color;
+      spi_get_hw(SPI_X)->dr = (unsigned int)color;
     }
   }
 }
@@ -566,7 +566,7 @@ void TFT_eSPI::pushPixels(const void* data_in, uint32_t len){
 ////////////////////////////////////////////////////////////////////////////////////////
 /*
 These are created in header file:
-  uint32_t           dma_tx_channel;
+  unsigned int           dma_tx_channel;
   dma_channel_config dma_tx_config;
 */
 
@@ -607,7 +607,7 @@ void TFT_eSPI::dmaWait(void)
 ** Function name:           pushPixelsDMA
 ** Description:             Push pixels to TFT
 ***************************************************************************************/
-void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
+void TFT_eSPI::pushPixelsDMA(unsigned short* image, unsigned int len)
 {
   if ((len == 0) || (!DMA_Enabled)) return;
 
@@ -616,9 +616,9 @@ void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
   channel_config_set_bswap(&dma_tx_config, !_swapBytes);
 
 #if !defined (RP2040_PIO_INTERFACE)
-  dma_channel_configure(dma_tx_channel, &dma_tx_config, &spi_get_hw(SPI_X)->dr, (uint16_t*)image, len, true);
+  dma_channel_configure(dma_tx_channel, &dma_tx_config, &spi_get_hw(SPI_X)->dr, (unsigned short*)image, len, true);
 #else
-  dma_channel_configure(dma_tx_channel, &dma_tx_config, &tft_pio->txf[pio_sm], (uint16_t*)image, len, true);
+  dma_channel_configure(dma_tx_channel, &dma_tx_config, &tft_pio->txf[pio_sm], (unsigned short*)image, len, true);
 #endif
 }
 
@@ -627,14 +627,14 @@ void TFT_eSPI::pushPixelsDMA(uint16_t* image, uint32_t len)
 ** Description:             Push image to a window
 ***************************************************************************************/
 // This will clip to the viewport
-void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t* image, uint16_t* buffer)
+void TFT_eSPI::pushImageDMA(int x, int y, int w, int h, unsigned short* image, unsigned short* buffer)
 {
   if ((x >= _vpW) || (y >= _vpH) || (!DMA_Enabled)) return;
 
-  int32_t dx = 0;
-  int32_t dy = 0;
-  int32_t dw = w;
-  int32_t dh = h;
+  int dx = 0;
+  int dy = 0;
+  int dw = w;
+  int dh = h;
 
   if (x < _vpX) { dx = _vpX - x; dw -= dx; x = _vpX; }
   if (y < _vpY) { dy = _vpY - y; dh -= dy; y = _vpY; }
@@ -644,7 +644,7 @@ void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t
 
   if (dw < 1 || dh < 1) return;
 
-  uint32_t len = dw*dh;
+  unsigned int len = dw*dh;
 
   if (buffer == nullptr) {
     buffer = image;
@@ -653,8 +653,8 @@ void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t
 
   // If image is clipped, copy pixels into a contiguous block
   if ( (dw != w) || (dh != h) ) {
-    for (int32_t yb = 0; yb < dh; yb++) {
-      memmove((uint8_t*) (buffer + yb * dw), (uint8_t*) (image + dx + w * (yb + dy)), dw << 1);
+    for (int yb = 0; yb < dh; yb++) {
+      memmove((unsigned char*) (buffer + yb * dw), (unsigned char*) (image + dx + w * (yb + dy)), dw << 1);
     }
   }
   // else, if a buffer pointer has been provided copy whole image to the buffer
@@ -669,9 +669,9 @@ void TFT_eSPI::pushImageDMA(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t
   channel_config_set_bswap(&dma_tx_config, !_swapBytes);
 
 #if !defined (RP2040_PIO_INTERFACE)
-  dma_channel_configure(dma_tx_channel, &dma_tx_config, &spi_get_hw(SPI_X)->dr, (uint16_t*)buffer, len, true);
+  dma_channel_configure(dma_tx_channel, &dma_tx_config, &spi_get_hw(SPI_X)->dr, (unsigned short*)buffer, len, true);
 #else
-  dma_channel_configure(dma_tx_channel, &dma_tx_config, &tft_pio->txf[pio_sm], (uint16_t*)buffer, len, true);
+  dma_channel_configure(dma_tx_channel, &dma_tx_config, &tft_pio->txf[pio_sm], (unsigned short*)buffer, len, true);
 #endif
 }
 

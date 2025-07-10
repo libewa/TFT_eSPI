@@ -29,7 +29,7 @@
 // at line 32, then edit line 77 to match new name.
 // To setup you own palette edit the next line to //*
   /*
-  static const uint16_t default_4bit_palette[] PROGMEM = {
+  static const unsigned short default_4bit_palette[] PROGMEM = {
     TFT_BLACK,    //  0  ^
     TFT_BROWN,    //  1  |
     TFT_RED,      //  2  |
@@ -85,7 +85,7 @@ void loop() {
   // Change palette colour 11 to violet
   spr.setPaletteColor(11, TFT_VIOLET);
 
-  uint16_t color15 = spr.getPaletteColor(15); // The 16-bit colour in a palette can be read back
+  unsigned short color15 = spr.getPaletteColor(15); // The 16-bit colour in a palette can be read back
 
   // Draw 50 sprites containing a "transparent" colour
   for (int i = 0; i < 50; i++)
@@ -99,7 +99,7 @@ void loop() {
   delay(2000);
 
   // Change the palette to a 16-bit grey scale colour
-  for (uint8_t i = 0; i < 16; i++) {
+  for (unsigned char i = 0; i < 16; i++) {
     // (i*16+i) produces a value in range 0-255 for the RGB colours
     //                                   Red    Green    Blue
     spr.setPaletteColor(i, tft.color565(i*16+i, i*16+i, i*16+i));

@@ -23,14 +23,14 @@ TFT_eSprite fb = TFT_eSprite(&tft);  // Sprite object for frame buffer
 #define XDELTA  1
 #define YDELTA  1
 
-int16_t scroll_x = 0; // Keep track of the scrolled position, this is where the origin 
-int16_t scroll_y = 0; // (top left) of the gfx Sprite will be
+short scroll_x = 0; // Keep track of the scrolled position, this is where the origin 
+short scroll_y = 0; // (top left) of the gfx Sprite will be
 
-int16_t radius = 5; // radius of circle
+short radius = 5; // radius of circle
 
 bool grow = true;   // grow or shrink circle
 
-uint16_t *gfxPtr; // Pointer to start of graphics sprite memory area
+unsigned short *gfxPtr; // Pointer to start of graphics sprite memory area
 
 //==========================================================================================
 //==========================================================================================
@@ -46,7 +46,7 @@ void setup() {
 
   // Create a sprite for the graphics
   gfx.setColorDepth(1);
-  gfxPtr = (uint16_t*) gfx.createSprite(WIDTH, HEIGHT);      // 450 bytes needed
+  gfxPtr = (unsigned short*) gfx.createSprite(WIDTH, HEIGHT);      // 450 bytes needed
   gfx.fillSprite(TFT_BLACK); // Note: Sprite is filled with black when created
 
   // Create a sprite for the frame buffer
@@ -72,7 +72,7 @@ void setup() {
 //==========================================================================================
 
 void loop() {
-uint32_t tnow = millis();
+unsigned int tnow = millis();
   drawGraphics(); // Not needed if scrolling graphics are static
 
   wrappingScroll(XDELTA, YDELTA);
@@ -117,7 +117,7 @@ void drawGraphics(void)
 // Scrolling is achieved by plotting one Sprite inside another with an offset. This has
 // to be done by plotting 4 times into a second frame buffer Sprite.
 //==========================================================================================
-void wrappingScroll(int16_t dx, int16_t dy)
+void wrappingScroll(short dx, short dy)
 {
   // Position the quadrants so they overlap all areas of the buffer
   scroll_x += dx;

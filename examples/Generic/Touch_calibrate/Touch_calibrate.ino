@@ -29,7 +29,7 @@ void setup() {
 /*
   // Replace above line with the code sent to Serial Monitor
   // once calibration is complete, e.g.:
-  uint16_t calData[5] = { 286, 3534, 283, 3600, 6 };
+  unsigned short calData[5] = { 286, 3534, 283, 3600, 6 };
   tft.setTouch(calData);
 */
 
@@ -41,7 +41,7 @@ void setup() {
 //------------------------------------------------------------------------------------------
 
 void loop(void) {
-  uint16_t x = 0, y = 0; // To store the touch coordinates
+  unsigned short x = 0, y = 0; // To store the touch coordinates
 
   // Pressed will be set true is there is a valid touch on the screen
   bool pressed = tft.getTouch(&x, &y);
@@ -61,8 +61,8 @@ void loop(void) {
 // Code to run a screen calibration, not needed when calibration values set in setup()
 void touch_calibrate()
 {
-  uint16_t calData[5];
-  uint8_t calDataOK = 0;
+  unsigned short calData[5];
+  unsigned char calDataOK = 0;
 
   // Calibrate
   tft.fillScreen(TFT_BLACK);
@@ -80,10 +80,10 @@ void touch_calibrate()
 
   Serial.println(); Serial.println();
   Serial.println("// Use this calibration code in setup():");
-  Serial.print("  uint16_t calData[5] = ");
+  Serial.print("  unsigned short calData[5] = ");
   Serial.print("{ ");
 
-  for (uint8_t i = 0; i < 5; i++)
+  for (unsigned char i = 0; i < 5; i++)
   {
     Serial.print(calData[i]);
     if (i < 4) Serial.print(", ");

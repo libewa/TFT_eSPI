@@ -50,17 +50,17 @@ TFT_eSprite frame = TFT_eSprite(&glc);  // Invoke the Sprite class for the image
 #define INK    COLORED                  // Black ink
 #define PAPER  UNCOLORED                // 'paper' background colour
 
-uint16_t epd_width  = EPD_WIDTH;        // Set the initial values, these are swapped
-uint16_t epd_height = EPD_HEIGHT;       // in different landscape/portrait rotations
+unsigned short epd_width  = EPD_WIDTH;        // Set the initial values, these are swapped
+unsigned short epd_height = EPD_HEIGHT;       // in different landscape/portrait rotations
                                         // so call frame.width() or frame.height() to get new values
 
 #define EPD_BUFFER 1                    // Label for the black frame buffer 1
 
-uint8_t* framePtr = NULL;               // Pointer for the black frame buffer
+unsigned char* framePtr = NULL;               // Pointer for the black frame buffer
 
 #include "EPD_Support.h"                // Include sketch EPD support functions last!
 
-int8_t limit = 5;                      // Limit the number of loops before halting
+char limit = 5;                      // Limit the number of loops before halting
 //------------------------------------------------------------------------------------
 // Setup
 //------------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ void setup() {
   // Create a frame buffer in RAM of defined size and save the pointer to it
   // RAM needed is about (EPD_WIDTH * EPD_HEIGHT)/8 , ~5000 bytes for 200 x 200 pixels
   // Note: always create the Sprite before setting the Sprite rotation
-  framePtr = (uint8_t*) frame.createSprite(EPD_WIDTH, EPD_HEIGHT);
+  framePtr = (unsigned char*) frame.createSprite(EPD_WIDTH, EPD_HEIGHT);
 
   Serial.println("\r\nInitialisation done.");
 

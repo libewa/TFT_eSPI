@@ -20,7 +20,7 @@
 #define tft_io_offset_start_8 18u
 #define tft_io_offset_set_addr_window 21u
 
-static const uint16_t tft_io_program_instructions[] = {
+static const unsigned short tft_io_program_instructions[] = {
     0x98a0, //  0: pull   block           side 1     
     0xa027, //  1: mov    x, osr                     
     0x80a0, //  2: pull   block                      

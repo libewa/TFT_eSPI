@@ -11,7 +11,7 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 unsigned long runTime = 0;
 
 float sx = 0, sy = 0;
-uint16_t x0 = 0, x1 = 0, yy0 = 0, yy1 = 0;
+unsigned short x0 = 0, x1 = 0, yy0 = 0, yy1 = 0;
 
 void setup()
 {

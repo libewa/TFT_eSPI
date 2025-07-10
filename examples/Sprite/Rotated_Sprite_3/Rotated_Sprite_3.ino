@@ -106,7 +106,7 @@ void loop()
 
   // Push copies of Sprite rotated through increasing angles 0-360 degrees
   // with 45 degree increments
-  for (int16_t angle = 0; angle <= 360; angle += 45) {
+  for (short angle = 0; angle <= 360; angle += 45) {
     spr.pushRotated(angle);
     delay(500);
   }
@@ -130,7 +130,7 @@ void loop()
 
   // Push Sprite to screen rotated about the new pivot points
   // negative angle rotates Sprite anticlockwise
-  for (int16_t angle = 330; angle >= 0; angle -= 30) {
+  for (short angle = 330; angle >= 0; angle -= 30) {
     spr.pushRotated(angle);
     yield(); // Stop watchdog triggering
   }

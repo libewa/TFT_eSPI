@@ -81,11 +81,11 @@ bool screenServer(String filename)
 bool serialScreenServer(String filename)
 {
   // Precautionary receive buffer garbage flush for 50ms
-  uint32_t clearTime = millis() + 50;
+  unsigned int clearTime = millis() + 50;
   while ( millis() < clearTime && Serial.read() >= 0) delay(0); // Equivalent to yield() for ESP8266;
 
   bool wait = true;
-  uint32_t lastCmdTime = millis();     // Initialise start of command time-out
+  unsigned int lastCmdTime = millis();     // Initialise start of command time-out
 
   // Wait for the starting flag with a start time-out
   while (wait)
@@ -94,7 +94,7 @@ bool serialScreenServer(String filename)
     // Check serial buffer
     if (Serial.available() > 0) {
       // Read the command byte
-      uint8_t cmd = Serial.read();
+      unsigned char cmd = Serial.read();
       // If it is 'S' (start command) then clear the serial buffer for 100ms and stop waiting
       if ( cmd == 'S' ) {
         // Precautionary receive buffer garbage flush for 50ms
@@ -115,13 +115,13 @@ bool serialScreenServer(String filename)
     }
   }
 
-  uint8_t color[3 * NPIXELS]; // RGB and 565 format color buffer for N pixels
+  unsigned char color[3 * NPIXELS]; // RGB and 565 format color buffer for N pixels
 
   // Send all the pixels on the whole screen
-  for ( uint32_t y = 0; y < tft.height(); y++)
+  for ( unsigned int y = 0; y < tft.height(); y++)
   {
     // Increment x by NPIXELS as we send NPIXELS for every byte received
-    for ( uint32_t x = 0; x < tft.width(); x += NPIXELS)
+    for ( unsigned int x = 0; x < tft.width(); x += NPIXELS)
     {
       delay(0); // Equivalent to yield() for ESP8266;
 
@@ -150,10 +150,10 @@ bool serialScreenServer(String filename)
       Serial.write(color, 3 * NPIXELS); // Write all pixels in the buffer
 #else
       // Fetch N 565 format pixels from x,y and put in buffer
-      if (NPIXELS > 1) tft.readRect(x, y, NPIXELS, 1, (uint16_t *)color);
+      if (NPIXELS > 1) tft.readRect(x, y, NPIXELS, 1, (unsigned short *)color);
       else
       {
-        uint16_t c = tft.readPixel(x, y);
+        unsigned short c = tft.readPixel(x, y);
         color[0] = c>>8;
         color[1] = c & 0xFF;  // Swap bytes
       }

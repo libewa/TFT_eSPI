@@ -35,7 +35,7 @@
 TFT_eSPI tft = TFT_eSPI();
 
 // Callback function to provide the pixel color at x,y
-uint16_t pixelColor(uint16_t x, uint16_t y) { return tft.readPixel(x, y); }
+unsigned short pixelColor(unsigned short x, unsigned short y) { return tft.readPixel(x, y); }
 
 
 void setup(void) {
@@ -63,7 +63,7 @@ void loop() {
   tft.setTextColor(TFT_BLACK, TFT_WHITE); // Background color is ignored if callback is set
   tft.setCursor(0, 10); // Set cursor at top left of screen
 
-  uint32_t t = millis();
+  unsigned int t = millis();
   tft.println(" Ode to a small\n lump of green\n putty I found\n in my armpit\n one midsummer\n morning ");
   Serial.println(t = millis()-t);
 

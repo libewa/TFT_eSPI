@@ -100,7 +100,7 @@ void setup() {
 }
 
 void loop(void) {
-  for (uint8_t rotation = 0; rotation < 4; rotation++) {
+  for (unsigned char rotation = 0; rotation < 4; rotation++) {
     tft.setRotation(rotation);
     testText();
     delay(2000);
@@ -146,7 +146,7 @@ unsigned long testText() {
   return micros() - start;
 }
 
-unsigned long testLines(uint16_t color) {
+unsigned long testLines(unsigned short color) {
   unsigned long start, t;
   int           x1, y1, x2, y2,
                 w = tft.width(),
@@ -197,7 +197,7 @@ unsigned long testLines(uint16_t color) {
   return micros() - start;
 }
 
-unsigned long testFastLines(uint16_t color1, uint16_t color2) {
+unsigned long testFastLines(unsigned short color1, unsigned short color2) {
   unsigned long start;
   int           x, y, w = tft.width(), h = tft.height();
 
@@ -209,7 +209,7 @@ unsigned long testFastLines(uint16_t color1, uint16_t color2) {
   return micros() - start;
 }
 
-unsigned long testRects(uint16_t color) {
+unsigned long testRects(unsigned short color) {
   unsigned long start;
   int           n, i, i2,
                 cx = tft.width()  / 2,
@@ -226,7 +226,7 @@ unsigned long testRects(uint16_t color) {
   return micros() - start;
 }
 
-unsigned long testFilledRects(uint16_t color1, uint16_t color2) {
+unsigned long testFilledRects(unsigned short color1, unsigned short color2) {
   unsigned long start, t = 0;
   int           n, i, i2,
                 cx = tft.width()  / 2 - 1,
@@ -246,7 +246,7 @@ unsigned long testFilledRects(uint16_t color1, uint16_t color2) {
   return t;
 }
 
-unsigned long testFilledCircles(uint8_t radius, uint16_t color) {
+unsigned long testFilledCircles(unsigned char radius, unsigned short color) {
   unsigned long start;
   int x, y, w = tft.width(), h = tft.height(), r2 = radius * 2;
 
@@ -261,7 +261,7 @@ unsigned long testFilledCircles(uint8_t radius, uint16_t color) {
   return micros() - start;
 }
 
-unsigned long testCircles(uint8_t radius, uint16_t color) {
+unsigned long testCircles(unsigned char radius, unsigned short color) {
   unsigned long start;
   int           x, y, r2 = radius * 2,
                       w = tft.width()  + radius,

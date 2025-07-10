@@ -182,7 +182,7 @@ for i in range(colorsUsed[0]):
 arraySize = (len(contents) - offset[0]) 
 outputString = "/* This was generated using a script based on the SparkFun BMPtoArray python script" + '\n'
 outputString += " See https://github.com/sparkfun/BMPtoArray for more info */" + '\n\n'
-outputString += "static const uint16_t palette[" + str(colorsUsed[0]) + "] = {";
+outputString += "static const unsigned short palette[" + str(colorsUsed[0]) + "] = {";
 for i in range(colorsUsed[0]): 
     # print hexlify(colorIndex[i])
     if i % 4 == 0:
@@ -192,7 +192,7 @@ for i in range(colorsUsed[0]):
 outputString = outputString[:-2]
 outputString += "\n};\n\n"
 outputString += "// width is " + str(width) + ", height is " + str(height) + "\n"
-outputString += "static const uint8_t myGraphic[" + str(arraySize) + "] PROGMEM = {" + '\n'
+outputString += "static const unsigned char myGraphic[" + str(arraySize) + "] PROGMEM = {" + '\n'
 
 if bitsPerPixel != 4:
     print("Expected 4 bits per pixel; found {}".format(bitsPerPixel))

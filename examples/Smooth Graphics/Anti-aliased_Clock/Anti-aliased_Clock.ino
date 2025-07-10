@@ -47,7 +47,7 @@ TFT_eSprite face = TFT_eSprite(&tft);
 #define FACE_H CLOCK_R * 2 + 1
 
 // Time h:m:s
-uint8_t h = 0, m = 0, s = 0;
+unsigned char h = 0, m = 0, s = 0;
 
 float time_secs = h * 3600 + m * 60 + s;
 
@@ -55,7 +55,7 @@ float time_secs = h * 3600 + m * 60 + s;
 #include "NTP_Time.h" // Attached to this sketch, see that tab for library needs
 
 // Time for next tick
-uint32_t targetTime = 0;
+unsigned int targetTime = 0;
 
 // =========================================================================
 // Setup
@@ -132,12 +132,12 @@ static void renderFace(float t) {
   face.setTextColor(CLOCK_FG, CLOCK_BG);
 
   // Text offset adjustment
-  constexpr uint32_t dialOffset = CLOCK_R - 10;
+  constexpr unsigned int dialOffset = CLOCK_R - 10;
 
   float xp = 0.0, yp = 0.0; // Use float pixel position for smooth AA motion
 
   // Draw digits around clock perimeter
-  for (uint32_t h = 1; h <= 12; h++) {
+  for (unsigned int h = 1; h <= 12; h++) {
     getCoord(CLOCK_R, CLOCK_R, &xp, &yp, dialOffset, h * 360.0 / 12);
     face.drawNumber(h, xp, 2 + yp);
   }
@@ -170,7 +170,7 @@ static void renderFace(float t) {
 // =========================================================================
 // Coordinates are returned to caller via the xp and yp pointers
 #define DEG2RAD 0.0174532925
-void getCoord(int16_t x, int16_t y, float *xp, float *yp, int16_t r, float a)
+void getCoord(short x, short y, float *xp, float *yp, short r, float a)
 {
   float sx1 = cos( (a - 90) * DEG2RAD);
   float sy1 = sin( (a - 90) * DEG2RAD);

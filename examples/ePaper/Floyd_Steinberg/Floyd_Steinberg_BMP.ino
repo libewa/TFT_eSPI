@@ -49,7 +49,7 @@
 //          |-------|-------|-------|
 //
 
-void drawFSBmp(const char *filename, int16_t x, int16_t y) {
+void drawFSBmp(const char *filename, short x, short y) {
 
   if ((x >= frame.width()) || (y >= frame.height())) return;
 
@@ -64,9 +64,9 @@ void drawFSBmp(const char *filename, int16_t x, int16_t y) {
     return;
   }
 
-  uint32_t seekOffset, dib_size;
-  uint16_t w, h, row, col, num_colors;
-  uint8_t  r, g, b;
+  unsigned int seekOffset, dib_size;
+  unsigned short w, h, row, col, num_colors;
+  unsigned char  r, g, b;
 
   if (read16(bmpFS) == 0x4D42)         // Check it is a valid bitmap header
   {
@@ -87,27 +87,27 @@ void drawFSBmp(const char *filename, int16_t x, int16_t y) {
 
       num_colors = read32(bmpFS);           // Number of colours in colour table (usually 256)
 
-      uint8_t pixel_color[num_colors];      // Lookup table for grey-scale
+      unsigned char pixel_color[num_colors];      // Lookup table for grey-scale
 
       bmpFS.seek(14 + dib_size);            // Seek to start of colour table
 
       // Capture the colour lookup table
-      for (uint16_t i = 0; i < num_colors; i++)
+      for (unsigned short i = 0; i < num_colors; i++)
       {
-        uint32_t abgr = read32(bmpFS);      // Assume 4 byte, RGB colours in LS 3 bytes
-        pixel_color[i] = (uint8_t) abgr;    // For grey-scale R, G, B are same value
+        unsigned int abgr = read32(bmpFS);      // Assume 4 byte, RGB colours in LS 3 bytes
+        pixel_color[i] = (unsigned char) abgr;    // For grey-scale R, G, B are same value
       }
 
       bmpFS.seek(seekOffset);               // Seek to start of image
 
-      uint16_t padding = (4 - (w & 3)) & 3; // Calculate the BMP line padding
+      unsigned short padding = (4 - (w & 3)) & 3; // Calculate the BMP line padding
 
       // Create an zero an 8-bit pixel line buffer
-      uint8_t* lineBuffer = ( uint8_t*) calloc(w    , sizeof(uint8_t));
+      unsigned char* lineBuffer = ( unsigned char*) calloc(w    , sizeof(unsigned char));
 
       // Create a 16-bit signed line buffer for the quantisation error
       // Diffusion spreads to x-1 and x+1 so w + 2 avoids a bounds check
-      int16_t* qerrBuffer = ( int16_t*) calloc((w + 2)<<1, sizeof(uint8_t));
+      short* qerrBuffer = ( short*) calloc((w + 2)<<1, sizeof(unsigned char));
 
       y += h - 1; // Start from bottom (assumes bottum up!)
 
@@ -118,17 +118,17 @@ void drawFSBmp(const char *filename, int16_t x, int16_t y) {
         bmpFS.read(lineBuffer, w);
 
         // Prep variables
-        uint16_t dx = 0;
-        uint8_t* bptr = lineBuffer;
-        int16_t* qptr = qerrBuffer + 1; // + 1 because diffusion spreads to x-1
+        unsigned short dx = 0;
+        unsigned char* bptr = lineBuffer;
+        short* qptr = qerrBuffer + 1; // + 1 because diffusion spreads to x-1
 
         // Lookup color, add quantisation error, clip and clear error buffer
         while(dx < w)
         {
-          int16_t depixel =  pixel_color[(uint8_t)*bptr] + *qptr;
+          short depixel =  pixel_color[(unsigned char)*bptr] + *qptr;
           if (depixel >255) depixel = 255;   // Clip pixel to 0-255
           else if (depixel < 0) depixel = 0;
-          *bptr++ = (uint8_t) depixel;       // Save new value, inc pointer
+          *bptr++ = (unsigned char) depixel;       // Save new value, inc pointer
           *qptr++ = 0;                       // Zero error, inc pointer
           dx++;                              // Next pixel
         }
@@ -136,14 +136,14 @@ void drawFSBmp(const char *filename, int16_t x, int16_t y) {
         dx = 0;                // Reset varaibles to start of line
         bptr = lineBuffer;
         qptr = qerrBuffer + 1;
-        int32_t qerr = 0;
-        int32_t qerr16 = 0;
+        int qerr = 0;
+        int qerr16 = 0;
 
         // Push the pixel row to screen
         while(dx < w)
         {
            // Add 7/16 of error (error = 0 on first entry)
-          int16_t pixel = *bptr + (qerr>>1) - qerr16;
+          short pixel = *bptr + (qerr>>1) - qerr16;
 
           // Do not clip here so quantisation error accumulates correctly?
           // Draw pixel (black or white) and determine new error
@@ -176,22 +176,22 @@ void drawFSBmp(const char *filename, int16_t x, int16_t y) {
 //====================================================================================
 // Read a 16-bit value from the filing system
 //====================================================================================
-uint16_t read16(fs::File &f) {
-  uint16_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read(); // MSB
+unsigned short read16(fs::File &f) {
+  unsigned short result;
+  ((unsigned char *)&result)[0] = f.read(); // LSB
+  ((unsigned char *)&result)[1] = f.read(); // MSB
   return result;
 }
 
 //====================================================================================
 // Read a 32-bit value from the filing system
 //====================================================================================
-uint32_t read32(fs::File &f) {
-  uint32_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read();
-  ((uint8_t *)&result)[2] = f.read();
-  ((uint8_t *)&result)[3] = f.read(); // MSB
+unsigned int read32(fs::File &f) {
+  unsigned int result;
+  ((unsigned char *)&result)[0] = f.read(); // LSB
+  ((unsigned char *)&result)[1] = f.read();
+  ((unsigned char *)&result)[2] = f.read();
+  ((unsigned char *)&result)[3] = f.read(); // MSB
   return result;
 }
 
